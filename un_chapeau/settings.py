@@ -38,6 +38,8 @@ INSTALLED_APPS = [
 
     'oauth2_provider',
     'corsheaders',
+
+    'elephant',
 ]
 
 MIDDLEWARE = [
@@ -143,6 +145,7 @@ REST_FRAMEWORK = {
             )
         }
 
+AUTH_USER_MODEL = 'elephant.User'
 
 ########################
 
