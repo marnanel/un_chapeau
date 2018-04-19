@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from oauth2_provider.models import Application
 import json
 
 def un_chapeau_response(d):
@@ -28,9 +29,21 @@ def instance(request):
 ###########################
 
 def apps(request):
+
+    new_app = Application(
+            name = request.POST['client_name'],
+            redirect_uris = request.POST['redirect_uris'],
+            client_type = 'confidential', # ?
+            authorization_grant_type = 'password',
+            user = None, # don't need to be logged in
+            )
+
+    new_app.save()
+
     result = {
-            'id': 'wombat',
-            'client_id': '5Acb78IHuX9DgH7RNiJCNk1J1mZJbTrzy1B2eOEa',
-            'client_secret': 'i8L3q1T9ECg0cYCD2P3O319my9rIfyLD3YWjiZX5vwIL8XI4XhNNlN6YuAjkkxH2ruUrs6p5TQisU6FkAILoF1DTPKYsx95UqK8QrZ5Vo9IHhtxizfbI710Qn0a1Rq49',
+            'id': new_app.id,
+            'client_id': new_app.client_id,
+            'client_secret': new_app.client_secret,
             }
+
     return un_chapeau_response(result)

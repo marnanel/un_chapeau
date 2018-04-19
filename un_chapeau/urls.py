@@ -16,7 +16,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
+import oauth2_provider.views as oauth2_views
 from elephant import views
+import un_chapeau.settings
+
+##################################
+# OAuth2 provider endpoints
+
+oauth2_endpoint_views = [
+    path('authorize/', oauth2_views.AuthorizationView.as_view(), name="authorize"),
+    path('token', oauth2_views.TokenView.as_view(), name="token"),
+    path('revoke-token', oauth2_views.RevokeTokenView.as_view(), name="revoke-token"),
+]
+
+##################################################
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,7 +37,7 @@ urlpatterns = [
     path('accounts/login/', auth_views.login, name='login'),
     path('accounts/logout/', auth_views.logout, name='logout'),
 
-    path('oauth/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    path('oauth/', include((oauth2_endpoint_views, 'oauth2_provider'), namespace="oauth2_provider")),
 
     path('api/v1/instance', views.instance),
     path('api/v1/apps', views.apps),

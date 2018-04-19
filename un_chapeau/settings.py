@@ -41,7 +41,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.csrf.CsrfViewMiddleware',
+#    'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -127,8 +127,31 @@ STATIC_URL = '/static/'
 
 APPEND_SLASH = False
 
+
+OAUTH2_PROVIDER = {
+        'SCOPES': {
+            'read': 'Read toots',
+            'write': 'Post toots',
+            'follow': 'Follow other users',
+            }
+        }
+
+REST_FRAMEWORK = {
+
+        'DEFAULT_PERMISSION_CLASSES': (
+            'rest_framework.permissions.IsAuthenticated',
+            )
+        }
+
+
 ########################
 
 UN_CHAPEAU_INSTANCE_TITLE = 'un_chapeau test'
 UN_CHAPEAU_INSTANCE_DESCRIPTION = 'this is a test'
 
+######################################
+
+from oauth2_provider.settings import oauth2_settings
+oauth2_settings.ALLOWED_REDIRECT_URI_SCHEMES = ['urn', 'http', 'https']
+
+######################################
