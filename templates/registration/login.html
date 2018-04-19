@@ -1,0 +1,13 @@
+<html><head><title>un_chapeau login</title></head>
+<body>
+
+        <h1>un_chapeau &#x1F452; development login</h1>
+
+<form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" name="next" value="{{ next }}" />
+        <button type="submit">Login</button>
+</form>
+
+</body></html>

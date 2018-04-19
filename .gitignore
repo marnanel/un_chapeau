@@ -1,0 +1,6 @@
+*.sqlite3
+*.swp
+*.swo
+*.pyc
+__pycache__/
+
