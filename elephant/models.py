@@ -4,6 +4,11 @@ from django.utils.timezone import now
 
 class User(AbstractUser):
 
+    REQUIRED_FIELDS = ['username']
+    # yes, the USERNAME_FIELD is the email, and not the username.
+    # it's an oauth2 thing. just roll with it.
+    USERNAME_FIELD = 'email'
+
     username = models.CharField(max_length=255,
             unique=True)
 

@@ -38,50 +38,38 @@ Log in
 
 And you should see something like:
 ```
-Looking up instance info...
 DEBUG:toot:>>> GET http://127.0.0.1:8999/api/v1/instance
 DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1
 DEBUG:urllib3.connectionpool:http://127.0.0.1:8999 "GET /api/v1/instance HTTP/1.1" 200 245
 DEBUG:toot:<<< <Response [200]>
-DEBUG:toot:<<< b'{\n  "contact_account": "marnanel",\n  "description": "just a test",\n
-"email": "marnanel@thurman.org.uk",\n  "languages": [\n    "en_GB"\n  ],\n  "title": "un_chapeau test",\n
-"uri": "http://127.0.0.1",\n  "urls": {},\n  "version": "un_chapeau 0.0.1"\n}'
-Found instance un_chapeau test running Mastodon version un_chapeau 0.0.1
-Registering application...
+DEBUG:toot:<<< b'{\n  "contact_account": "marnanel",\n  "description": "just a test",\n  "email": "marnanel@thurman.org.uk",\n  "languages": [\n    "en_GB"\n  ],\n  "title": "un_chapeau test",\n  "uri": "http://127.0.0.1",\n  "urls": {},\n  "version": "un_chapeau 0.0.1"\n}'
 DEBUG:toot:>>> POST http://127.0.0.1:8999/api/v1/apps
-DEBUG:toot:>>> DATA:    {'redirect_uris': 'urn:ietf:wg:oauth:2.0:oob', 'scopes': 'read write follow',
-'website': 'https://github.com/ihabunek/toot', 'client_name': 'toot - a Mastodon CLI client'}
+DEBUG:toot:>>> DATA:    {'client_name': 'toot - a Mastodon CLI client', 'redirect_uris': 'urn:ietf:wg:oauth:2.0:oob', 'scopes': 'read write follow', 'website': 'https://github.com/ihabunek/toot'}
 DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1
 DEBUG:urllib3.connectionpool:http://127.0.0.1:8999 "POST /api/v1/apps HTTP/1.1" 200 223
 DEBUG:toot:<<< <Response [200]>
-DEBUG:toot:<<< b'{\n  "client_id": "5LAw5aKzJVQ7Q28yEOkmCj5AA5FcFWnWN45sWmQ3",\n
-"client_secret": "really long string",\n "id": 4\n}'
-Application tokens saved.
-Log in to 127.0.0.1:8999
+DEBUG:toot:<<< b'{\n  "client_id": "Fz2DRhObvmTEj5ICxToxqqvTpUqlBLvJg5AnnEsZ",\n  "client_secret": "vTGPho6XPZlczDyKDaibBmQ7vNRurzg7yhOe9wtrRIGM5cusv99gBnkxIutK9jrdpcHhxgvT4F8dRVNknYamsVN830orTe2ZAnf4ZyGTMTKeMgigBB9NTOeI8W32vKRC",\n  "id": 4\n}'
 Email:
 ```
 
-Give it the username and password you gave ```createsuperuser```. Despite the prompt, don't use the email address.
+Give it the email address and password you gave ```createsuperuser```.
 
 ```
-Authenticating...
 DEBUG:toot:>>> POST http://127.0.0.1:8999/oauth/token
-DEBUG:toot:>>> DATA:    {'scope': 'read write follow', 'client_secret': 'really long string', 'password': 'whatever',
-'grant_type': 'password', 'username': 'whatever', 'client_id': '5LAw5aKzJVQ7Q28yEOkmCj5AA5FcFWnWN45sWmQ3'}
+DEBUG:toot:>>> DATA:    {'grant_type': 'password', 'client_id': 'Fz2DRhObvmTEj5ICxToxqqvTpUqlBLvJg5AnnEsZ', 'username': 'you@example.com', 'scope': 'read write follow', 'password': 'lkx663plkx663p', 'client_secret': 'vTGPho6XPZlczDyKDaibBmQ7vNRurzg7yhOe9wtrRIGM5cusv99gBnkxIutK9jrdpcHhxgvT4F8dRVNknYamsVN830orTe2ZAnf4ZyGTMTKeMgigBB9NTOeI8W32vKRC'}
 DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1
 DEBUG:urllib3.connectionpool:http://127.0.0.1:8999 "POST /oauth/token HTTP/1.1" 200 176
 DEBUG:toot:<<< <Response [200]>
-DEBUG:toot:<<< b'{"token_type": "Bearer", "scope": "read write follow", "refresh_token": "pJbCx94qyuzQMLQPsW4aL9B5fjrqXv",
-"expires_in": 36000, "access_token": "FvrS6RDcNqDu2TwTM5SohmhSjcu2T6"}'
+DEBUG:toot:<<< b'{"token_type": "Bearer", "access_token": "Uo7SbUuqrLKlHcW9xDOSgHxQcAFqer", "refresh_token": "1IkFa21SmLDyMg4rtGla2TnWfhs8fD", "scope": "read write follow", "expires_in": 36000}'
 DEBUG:toot:>>> GET http://127.0.0.1:8999/api/v1/accounts/verify_credentials
-DEBUG:toot:>>> HEADERS: {'Authorization': 'Bearer FvrS6RDcNqDu2TwTM5SohmhSjcu2T6'}
+DEBUG:toot:>>> HEADERS: {'Authorization': 'Bearer Uo7SbUuqrLKlHcW9xDOSgHxQcAFqer'}
 DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1
-DEBUG:urllib3.connectionpool:http://127.0.0.1:8999 "GET /api/v1/accounts/verify_credentials HTTP/1.1" 404 2637
-DEBUG:toot:<<< <Response [404]>
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8999 "GET /api/v1/accounts/verify_credentials HTTP/1.1" 200 620
+DEBUG:toot:<<< <Response [200]>
+DEBUG:toot:<<< b'{\n  "acct": "marnanel",\n  "avatar": "https://marnanel.org/pics/un_chapeau_userpic_120.jpg",\n  "avatar_static": "https://marnanel.org/pics/un_chapeau_userpic_120.jpg",\n  "created_at": "2018-04-21T23:16:55.156258+00:00Z",\n  "display_name": "",\n  "followers_count": 0,\n  "following_count": 0,\n  "header": "https://marnanel.org/pics/un_chapeau_header_700.jpg",\n  "header_static": "https://marnanel.org/pics/un_chapeau_header_700.jpg",\n  "id": 1,\n  "locked": false,\n  "note": "",\n  "source": {\n    "note": "",\n    "privacy": "public",\n    "sensitive": false\n  },\n  "statuses_count": 0,\n  "url": "",\n  "username": "marnanel"\n}'
 ```
 
-and it will fall over. Construction continues-- but, as you see, we've managed to authenticate. If you go to ```http://127.0.0.1:8999/admin``` you'll
-see that our login credentials have been recorded.
+and you're logged in. You can't actually do anything until we implement some more, but at least you're logged in.
 
 If you want to reset toot later, you must remove your server's entry in ```~/.config/toot/config.json```, under ```"apps"```.
 
