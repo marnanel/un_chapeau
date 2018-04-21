@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from oauth2_provider.models import Application
+from django.contrib.auth.decorators import login_required
 import json
 
 def un_chapeau_response(d):
@@ -47,3 +48,36 @@ def apps(request):
             }
 
     return un_chapeau_response(result)
+
+
+def verify_credentials(request):
+
+    user = request.user
+    # XXX 401 if there's no user
+
+    result = {
+            'id': user.id,
+            'username': user.username,
+            'acct': user.username, # XXX for remote ones we need to split this up
+            'display_name': user.display_name,
+            'locked': user.is_locked,
+            'created_at': user.created_at.isoformat()+'Z',
+            'note': user.note,
+            'url': user.url,
+            'avatar': 'https://marnanel.org/pics/un_chapeau_userpic_120.jpg',
+            'avatar_static': 'https://marnanel.org/pics/un_chapeau_userpic_120.jpg',
+            'header': 'https://marnanel.org/pics/un_chapeau_header_700.jpg',
+            'header_static': 'https://marnanel.org/pics/un_chapeau_header_700.jpg',
+            'followers_count': 0,
+            'following_count': 0,
+            'statuses_count': 0,
+            'source': {
+                'privacy': 'public',
+                'sensitive': False,
+                'note': user.note,
+                },
+            }
+
+    return un_chapeau_response(result)
+
+

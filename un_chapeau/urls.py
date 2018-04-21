@@ -41,5 +41,6 @@ urlpatterns = [
 
     path('api/v1/instance', views.instance),
     path('api/v1/apps', views.apps),
+    path('api/v1/accounts/verify_credentials', views.verify_credentials),
 ]
 

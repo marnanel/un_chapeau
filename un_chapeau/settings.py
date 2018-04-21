@@ -43,7 +43,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-#    'django.middleware.csrf.CsrfViewMiddleware',
+
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -87,6 +89,10 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = (
+        'oauth2_provider.backends.OAuth2Backend',
+        'django.contrib.auth.backends.ModelBackend',
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
