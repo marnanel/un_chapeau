@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
+from django.conf.urls.static import static
 import oauth2_provider.views as oauth2_views
 from elephant import views
-import un_chapeau.settings
+import un_chapeau.settings as settings
 
 ##################################
 # OAuth2 provider endpoints
@@ -42,5 +43,5 @@ urlpatterns = [
     path('api/v1/instance', views.instance),
     path('api/v1/apps', views.apps),
     path('api/v1/accounts/verify_credentials', views.verify_credentials),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
