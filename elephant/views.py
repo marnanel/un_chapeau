@@ -6,7 +6,7 @@ import json
 
 def un_chapeau_response(d):
     return HttpResponse(
-            content_type = 'text/json',
+            content_type = 'application/json',
             content = json.dumps(d, indent=2, sort_keys=True),
             status = 200,
             reason = 'love and hugs',
