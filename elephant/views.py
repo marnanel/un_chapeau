@@ -60,7 +60,7 @@ class Apps(View):
 
 class Verify_Credentials(LoginRequiredMixin, View):
 
-    raise_exception = True # 401 if they're not authenticated
+    raise_exception = True # 403 if they're not authenticated
 
     def get(self, request, *args, **kwargs):
 
@@ -90,5 +90,3 @@ class Verify_Credentials(LoginRequiredMixin, View):
             }
 
         return un_chapeau_response(result)
-
-

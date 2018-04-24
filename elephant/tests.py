@@ -28,6 +28,10 @@ class UnChapeauTestCase(TestCase):
                 msg=str(response.content))
         return response.json()
 
+    def assertForbidden(self, response):
+        self.assertEqual(response.status_code, 403,
+                msg=str(response.content))
+
 class AuthTests(UnChapeauTestCase):
     def test_create_app(self):
         c = Client()
@@ -62,6 +66,26 @@ class AuthTests(UnChapeauTestCase):
         self.assertEqual(token['scope'], token_params['scope'])
         self.assertEqual(token['token_type'].lower(), 'bearer')
 
+    def test_create_token_fails(self):
+        c = Client()
+
+        app = self._get_json(c.post('/api/v1/apps',
+                APPS_CREATE_PARAMS))
+
+        token_params = TOKEN_REQUEST_PARAMS
+        self.user = User.objects.create_user(
+                username=token_params['username'],
+                email=token_params['username'],
+                password=token_params['password'])
+
+        for key in ['client_id', 'client_secret']:
+            token_params[key] = app[key] + 'x'
+
+        token = c.post('/oauth/token',
+                TOKEN_REQUEST_PARAMS)
+
+        self.assertForbidden(token)
+
     def test_login(self):
         c = Client()
 
@@ -78,17 +102,40 @@ class AuthTests(UnChapeauTestCase):
             token_params[key] = app[key]
 
         token = self._get_json(c.post('/oauth/token',
-                TOKEN_REQUEST_PARAMS))
+                token_params))
 
         account = self._get_json(c.get('/api/v1/accounts/verify_credentials',
-                HTTP_AUTHORIZATION = 'Bearer '+token['access_token']))
+                http_authorization = 'bearer '+token['access_token']))
 
         for key in ['id', 'username', 'acct', 'display_name',
                 'locked', 'created_at', 'note', 'avatar',
                 'avatar_static', 'header', 'header_static',
                 'followers_count', 'following_count',
                 'source']:
-            self.assertIn(key, account)
+            self.assertin(key, account)
 
         for key in ['privacy', 'sensitive', 'note']:
-            self.assertIn(key, account['source'])
+            self.assertin(key, account['source'])
+
+    def test_login_fails(self):
+        c = Client()
+
+        app = self._get_json(c.post('/api/v1/apps',
+                APPS_CREATE_PARAMS))
+
+        token_params = TOKEN_REQUEST_PARAMS
+        self.user = User.objects.create_user(
+                username=token_params['username'],
+                email=token_params['username'],
+                password=token_params['password'])
+
+        for key in ['client_id', 'client_secret']:
+            token_params[key] = app[key]
+
+        token = self._get_json(c.post('/oauth/token',
+                token_params))
+
+        account = c.get('/api/v1/accounts/verify_credentials',
+                http_authorization = 'bearer '+token['access_token']+'x')
+
+        self.assertForbidden(account)
