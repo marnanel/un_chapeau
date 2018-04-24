@@ -40,8 +40,8 @@ urlpatterns = [
 
     path('oauth/', include((oauth2_endpoint_views, 'oauth2_provider'), namespace="oauth2_provider")),
 
-    path('api/v1/instance', views.instance),
-    path('api/v1/apps', views.apps),
-    path('api/v1/accounts/verify_credentials', views.verify_credentials),
+    path('api/v1/instance', views.Instance.as_view()),
+    path('api/v1/apps', views.Apps.as_view()),
+    path('api/v1/accounts/verify_credentials', views.Verify_Credentials.as_view()),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

@@ -1,7 +1,10 @@
 from django.shortcuts import render
+from django.views import View
 from django.http import HttpResponse
 from oauth2_provider.models import Application
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.mixins import LoginRequiredMixin
 import json
 
 def un_chapeau_response(d):
@@ -14,8 +17,11 @@ def un_chapeau_response(d):
 
 ###########################
 
-def instance(request):
-    result = {
+class Instance(View):
+
+    def get(self, request, *args, **kwargs):
+
+        result = {
             'uri': 'http://127.0.0.1',
             'title': 'un_chapeau test',
             'description': 'just a test',
@@ -25,13 +31,16 @@ def instance(request):
             'languages': ['en_GB'],
             'contact_account': 'marnanel',
             }
-    return un_chapeau_response(result)
+
+        return un_chapeau_response(result)
 
 ###########################
 
-def apps(request):
+class Apps(View):
 
-    new_app = Application(
+    def post(self, request, *args, **kwargs):
+
+        new_app = Application(
             name = request.POST['client_name'],
             redirect_uris = request.POST['redirect_uris'],
             client_type = 'confidential', # ?
@@ -39,23 +48,25 @@ def apps(request):
             user = None, # don't need to be logged in
             )
 
-    new_app.save()
+        new_app.save()
 
-    result = {
+        result = {
             'id': new_app.id,
             'client_id': new_app.client_id,
             'client_secret': new_app.client_secret,
             }
 
-    return un_chapeau_response(result)
+        return un_chapeau_response(result)
 
+class Verify_Credentials(LoginRequiredMixin, View):
 
-def verify_credentials(request):
+    raise_exception = True # 401 if they're not authenticated
 
-    user = request.user
-    # XXX 401 if there's no user
+    def get(self, request, *args, **kwargs):
 
-    result = {
+        user = request.user
+
+        result = {
             'id': user.id,
             'username': user.username,
             'acct': user.username, # XXX for remote ones we need to split this up
@@ -78,6 +89,6 @@ def verify_credentials(request):
                 },
             }
 
-    return un_chapeau_response(result)
+        return un_chapeau_response(result)
 
 

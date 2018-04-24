@@ -71,7 +71,7 @@ class AuthTests(TestCase):
         token = c.post('/oauth/token',
                 TOKEN_REQUEST_PARAMS).json()
 
-        account = c.post('/api/v1/accounts/verify_credentials',
+        account = c.get('/api/v1/accounts/verify_credentials',
                 HTTP_AUTHORIZATION = 'Bearer '+token['access_token']).json()
 
         for key in ['id', 'username', 'acct', 'display_name',
