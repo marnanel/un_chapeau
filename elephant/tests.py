@@ -52,3 +52,34 @@ class AuthTests(TestCase):
 
         self.assertEqual(token['scope'], token_params['scope'])
         self.assertEqual(token['token_type'].lower(), 'bearer')
+
+    def test_login(self):
+        c = Client()
+
+        app = c.post('/api/v1/apps',
+                APPS_CREATE_PARAMS).json()
+
+        token_params = TOKEN_REQUEST_PARAMS
+        self.user = User.objects.create_user(
+                username=token_params['username'],
+                email=token_params['username'],
+                password=token_params['password'])
+
+        for key in ['client_id', 'client_secret']:
+            token_params[key] = app[key]
+
+        token = c.post('/oauth/token',
+                TOKEN_REQUEST_PARAMS).json()
+
+        account = c.post('/api/v1/accounts/verify_credentials',
+                HTTP_AUTHORIZATION = 'Bearer '+token['access_token']).json()
+
+        for key in ['id', 'username', 'acct', 'display_name',
+                'locked', 'created_at', 'note', 'avatar',
+                'avatar_static', 'header', 'header_static',
+                'followers_count', 'following_count',
+                'source']:
+            self.assertIn(key, account)
+
+        for key in ['privacy', 'sensitive', 'note']:
+            self.assertIn(key, account['source'])
