@@ -34,15 +34,24 @@ class User(AbstractUser):
 
 class Status(models.Model):
 
+    class Meta:
+        verbose_name_plural = "statuses"
+
+    posted_by = models.ForeignKey(User,
+            on_delete = models.CASCADE,
+            default = 1, # to pacify makemigrations
+            )
+
     # the spec calls this field "status", confusingly
     content = models.TextField()
 
     created_at = models.DateTimeField(default=now,
             editable=False)
 
-
     in_reply_to_id = models.ForeignKey('self',
             on_delete = models.CASCADE,
+            blank = True,
+            null = True,
             )
 
     # XXX Media IDs here, when we've implemented Media
@@ -74,3 +83,5 @@ class Status(models.Model):
     def is_sensitive(self):
         return self.spoiler_text!='' or self.sensitive
 
+    def __str__(self):
+        return str(self.user) + " - " + self.content
