@@ -5,6 +5,7 @@ from oauth2_provider.models import Application
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Status
 import json
 
 def un_chapeau_response(d):
@@ -14,6 +15,9 @@ def un_chapeau_response(d):
             status = 200,
             reason = 'love and hugs',
             charset = 'UTF-8')
+
+def iso_date(date):
+    return date.isoformat()+'Z'
 
 ###########################
 
@@ -72,7 +76,7 @@ class Verify_Credentials(LoginRequiredMixin, View):
             'acct': user.username, # XXX for remote ones we need to split this up
             'display_name': user.display_name,
             'locked': user.is_locked,
-            'created_at': user.created_at.isoformat()+'Z',
+            'created_at': iso_date(user.created_at),
             'note': user.note,
             'url': user.url,
             'avatar': '/static/un_chapeau/defaults/avatar_1.jpg',
@@ -87,6 +91,51 @@ class Verify_Credentials(LoginRequiredMixin, View):
                 'sensitive': False,
                 'note': user.note,
                 },
+            }
+
+        return un_chapeau_response(result)
+
+class Statuses(View):
+
+    def post(self, request, *args, **kwargs):
+        # XXX require authentication here
+
+        new_status = Status(
+            content = request.POST['status'],
+            #sensitive = int(request.POST['sensitive']),
+            #spoiler_text = request.POST['spoiler_text'],
+            visibility = request.POST['visibility'],
+
+            # XXX we can't do media IDs until we implement media
+            # XXX idempotency taken from "Idempotency-Key" header
+            # XXX sanitise HTML
+
+            )
+
+        new_status.save()
+
+        # XXX obviously this will need splitting out
+        result = {
+                "id": new_status.id,
+                "uri": "?",
+                "url": "?",
+                "account": "your account",
+                "content": new_status.content,
+                'created_at': iso_date(new_status.created_at),
+                "emojis": [],
+                "reblogs_count": 0,
+                "favourites_count": 0,
+                "reblogged": False,
+                "favourited": False,
+                "muted": False,
+                "sensitive": new_status.is_sensitive(),
+                "spoiler_text": new_status.spoiler_text,
+                "visibility": new_status.visibility,
+                "media_attachments": [],
+                "mentions": [],
+                "tags": [],
+                "language": '', # XXX null?
+                "pinned": False,
             }
 
         return un_chapeau_response(result)
