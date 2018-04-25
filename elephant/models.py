@@ -31,3 +31,46 @@ class User(AbstractUser):
 
     moved_to = models.CharField(max_length=255,
             default='')
+
+class Status(models.Model):
+
+    # the spec calls this field "status", confusingly
+    content = models.TextField()
+
+    created_at = models.DateTimeField(default=now,
+            editable=False)
+
+
+    in_reply_to_id = models.ForeignKey('self',
+            on_delete = models.CASCADE,
+            )
+
+    # XXX Media IDs here, when we've implemented Media
+
+    sensitive = models.BooleanField(default=False)
+    # applies to the media, not the text
+
+    spoiler_text = models.CharField(max_length=255, default='')
+
+    DIRECT = "direct"
+    PRIVATE = "private"
+    UNLISTED = "unlisted"
+    PUBLIC = "public"
+
+    VISIBILITY_CHOICES = (
+            (DIRECT, DIRECT),
+            (PRIVATE, PRIVATE),
+            (UNLISTED, UNLISTED),
+            (PUBLIC, PUBLIC),
+            )
+
+    visibility = models.CharField(max_length=255,
+            choices = VISIBILITY_CHOICES,
+            default = "public",
+            )
+
+    idempotency_key = models.CharField(max_length=255, default='')
+
+    def is_sensitive(self):
+        return self.spoiler_text!='' or self.sensitive
+
