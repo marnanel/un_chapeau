@@ -1,0 +1,7 @@
+setuptools
+wheel
+django
+django-markdown
+oauth2-provider
+django-cors-headers
+django-oauth-toolkit
