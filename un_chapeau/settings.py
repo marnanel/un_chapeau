@@ -137,18 +137,25 @@ STATIC_URL = '/static/'
 APPEND_SLASH = False
 
 OAUTH2_PROVIDER = {
+
         'SCOPES': {
             'read': 'Read toots',
             'write': 'Post toots',
             'follow': 'Follow other users',
-            }
+            },
+
+        'ALLOWED_REDIRECT_URI_SCHEMES': ['urn', 'http', 'https'],
+
         }
 
 REST_FRAMEWORK = {
 
         'DEFAULT_PERMISSION_CLASSES': (
             'rest_framework.permissions.IsAuthenticated',
-            )
+            ),
+        'DEFAULT_AUTHENTICATION_CLASSES': {
+            'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+            },
         }
 
 AUTH_USER_MODEL = 'elephant.User'
@@ -160,7 +167,5 @@ UN_CHAPEAU_INSTANCE_DESCRIPTION = 'this is a test'
 
 ######################################
 
-from oauth2_provider.settings import oauth2_settings
-oauth2_settings.ALLOWED_REDIRECT_URI_SCHEMES = ['urn', 'http', 'https']
 
 ######################################
