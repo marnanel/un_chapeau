@@ -28,8 +28,9 @@ class UnChapeauTestCase(TestCase):
                 msg=str(response.content))
         return response.json()
 
-    def assertForbidden(self, response):
-        self.assertEqual(response.status_code, 403,
+    def assertHttpFailCode(self, response,
+            failcode):
+        self.assertEqual(response.status_code, failcode,
                 msg=str(response.content))
 
 class AuthTests(UnChapeauTestCase):
@@ -84,7 +85,7 @@ class AuthTests(UnChapeauTestCase):
         token = c.post('/oauth/token',
                 TOKEN_REQUEST_PARAMS)
 
-        self.assertForbidden(token)
+        self.assertHttpFailCode(token, 401)
 
     def test_login(self):
         c = Client()
@@ -105,17 +106,17 @@ class AuthTests(UnChapeauTestCase):
                 token_params))
 
         account = self._get_json(c.get('/api/v1/accounts/verify_credentials',
-                http_authorization = 'bearer '+token['access_token']))
+                HTTP_AUTHORIZATION = 'Bearer '+token['access_token']))
 
         for key in ['id', 'username', 'acct', 'display_name',
                 'locked', 'created_at', 'note', 'avatar',
                 'avatar_static', 'header', 'header_static',
                 'followers_count', 'following_count',
                 'source']:
-            self.assertin(key, account)
+            self.assertIn(key, account)
 
         for key in ['privacy', 'sensitive', 'note']:
-            self.assertin(key, account['source'])
+            self.assertIn(key, account['source'])
 
     def test_login_fails(self):
         c = Client()
@@ -136,6 +137,6 @@ class AuthTests(UnChapeauTestCase):
                 token_params))
 
         account = c.get('/api/v1/accounts/verify_credentials',
-                http_authorization = 'bearer '+token['access_token']+'x')
+                HTTP_AUTHORIZATION = 'Bearer '+token['access_token']+'x')
 
-        self.assertForbidden(account)
+        self.assertHttpFailCode(account, 403)
