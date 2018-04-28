@@ -19,6 +19,24 @@ TOKEN_REQUEST_PARAMS = {
         'scope': 'read write follow',
         }
 
+class UnChapeauClient(Client):
+
+    http_auth = 'HTTP_AUTHORIZATION'
+
+    def __init__(self, **kwargs):
+        super().__init__(kwargs)
+
+        self.authorization = None
+
+    def request(self, **request):
+
+        if self.authorization is not None and http_auth not in request:
+            request[http_auth] = self.authorization
+
+        result = super().request(**request)
+
+        return result
+
 class UnChapeauTestCase(TestCase):
 
     def _get_json(self, response):
@@ -33,9 +51,32 @@ class UnChapeauTestCase(TestCase):
         self.assertEqual(response.status_code, failcode,
                 msg=str(response.content))
 
+    def login(self):
+        c = UnChapeauClient()
+
+        app = self._get_json(c.post('/api/v1/apps',
+                APPS_CREATE_PARAMS))
+
+        token_params = TOKEN_REQUEST_PARAMS
+        self.user = User.objects.create_user(
+                username=token_params['username'],
+                email=token_params['username'],
+                password=token_params['password'])
+
+        for key in ['client_id', 'client_secret']:
+            token_params[key] = app[key]
+
+        token = self._get_json(c.post('/oauth/token',
+                token_params))
+
+        account = self._get_json(c.get('/api/v1/accounts/verify_credentials',
+                HTTP_AUTHORIZATION = 'Bearer '+token['access_token']))
+
+
+
 class AuthTests(UnChapeauTestCase):
     def test_create_app(self):
-        c = Client()
+        c = UnChapeauClient()
 
         app = self._get_json(c.post('/api/v1/apps',
                 APPS_CREATE_PARAMS))
@@ -44,7 +85,7 @@ class AuthTests(UnChapeauTestCase):
             self.assertIn(key, app)
 
     def test_create_token(self):
-        c = Client()
+        c = UnChapeauClient()
 
         app = self._get_json(c.post('/api/v1/apps',
                 APPS_CREATE_PARAMS))
@@ -68,7 +109,7 @@ class AuthTests(UnChapeauTestCase):
         self.assertEqual(token['token_type'].lower(), 'bearer')
 
     def test_create_token_fails(self):
-        c = Client()
+        c = UnChapeauClient()
 
         app = self._get_json(c.post('/api/v1/apps',
                 APPS_CREATE_PARAMS))
@@ -88,7 +129,7 @@ class AuthTests(UnChapeauTestCase):
         self.assertHttpFailCode(token, 401)
 
     def test_login(self):
-        c = Client()
+        c = UnChapeauClient()
 
         app = self._get_json(c.post('/api/v1/apps',
                 APPS_CREATE_PARAMS))
@@ -119,7 +160,7 @@ class AuthTests(UnChapeauTestCase):
             self.assertIn(key, account['source'])
 
     def test_login_fails(self):
-        c = Client()
+        c = UnChapeauClient()
 
         app = self._get_json(c.post('/api/v1/apps',
                 APPS_CREATE_PARAMS))
@@ -140,3 +181,4 @@ class AuthTests(UnChapeauTestCase):
                 HTTP_AUTHORIZATION = 'Bearer '+token['access_token']+'x')
 
         self.assertHttpFailCode(account, 403)
+        
