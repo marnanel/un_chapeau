@@ -5,6 +5,7 @@ from oauth2_provider.models import Application
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.mixins import LoginRequiredMixin
+from un_chapeau.settings import UN_CHAPEAU_SETTINGS
 from .models import Status
 import json
 
@@ -24,13 +25,13 @@ class Instance(View):
 
         result = {
             'uri': 'http://127.0.0.1',
-            'title': 'un_chapeau test',
-            'description': 'just a test',
-            'email': 'marnanel@thurman.org.uk',
+            'title': UN_CHAPEAU_SETTINGS['INSTANCE_NAME'],
+            'description': UN_CHAPEAU_SETTINGS['INSTANCE_DESCRIPTION'],
+            'email': UN_CHAPEAU_SETTINGS['CONTACT_EMAIL'],
             'version': 'un_chapeau 0.0.1',
             'urls': {},
-            'languages': ['en_GB'],
-            'contact_account': 'marnanel',
+            'languages': UN_CHAPEAU_SETTINGS['LANGUAGES'],
+            'contact_account': UN_CHAPEAU_SETTINGS['CONTACT_ACCOUNT'],
             }
 
         return un_chapeau_response(result)
