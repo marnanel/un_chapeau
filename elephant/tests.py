@@ -221,3 +221,25 @@ class AuthTests(UnChapeauTestCase):
         c.login()
 
         
+class StatusTests(UnChapeauTestCase):
+
+    def test_post_status(self):
+        c = UnChapeauClient()
+
+        c.login()
+
+        status_params = {
+                'status': 'Hello world!',
+                }
+        status = c.post('/api/v1/statuses', status_params).json()
+
+        for key in [
+                'id', 'uri', 'url', 'account', 'content',
+                'created_at', 'emojis', 'reblogs_count',
+                'favourites_count', 'sensitive',
+                'spoiler_text', 'visibility',
+                'media_attachments',
+                'mentions', 'tags']:
+                self.assertIn(key, status)
+
+
