@@ -79,7 +79,7 @@ class Statuses(View):
             content = request.POST['status'],
             #sensitive = int(request.POST['sensitive']),
             #spoiler_text = request.POST['spoiler_text'],
-            visibility = request.POST['visibility'],
+            visibility = request.POST.get('visibility', 'public'),
 
             # XXX we can't do media IDs until we implement media
             # XXX idempotency taken from "Idempotency-Key" header
