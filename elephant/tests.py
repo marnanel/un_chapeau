@@ -28,6 +28,16 @@ class UnChapeauClient(Client):
 
         self.authorization = None
 
+    def _maybe_parse_json(self, response):
+
+        if response.status_code != 200:
+            return response
+
+        if response['Content-Type'] != 'application/json':
+            return response
+
+        return response.json()
+
     def request(self, **request):
 
         if self.authorization is not None and HTTP_AUTH not in request:
@@ -35,16 +45,12 @@ class UnChapeauClient(Client):
 
         result = super().request(**request)
 
+        if request.get('parse_json', True):
+            result = self._maybe_parse_json(result)
+
         return result
 
 class UnChapeauTestCase(TestCase):
-
-    def _get_json(self, response):
-        self.assertEqual(response.status_code, 200,
-                msg=str(response.content))
-        self.assertEqual(response['Content-Type'], 'application/json',
-                msg=str(response.content))
-        return response.json()
 
     def assertHttpFailCode(self, response,
             failcode):
@@ -54,10 +60,10 @@ class UnChapeauTestCase(TestCase):
     def login(self):
         c = UnChapeauClient()
 
-        app = self._get_json(c.post('/api/v1/apps',
-                APPS_CREATE_PARAMS))
+        app = c.post('/api/v1/apps', APPS_CREATE_PARAMS)
 
         token_params = TOKEN_REQUEST_PARAMS
+
         self.user = User.objects.create_user(
                 username=token_params['username'],
                 email=token_params['username'],
@@ -66,20 +72,16 @@ class UnChapeauTestCase(TestCase):
         for key in ['client_id', 'client_secret']:
             token_params[key] = app[key]
 
-        token = self._get_json(c.post('/oauth/token',
-                token_params))
+        token = c.post('/oauth/token', token_params)
 
-        account = self._get_json(c.get('/api/v1/accounts/verify_credentials',
-                HTTP_AUTHORIZATION = 'Bearer '+token['access_token']))
-
-
+        c.authorization = 'Bearer '+token['access_token']
+        self.account = c.get('/api/v1/accounts/verify_credentials')
 
 class AuthTests(UnChapeauTestCase):
     def test_create_app(self):
         c = UnChapeauClient()
 
-        app = self._get_json(c.post('/api/v1/apps',
-                APPS_CREATE_PARAMS))
+        app = c.post('/api/v1/apps', APPS_CREATE_PARAMS)
 
         for key in ['client_id', 'client_secret', 'id']:
             self.assertIn(key, app)
@@ -87,8 +89,7 @@ class AuthTests(UnChapeauTestCase):
     def test_create_token(self):
         c = UnChapeauClient()
 
-        app = self._get_json(c.post('/api/v1/apps',
-                APPS_CREATE_PARAMS))
+        app = c.post('/api/v1/apps', APPS_CREATE_PARAMS)
 
         token_params = TOKEN_REQUEST_PARAMS
         self.user = User.objects.create_user(
@@ -99,8 +100,7 @@ class AuthTests(UnChapeauTestCase):
         for key in ['client_id', 'client_secret']:
             token_params[key] = app[key]
 
-        token = self._get_json(c.post('/oauth/token',
-                TOKEN_REQUEST_PARAMS))
+        token = c.post('/oauth/token', TOKEN_REQUEST_PARAMS)
 
         for key in ['access_token','token_type','scope']:
             self.assertIn(key, token)
@@ -111,8 +111,7 @@ class AuthTests(UnChapeauTestCase):
     def test_create_token_fails(self):
         c = UnChapeauClient()
 
-        app = self._get_json(c.post('/api/v1/apps',
-                APPS_CREATE_PARAMS))
+        app = c.post('/api/v1/apps', APPS_CREATE_PARAMS)
 
         token_params = TOKEN_REQUEST_PARAMS
         self.user = User.objects.create_user(
@@ -131,10 +130,10 @@ class AuthTests(UnChapeauTestCase):
     def test_login(self):
         c = UnChapeauClient()
 
-        app = self._get_json(c.post('/api/v1/apps',
-                APPS_CREATE_PARAMS))
+        app = c.post('/api/v1/apps', APPS_CREATE_PARAMS)
 
         token_params = TOKEN_REQUEST_PARAMS
+
         self.user = User.objects.create_user(
                 username=token_params['username'],
                 email=token_params['username'],
@@ -143,12 +142,11 @@ class AuthTests(UnChapeauTestCase):
         for key in ['client_id', 'client_secret']:
             token_params[key] = app[key]
 
-        token = self._get_json(c.post('/oauth/token',
-                token_params))
+        token = c.post('/oauth/token', token_params)
 
         c.authorization = 'Bearer '+token['access_token']
 
-        account = self._get_json(c.get('/api/v1/accounts/verify_credentials'))
+        account = c.get('/api/v1/accounts/verify_credentials')
 
         for key in ['id', 'username', 'acct', 'display_name',
                 'locked', 'created_at', 'note', 'avatar',
@@ -163,10 +161,10 @@ class AuthTests(UnChapeauTestCase):
     def test_login_fails(self):
         c = UnChapeauClient()
 
-        app = self._get_json(c.post('/api/v1/apps',
-                APPS_CREATE_PARAMS))
+        app = c.post('/api/v1/apps', APPS_CREATE_PARAMS)
 
         token_params = TOKEN_REQUEST_PARAMS
+
         self.user = User.objects.create_user(
                 username=token_params['username'],
                 email=token_params['username'],
@@ -175,8 +173,7 @@ class AuthTests(UnChapeauTestCase):
         for key in ['client_id', 'client_secret']:
             token_params[key] = app[key]
 
-        token = self._get_json(c.post('/oauth/token',
-                token_params))
+        token = c.post('/oauth/token', token_params)
 
         c.authorization = 'Bearer '+token['access_token']+'x'
 
