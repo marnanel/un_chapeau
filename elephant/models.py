@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.timezone import now
+from un_chapeau.settings import UN_CHAPEAU_SETTINGS
 
 def iso_date(date):
     return date.isoformat()+'Z'
@@ -122,11 +123,17 @@ class Status(models.Model):
 
     def as_json(self):
 
+        path_formatting = {
+                'hostname': UN_CHAPEAU_SETTINGS['HOSTNAME'],
+                'username': self.posted_by.username,
+                'id': self.id,
+                }
+
         result = {
                 "id": self.posted_by.as_json(),
-                "uri": "?", # https://toot.love/users/un_chapeau_test/statuses/99927189452438245
-                "url": "?", # https://toot.love/@un_chapeau_test/99927189452438245
-                "account": "your account",
+                "url": UN_CHAPEAU_SETTINGS['URL_FORMAT'] % path_formatting,
+                "uri": UN_CHAPEAU_SETTINGS['URI_FORMAT'] % path_formatting,
+                "account": self.posted_by.as_json(),
                 "content": self.content,
                 'created_at': iso_date(self.created_at),
                 "emojis": [],
@@ -141,13 +148,12 @@ class Status(models.Model):
                 "media_attachments": [],
                 "mentions": [],
                 "tags": [],
-                "language": '', # XXX null?
+                "language": 'en', # XXX
                 "pinned": False,
-                # XXX in_reply_to_id
-                # XXX in_reply_to_account_id
-                # XXX application
+                "in_reply_to_id": None, # XXX
+                "in_reply_to_account_id": None, # XXX
+                "application": None, # XXX
             }
-
         return result
 
 # XXX Need to wrap oauth2's Application. For now:

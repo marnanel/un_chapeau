@@ -163,11 +163,14 @@ AUTH_USER_MODEL = 'elephant.User'
 ########################
 
 UN_CHAPEAU_SETTINGS = {
+        'HOSTNAME': 'example.com', # XXX there has to be a better way
         'INSTANCE_NAME': 'un_chapeau test',
         'INSTANCE_DESCRIPTION': 'this is a test',
         'CONTACT_ACCOUNT': 'marnanel',
         'CONTACT_EMAIL': 'marnanel@example.com',
         'LANGUAGES': ['en'],
+        'URI_FORMAT': 'https://%(hostname)s/users/%(username)s/statuses/%(id)d',
+        'URL_FORMAT': 'https://%(hostname)s/@%(username)s/%(id)d',
         }
 
 ######################################
