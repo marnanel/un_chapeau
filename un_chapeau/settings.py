@@ -162,8 +162,13 @@ AUTH_USER_MODEL = 'elephant.User'
 
 ########################
 
-UN_CHAPEAU_INSTANCE_TITLE = 'un_chapeau test'
-UN_CHAPEAU_INSTANCE_DESCRIPTION = 'this is a test'
+UN_CHAPEAU_SETTINGS = {
+        'INSTANCE_NAME': 'un_chapeau test',
+        'INSTANCE_DESCRIPTION': 'this is a test',
+        'CONTACT_ACCOUNT': 'marnanel',
+        'CONTACT_EMAIL': 'marnanel@example.com',
+        'LANGUAGES': ['en'],
+        }
 
 ######################################
 
