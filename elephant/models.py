@@ -123,7 +123,7 @@ class Status(models.Model):
     def as_json(self):
 
         result = {
-                "id": self.posted_by().as_json,
+                "id": self.posted_by.as_json(),
                 "uri": "?", # https://toot.love/users/un_chapeau_test/statuses/99927189452438245
                 "url": "?", # https://toot.love/@un_chapeau_test/99927189452438245
                 "account": "your account",
@@ -147,6 +147,8 @@ class Status(models.Model):
                 # XXX in_reply_to_account_id
                 # XXX application
             }
+
+        return result
 
 # XXX Need to wrap oauth2's Application. For now:
 def application_as_json(app):
