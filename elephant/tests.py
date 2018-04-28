@@ -19,9 +19,9 @@ TOKEN_REQUEST_PARAMS = {
         'scope': 'read write follow',
         }
 
-class UnChapeauClient(Client):
+HTTP_AUTH = 'HTTP_AUTHORIZATION'
 
-    http_auth = 'HTTP_AUTHORIZATION'
+class UnChapeauClient(Client):
 
     def __init__(self, **kwargs):
         super().__init__(kwargs)
@@ -30,8 +30,8 @@ class UnChapeauClient(Client):
 
     def request(self, **request):
 
-        if self.authorization is not None and http_auth not in request:
-            request[http_auth] = self.authorization
+        if self.authorization is not None and HTTP_AUTH not in request:
+            request[HTTP_AUTH] = self.authorization
 
         result = super().request(**request)
 
@@ -146,8 +146,9 @@ class AuthTests(UnChapeauTestCase):
         token = self._get_json(c.post('/oauth/token',
                 token_params))
 
-        account = self._get_json(c.get('/api/v1/accounts/verify_credentials',
-                HTTP_AUTHORIZATION = 'Bearer '+token['access_token']))
+        c.authorization = 'Bearer '+token['access_token']
+
+        account = self._get_json(c.get('/api/v1/accounts/verify_credentials'))
 
         for key in ['id', 'username', 'acct', 'display_name',
                 'locked', 'created_at', 'note', 'avatar',
@@ -177,8 +178,9 @@ class AuthTests(UnChapeauTestCase):
         token = self._get_json(c.post('/oauth/token',
                 token_params))
 
-        account = c.get('/api/v1/accounts/verify_credentials',
-                HTTP_AUTHORIZATION = 'Bearer '+token['access_token']+'x')
+        c.authorization = 'Bearer '+token['access_token']+'x'
+
+        account = c.get('/api/v1/accounts/verify_credentials')
 
         self.assertHttpFailCode(account, 403)
         
