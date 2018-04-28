@@ -17,9 +17,6 @@ def un_chapeau_response(d):
             reason = 'love and hugs',
             charset = 'UTF-8')
 
-def iso_date(date):
-    return date.isoformat()+'Z'
-
 ###########################
 
 class Instance(View):
@@ -69,30 +66,7 @@ class Verify_Credentials(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
 
-        user = request.user
-
-        result = {
-            'id': user.id,
-            'username': user.username,
-            'acct': user.username, # XXX for remote ones we need to split this up
-            'display_name': user.display_name,
-            'locked': user.is_locked,
-            'created_at': iso_date(user.created_at),
-            'note': user.note,
-            'url': user.url,
-            'avatar': '/static/un_chapeau/defaults/avatar_1.jpg',
-            'avatar_static': '/static/un_chapeau/defaults/avatar_1.jpg',
-            'header': '/static/un_chapeau/defaults/header.jpg',
-            'header_static': '/static/un_chapeau/defaults/header.jpg',
-            'followers_count': 0,
-            'following_count': 0,
-            'statuses_count': 0,
-            'source': {
-                'privacy': 'public',
-                'sensitive': False,
-                'note': user.note,
-                },
-            }
+        result = request.user.as_json(include_source=True)
 
         return un_chapeau_response(result)
 
@@ -115,28 +89,6 @@ class Statuses(View):
 
         new_status.save()
 
-        # XXX obviously this will need splitting out
-        result = {
-                "id": new_status.id,
-                "uri": "?",
-                "url": "?",
-                "account": "your account",
-                "content": new_status.content,
-                'created_at': iso_date(new_status.created_at),
-                "emojis": [],
-                "reblogs_count": 0,
-                "favourites_count": 0,
-                "reblogged": False,
-                "favourited": False,
-                "muted": False,
-                "sensitive": new_status.is_sensitive(),
-                "spoiler_text": new_status.spoiler_text,
-                "visibility": new_status.visibility,
-                "media_attachments": [],
-                "mentions": [],
-                "tags": [],
-                "language": 'en',
-                "pinned": False,
-            }
+        result = new_status.as_json()
 
         return un_chapeau_response(result)
