@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import View
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from oauth2_provider.models import Application
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
@@ -8,14 +8,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from un_chapeau.settings import UN_CHAPEAU_SETTINGS
 from .models import Status
 import json
-
-def un_chapeau_response(d):
-    return HttpResponse(
-            content_type = 'application/json',
-            content = json.dumps(d, indent=2, sort_keys=True),
-            status = 200,
-            reason = 'love and hugs',
-            charset = 'UTF-8')
 
 ###########################
 
@@ -34,7 +26,7 @@ class Instance(View):
             'contact_account': UN_CHAPEAU_SETTINGS['CONTACT_ACCOUNT'],
             }
 
-        return un_chapeau_response(result)
+        return JsonResponse(result)
 
 ###########################
 
@@ -58,7 +50,7 @@ class Apps(View):
             'client_secret': new_app.client_secret,
             }
 
-        return un_chapeau_response(result)
+        return JsonResponse(result)
 
 class Verify_Credentials(LoginRequiredMixin, View):
 
@@ -68,7 +60,7 @@ class Verify_Credentials(LoginRequiredMixin, View):
 
         result = request.user.as_json(include_source=True)
 
-        return un_chapeau_response(result)
+        return JsonResponse(result)
 
 class Statuses(View):
 
@@ -91,4 +83,4 @@ class Statuses(View):
 
         result = new_status.as_json()
 
-        return un_chapeau_response(result)
+        return JsonResponse(result)
