@@ -7,6 +7,9 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.mixins import LoginRequiredMixin
 from un_chapeau.settings import UN_CHAPEAU_SETTINGS
 from .models import Status
+from .serializers import StatusSerializer
+from rest_framework import generics, response
+from rest_framework.permissions import IsAuthenticated
 import json
 
 ###########################
@@ -62,25 +65,9 @@ class Verify_Credentials(LoginRequiredMixin, View):
 
         return JsonResponse(result)
 
-class Statuses(View):
+class Statuses(generics.ListCreateAPIView):
 
-    def post(self, request, *args, **kwargs):
-        # XXX require authentication here
+    queryset = Status.objects.all()
+    serializer_class = StatusSerializer
+    permission_classes = (IsAuthenticated, )
 
-        new_status = Status(
-            content = request.POST['status'],
-            #sensitive = int(request.POST['sensitive']),
-            #spoiler_text = request.POST['spoiler_text'],
-            visibility = request.POST.get('visibility', 'public'),
-
-            # XXX we can't do media IDs until we implement media
-            # XXX idempotency taken from "Idempotency-Key" header
-            # XXX sanitise HTML
-
-            )
-
-        new_status.save()
-
-        result = new_status.as_json()
-
-        return JsonResponse(result)

@@ -231,7 +231,8 @@ class StatusTests(UnChapeauTestCase):
         status_params = {
                 'status': 'Hello world!',
                 }
-        status = c.post('/api/v1/statuses', status_params).json()
+        status = c.post('/api/v1/statuses', status_params,
+                expected_status_code = 201).json()
 
         for key in [
                 'id', 'uri', 'url', 'account', 'content',

@@ -101,12 +101,9 @@ class Status(models.Model):
     UNLISTED = "unlisted"
     PUBLIC = "public"
 
-    VISIBILITY_CHOICES = (
-            (DIRECT, DIRECT),
-            (PRIVATE, PRIVATE),
-            (UNLISTED, UNLISTED),
-            (PUBLIC, PUBLIC),
-            )
+    VISIBILITY_VALUES = [DIRECT, PRIVATE, UNLISTED, PUBLIC]
+
+    VISIBILITY_CHOICES = [(x,x) for x in VISIBILITY_VALUES]
 
     visibility = models.CharField(max_length=255,
             choices = VISIBILITY_CHOICES,
@@ -121,40 +118,74 @@ class Status(models.Model):
     def __str__(self):
         return str(self.user) + " - " + self.content
 
-    def as_json(self):
-
-        path_formatting = {
+    def _path_formatting(self, formatting):
+        return UN_CHAPEAU_SETTINGS[formatting] % {
                 'hostname': UN_CHAPEAU_SETTINGS['HOSTNAME'],
                 'username': self.posted_by.username,
                 'id': self.id,
                 }
 
-        result = {
-                "id": self.posted_by.as_json(),
-                "url": UN_CHAPEAU_SETTINGS['URL_FORMAT'] % path_formatting,
-                "uri": UN_CHAPEAU_SETTINGS['URI_FORMAT'] % path_formatting,
-                "account": self.posted_by.as_json(),
-                "content": self.content,
-                'created_at': iso_date(self.created_at),
-                "emojis": [],
-                "reblogs_count": 0,
-                "favourites_count": 0,
-                "reblogged": False,
-                "favourited": False,
-                "muted": False,
-                "sensitive": self.is_sensitive(),
-                "spoiler_text": self.spoiler_text,
-                "visibility": self.visibility,
-                "media_attachments": [],
-                "mentions": [],
-                "tags": [],
-                "language": 'en', # XXX
-                "pinned": False,
-                "in_reply_to_id": None, # XXX
-                "in_reply_to_account_id": None, # XXX
-                "application": None, # XXX
-            }
-        return result
+    def url(self):
+        return self._path_formatting('URL_FORMAT')
+
+    def uri(self):
+        return self._path_formatting('URI_FORMAT')
+
+    def emojis(self):
+        # I suppose we should do emojis eventually
+        return []
+
+    def reblog(self):
+        # XXX
+        return None
+
+    def reblogs_count(self):
+        # XXX
+        return 0
+
+    def favourites_count(self):
+        # XXX
+        return 0
+
+    def reblogged(self):
+        # XXX
+        return False
+
+    def favourited(self):
+        # XXX
+        return False
+
+    def muted(self):
+        # XXX
+        return False
+
+    def mentions(self):
+        # XXX
+        return []
+
+    def media_attachments(self):
+        # XXX
+        return []
+
+    def tags(self):
+        # XXX
+        return []
+
+    def language(self):
+        # XXX
+        return 'en'
+
+    def pinned(self):
+        # XXX
+        return False
+
+    def in_reply_to_account_id(self):
+        # XXX
+        return None
+
+    def application(self):
+        # XXX
+        return None
 
 # XXX Need to wrap oauth2's Application. For now:
 def application_as_json(app):
