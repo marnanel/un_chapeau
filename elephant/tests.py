@@ -213,14 +213,13 @@ class AuthTests(UnChapeauTestCase):
                 # but we'll fix it when we reasonably can.
                 expected_content_type = 'text/html',
 
-                expected_status_code = 403)
+                expected_status_code = 401)
 
     def test_client_login_method(self):
         c = UnChapeauClient()
 
         c.login()
 
-        
 class StatusTests(UnChapeauTestCase):
 
     def test_post_status(self):

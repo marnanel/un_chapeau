@@ -22,7 +22,7 @@ class User(AbstractUser):
     display_name = models.CharField(max_length=255,
             default='')
 
-    is_locked = models.BooleanField(default=False)
+    locked = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(default=now,
             editable=False)
@@ -36,36 +36,45 @@ class User(AbstractUser):
     moved_to = models.CharField(max_length=255,
             default='')
 
+    def acct(self):
+        # XXX for remote ones we need to spilt this up
+        return self.username
 
-    def as_json(self,
-            include_source=False):
+    def followers_count(self):
+        # XXX
+        return 0
 
-        result = {
-            'id': self.id,
-            'username': self.username,
-            'acct': self.username, # XXX for remote ones we need to split this up
-            'display_name': self.display_name,
-            'locked': self.is_locked,
-            'created_at': iso_date(self.created_at),
-            'note': self.note,
-            'url': self.url,
-            'avatar': '/static/un_chapeau/defaults/avatar_1.jpg',
-            'avatar_static': '/static/un_chapeau/defaults/avatar_1.jpg',
-            'header': '/static/un_chapeau/defaults/header.jpg',
-            'header_static': '/static/un_chapeau/defaults/header.jpg',
-            'followers_count': 0,
-            'following_count': 0,
-            'statuses_count': 0,
-        }
+    def following_count(self):
+        # XXX
+        return 0
 
-        if include_source:
-            result['source'] = {
-                'privacy': 'public',
-                'sensitive': False,
-                'note': self.note,
-                }
+    def statuses_count(self):
+        # XXX
+        return 0
 
-        return result
+    def avatar(self):
+        # XXX
+        return '/static/un_chapeau/defaults/avatar_1.jpg'
+
+    def avatar_static(self):
+        # XXX
+        return self.avatar()
+
+    def header(self):
+        # XXX
+        return '/static/un_chapeau/defaults/header.jpg'
+
+    def header_static(self):
+        # XXX
+        return self.header()
+
+    def default_privacy(self):
+        # XXX
+        return 'public'
+
+    def default_sensitive(self):
+        # XXX
+        return False
 
 class Status(models.Model):
 

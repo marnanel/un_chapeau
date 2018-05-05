@@ -6,10 +6,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.mixins import LoginRequiredMixin
 from un_chapeau.settings import UN_CHAPEAU_SETTINGS
-from .models import Status
-from .serializers import StatusSerializer
+from .models import Status, User
+from .serializers import *
 from rest_framework import generics, response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 import json
 
 ###########################
@@ -55,15 +56,14 @@ class Apps(View):
 
         return JsonResponse(result)
 
-class Verify_Credentials(LoginRequiredMixin, View):
+class Verify_Credentials(generics.GenericAPIView):
 
-    raise_exception = True # 403 if they're not authenticated
+    queryset = User.objects.all()
+    permission_classes = (IsAuthenticated, )
 
-    def get(self, request, *args, **kwargs):
-
-        result = request.user.as_json(include_source=True)
-
-        return JsonResponse(result)
+    def get(self, request):
+        serializer = UserSerializerWithSource(request.user)
+        return Response(serializer.data)
 
 class Statuses(generics.ListCreateAPIView):
 

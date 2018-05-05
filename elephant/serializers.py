@@ -5,10 +5,42 @@ from oauth2_provider.models import Application
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'email', 'display_name',
-                'is_locked', 'created_at', 'note',
-                'url', 'moved_to',
+        fields = (
+                'id',
+                'username',
+                'acct',
+                'display_name',
+                'email',
+                'locked',
+                'created_at',
+                'followers_count',
+                'following_count',
+                'statuses_count',
+                'note',
+                'url',
+                'avatar',
+                'avatar_static',
+                'header',
+                'header_static',
+                'moved_to',
                 )
+
+class UserSerializerWithSource(UserSerializer):
+
+    class Meta:
+        model = UserSerializer.Meta.model
+        fields = UserSerializer.Meta.fields + (
+            'source',
+            )
+
+    source = serializers.SerializerMethodField()
+
+    def get_source(self, instance):
+        return {
+                'privacy': instance.default_privacy(),
+                'sensitive': instance.default_sensitive(),
+                'note': instance.note,
+                }
 
 class StatusSerializer(serializers.ModelSerializer):
     class Meta:
