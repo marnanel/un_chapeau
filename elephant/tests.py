@@ -1,5 +1,5 @@
 from django.test import TestCase, Client
-from elephant.models import User
+from elephant.models import *
 
 # Create your tests here.
 
@@ -242,4 +242,28 @@ class StatusTests(UnChapeauTestCase):
                 'mentions', 'tags']:
                 self.assertIn(key, status)
 
+class UserTests(UnChapeauTestCase):
 
+    def _createFred(self):
+        self.user_fred = User.objects.create_user(
+                username='fred',
+                email='fred@example.com',
+                password='fredfred')
+
+    def _createJim(self):
+        user_jim = User.objects.create_user(
+                username='jim',
+                email='jim@example.com',
+                password='jimjim')
+
+    def test_status_count(self):
+        self._createFred()
+
+        self.assertEqual(self.user_fred.statuses_count(), 0)
+
+        for i in range(1, 13):
+            Status.objects.create(
+                    status= 'Hello world!',
+                    posted_by = self.user_fred,
+                    )
+            self.assertEqual(self.user_fred.statuses_count(), i)
