@@ -194,10 +194,3 @@ class Status(models.Model):
     def application(self):
         # XXX
         return None
-
-# XXX Need to wrap oauth2's Application. For now:
-def application_as_json(app):
-    return {
-            "name": app.name,
-            "website": app.website,
-            }
