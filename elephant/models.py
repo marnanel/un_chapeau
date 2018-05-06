@@ -49,8 +49,7 @@ class User(AbstractUser):
         return 0
 
     def statuses_count(self):
-        # XXX
-        return 0
+        return Status.objects.filter(posted_by=self).count()
 
     def avatar(self):
         # XXX
