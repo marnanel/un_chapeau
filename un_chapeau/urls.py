@@ -44,6 +44,7 @@ urlpatterns = [
     path('api/v1/apps', views.Apps.as_view()),
     path('api/v1/accounts/verify_credentials', views.Verify_Credentials.as_view()),
     path('api/v1/statuses', views.Statuses.as_view()),
+    path('api/v1/timelines/public', views.PublicTimeline.as_view()),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

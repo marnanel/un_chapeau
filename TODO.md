@@ -20,7 +20,9 @@ Statuses
 
 Timelines
 ---------
-- everything
+- home
+- hashtag
+- lists
 
 Searching
 ---------

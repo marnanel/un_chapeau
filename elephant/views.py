@@ -71,3 +71,16 @@ class Statuses(generics.ListCreateAPIView):
     serializer_class = StatusSerializer
     permission_classes = (IsAuthenticated, )
 
+class AbstractTimeline(generics.ListAPIView):
+
+    serializer_class = StatusSerializer
+    permission_classes = ()
+
+    def get_queryset(self):
+        raise RuntimeError("cannot query abstract timeline")
+
+class PublicTimeline(AbstractTimeline):
+
+    def get_queryset(self):
+        return Status.objects.filter(visibility='public')
+

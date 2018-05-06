@@ -104,7 +104,17 @@ class UnChapeauClient(Client):
         self.authorization = 'Bearer '+self.token['access_token']
 
 class UnChapeauTestCase(TestCase):
-    pass
+    def _createFred(self):
+        self.user_fred = User.objects.create_user(
+                username='fred',
+                email='fred@example.com',
+                password='fredfred')
+
+    def _createJim(self):
+        user_jim = User.objects.create_user(
+                username='jim',
+                email='jim@example.com',
+                password='jimjim')
 
 class AuthTests(UnChapeauTestCase):
     def test_create_app(self):
@@ -244,18 +254,6 @@ class StatusTests(UnChapeauTestCase):
 
 class UserTests(UnChapeauTestCase):
 
-    def _createFred(self):
-        self.user_fred = User.objects.create_user(
-                username='fred',
-                email='fred@example.com',
-                password='fredfred')
-
-    def _createJim(self):
-        user_jim = User.objects.create_user(
-                username='jim',
-                email='jim@example.com',
-                password='jimjim')
-
     def test_status_count(self):
         self._createFred()
 
@@ -267,3 +265,27 @@ class UserTests(UnChapeauTestCase):
                     posted_by = self.user_fred,
                     )
             self.assertEqual(self.user_fred.statuses_count(), i)
+
+class TimelineTests(UnChapeauTestCase):
+
+    CREATE_COUNT = 20
+
+    def test_public_timeline(self):
+        self._createFred()
+
+        statuses = []
+        for i in range(self.CREATE_COUNT):
+            statuses.append(Status.objects.create(
+                    status = 'Hello %04d!' % (i,),
+                    posted_by = self.user_fred,
+                    ))
+
+        c = UnChapeauClient()
+
+        timeline = c.get('/api/v1/timelines/public').json()
+
+        self.assertEqual(len(timeline), len(statuses))
+
+        for i, status in enumerate(statuses):
+            self.assertEqual(status.content,
+                    timeline[i]['content'])
