@@ -252,6 +252,47 @@ class StatusTests(UnChapeauTestCase):
                 'mentions', 'tags']:
                 self.assertIn(key, status)
 
+    def test_sensitive_status(self):
+        self._createFred()
+
+        for sensitive_by_default in (False, True):
+
+            if sensitive_by_default:
+                self.user_fred.default_sensitive = True
+
+            ordinary_status = Status.objects.create(
+                posted_by = self.user_fred,
+                status = 'I like cheese. It is delicious.',
+                )
+
+            self.assertEqual(ordinary_status.is_sensitive(),
+                    sensitive_by_default)
+
+            nsfw_status = Status.objects.create(
+                posted_by = self.user_fred,
+                status = 'I was very naughty today.',
+                sensitive = True,
+                )
+
+            self.assertEqual(nsfw_status.is_sensitive(), True)
+
+            spoiler_status = Status.objects.create(
+                posted_by = self.user_fred,
+                spoiler_text = 'Spoilers for Jekyll and Hyde',
+                status = 'They turn out to be the same guy.',
+                )
+
+            self.assertEqual(spoiler_status.is_sensitive(), True)
+
+            nsfw_spoiler_status = Status.objects.create(
+                posted_by = self.user_fred,
+                sensitive = True,
+                spoiler_text = 'Lex Luthor being naughty.',
+                status = 'He stole 40 cakes.',
+                )
+
+            self.assertEqual(nsfw_spoiler_status.is_sensitive(), True)
+
 class UserTests(UnChapeauTestCase):
 
     def test_status_count(self):
