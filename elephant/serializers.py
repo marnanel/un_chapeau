@@ -37,8 +37,8 @@ class UserSerializerWithSource(UserSerializer):
 
     def get_source(self, instance):
         return {
-                'privacy': instance.default_privacy(),
-                'sensitive': instance.default_sensitive(),
+                'privacy': instance.default_visibility,
+                'sensitive': instance.default_sensitive,
                 'note': instance.note,
                 }
 

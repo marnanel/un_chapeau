@@ -3,6 +3,17 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.timezone import now
 from un_chapeau.settings import UN_CHAPEAU_SETTINGS
 
+VISIBILITY = {
+        0: 'private', # seems like a safe choice for zero
+        1: 'unlisted',
+        2: 'public',
+        3: 'direct',
+        }
+
+VISIBILITY_NAMES = dict([(v,k) for k,v in VISIBILITY.items()])
+
+VISIBILITY_CHOICES = VISIBILITY.items()
+
 def iso_date(date):
     return date.isoformat()+'Z'
 
@@ -36,6 +47,22 @@ class User(AbstractUser):
     moved_to = models.CharField(max_length=255,
             default='')
 
+    # XXX this should really use reverse()
+    avatar = models.CharField(max_length=255,
+            default='/static/un_chapeau/defaults/avatar_1.jpg')
+
+    # XXX this should really use reverse()
+    header = models.CharField(max_length=255,
+            default='/static/un_chapeau/defaults/avatar_1.jpg')
+
+    default_sensitive = models.BooleanField(
+            default=False)
+
+    default_visibility = models.CharField(max_length=255,
+            choices = VISIBILITY_CHOICES,
+            default = VISIBILITY_NAMES["public"],
+            )
+
     def acct(self):
         # XXX for remote ones we need to spilt this up
         return self.username
@@ -51,29 +78,13 @@ class User(AbstractUser):
     def statuses_count(self):
         return Status.objects.filter(posted_by=self).count()
 
-    def avatar(self):
-        # XXX
-        return '/static/un_chapeau/defaults/avatar_1.jpg'
-
     def avatar_static(self):
         # XXX
-        return self.avatar()
-
-    def header(self):
-        # XXX
-        return '/static/un_chapeau/defaults/header.jpg'
+        return self.avatar
 
     def header_static(self):
         # XXX
-        return self.header()
-
-    def default_privacy(self):
-        # XXX
-        return 'public'
-
-    def default_sensitive(self):
-        # XXX
-        return False
+        return self.header
 
 class Status(models.Model):
 
@@ -104,18 +115,9 @@ class Status(models.Model):
 
     spoiler_text = models.CharField(max_length=255, default='')
 
-    DIRECT = "direct"
-    PRIVATE = "private"
-    UNLISTED = "unlisted"
-    PUBLIC = "public"
-
-    VISIBILITY_VALUES = [DIRECT, PRIVATE, UNLISTED, PUBLIC]
-
-    VISIBILITY_CHOICES = [(x,x) for x in VISIBILITY_VALUES]
-
     visibility = models.CharField(max_length=255,
             choices = VISIBILITY_CHOICES,
-            default = "public",
+            default = VISIBILITY_NAMES["public"],
             )
 
     idempotency_key = models.CharField(max_length=255, default='')
