@@ -259,6 +259,7 @@ class StatusTests(UnChapeauTestCase):
 
             if sensitive_by_default:
                 self.user_fred.default_sensitive = True
+                self.user_fred.save()
 
             ordinary_status = Status.objects.create(
                 posted_by = self.user_fred,

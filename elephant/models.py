@@ -58,7 +58,7 @@ class User(AbstractUser):
     default_sensitive = models.BooleanField(
             default=False)
 
-    default_visibility = models.CharField(max_length=255,
+    default_visibility = models.IntegerField(
             choices = VISIBILITY_CHOICES,
             default = VISIBILITY_NAMES["public"],
             )
@@ -110,17 +110,25 @@ class Status(models.Model):
 
     # XXX Media IDs here, when we've implemented Media
 
-    sensitive = models.BooleanField(default=False)
+    sensitive = models.BooleanField(default=None)
     # applies to the media, not the text
 
     spoiler_text = models.CharField(max_length=255, default='')
 
-    visibility = models.CharField(max_length=255,
+    visibility = models.IntegerField(
             choices = VISIBILITY_CHOICES,
-            default = VISIBILITY_NAMES["public"],
             )
 
     idempotency_key = models.CharField(max_length=255, default='')
+
+    def save(self, *args, **kwargs):
+
+        if self.visibility is None:
+            self.visibility = self.posted_by.default_visibility
+        if self.sensitive is None:
+            self.sensitive = self.posted_by.default_sensitive
+
+        super().save(*args, **kwargs)
 
     def is_sensitive(self):
         return self.spoiler_text!='' or self.sensitive
