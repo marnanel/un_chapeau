@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.timezone import now
 from un_chapeau.settings import UN_CHAPEAU_SETTINGS
 
+#############################
+
 VISIBILITY = {
         0: 'private', # seems like a safe choice for zero
         1: 'unlisted',
@@ -13,6 +15,27 @@ VISIBILITY = {
 VISIBILITY_NAMES = dict([(v,k) for k,v in VISIBILITY.items()])
 
 VISIBILITY_CHOICES = VISIBILITY.items()
+
+#############################
+
+RELATIONSHIP_IS_FOLLOWING = 'F'
+RELATIONSHIP_HAS_BLOCKED = 'B'
+RELATIONSHIP_HAS_MUTED = 'M'
+RELATIONSHIP_HAS_MUTED_NOTIFICATIONS = 'N'
+RELATIONSHIP_HAS_REQUESTED_ACCESS_TO = 'R'
+
+RELATIONSHIP_CHOICES = (
+        # ugh, that sounds like the title
+        # of an eighties sex ed film
+
+        (RELATIONSHIP_IS_FOLLOWING, 'is following'),
+        (RELATIONSHIP_HAS_BLOCKED, 'has blocked'),
+        (RELATIONSHIP_HAS_MUTED, 'has muted'),
+        (RELATIONSHIP_HAS_MUTED_NOTIFICATIONS, 'has muted notifications'),
+        (RELATIONSHIP_HAS_REQUESTED_ACCESS_TO, 'has requested access to'),
+        )
+
+#############################
 
 def iso_date(date):
     return date.isoformat()+'Z'
@@ -85,6 +108,92 @@ class User(AbstractUser):
     def header_static(self):
         # XXX
         return self.header
+
+    ############### Relationships (friending, muting, blocking, etc)
+
+    def _make_relationship(self, someone, type_):
+        rel = Relationship(
+                us = self,
+                them = someone,
+                what = type_)
+        rel.save()
+
+    def _destroy_relationship(self, someone, type_):
+        rel = Relationship.objects.get(
+                us = self,
+                them = someone,
+                what = type_).delete()
+
+    def _query_relationship(self, someone, type_):
+        return Relationship.objects.get(
+                us = self,
+                them = someone,
+                what = type_).exists()
+
+    def block(self, someone):
+        self._make_relationship(someone,
+                RELATIONSHIP_HAS_BLOCKED)
+
+    def unblock(self, someone):
+        self._destroy_relationship(someone,
+                RELATIONSHIP_HAS_BLOCKED)
+
+    def has_blocked(self, someone):
+        return self._query_relationship(someone,
+                RELATIONSHIP_HAS_BLOCKED)
+
+    def _mute_type(self, with_notifications):
+        if with_notifications:
+            return RELATIONSHIP_HAS_MUTED_NOTIFICATIONS
+        else:
+            return RELATIONSHIP_HAS_MUTED
+
+    def mute(self, someone,
+            with_notifications=False):
+        self._make_relationship(someone,
+                self._mute_type(with_notifications))
+
+    def unmute(self, someone,
+            with_notifications=False):
+        self._destroy_relationship(someone,
+                self._mute_type(with_notifications))
+
+    def has_muted(self, someone):
+        return self._query_relationship(someone,
+                self._mute_type(with_notifications))
+
+    def follow(self, someone):
+        self._make_relationship(someone,
+                RELATIONSHIP_IS_FOLLOWING)
+
+    def unfollow(self, someone):
+        self._destroy_relationship(someone,
+                RELATIONSHIP_IS_FOLLOWING)
+
+    def is_following(self, someone):
+        return self._query_relationship(someone,
+                RELATIONSHIP_IS_FOLLOWING)
+
+    def is_followed_by(self, someone):
+        return Relationship.objects.get(
+                us = someone,
+                them = self,
+                what = RELATIONSHIP_IS_FOLLOWING).exists()
+
+    def request_access(self, someone):
+        self._make_relationship(someone,
+                RELATIONSHIP_HAS_REQUESTED_ACCESS)
+
+    def unrequest_access(self, someone):
+        # I don't know whether that's the proper word
+        self._destroy_relationship(someone,
+                RELATIONSHIP_HAS_REQUESTED_ACCESS)
+
+    def has_requested_access(self, someone):
+        return self._query_relationship(someone,
+                RELATIONSHIP_HAS_REQUESTED_ACCESS)
+
+#############################
 
 class Status(models.Model):
 
@@ -204,3 +313,17 @@ class Status(models.Model):
     def application(self):
         # XXX
         return None
+
+class Relationship(models.Model):
+    """
+    A transitive relationship between two users.
+    Don't use this class directly: use the accessors
+    in User.
+    """
+    us = User()
+    them = User()
+
+    what = models.CharField(
+            max_length = 1,
+            choices = RELATIONSHIP_CHOICES,
+            )
