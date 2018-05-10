@@ -127,7 +127,7 @@ class User(AbstractUser):
                 what = type_).delete()
 
     def _query_relationship(self, someone, type_):
-        return Relationship.objects.get(
+        return Relationship.objects.filter(
                 us = self,
                 them = someone,
                 what = type_).exists()
@@ -177,7 +177,7 @@ class User(AbstractUser):
                 RELATIONSHIP_IS_FOLLOWING)
 
     def is_followed_by(self, someone):
-        return Relationship.objects.get(
+        return Relationship.objects.filter(
                 us = someone,
                 them = self,
                 what = RELATIONSHIP_IS_FOLLOWING).exists()
@@ -324,8 +324,15 @@ class Relationship(models.Model):
     Don't use this class directly: use the accessors
     in User.
     """
-    us = User()
-    them = User()
+    us = models.ForeignKey(User,
+            on_delete = models.DO_NOTHING,
+            related_name = 'active',
+            )
+
+    them = models.ForeignKey(User,
+            on_delete = models.DO_NOTHING,
+            related_name = 'passive',
+            )
 
     what = models.CharField(
             max_length = 1,
