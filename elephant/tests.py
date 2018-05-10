@@ -104,17 +104,13 @@ class UnChapeauClient(Client):
         self.authorization = 'Bearer '+self.token['access_token']
 
 class UnChapeauTestCase(TestCase):
-    def _createFred(self):
-        self.user_fred = User.objects.create_user(
-                username='fred',
-                email='fred@example.com',
-                password='fredfred')
-
-    def _createJim(self):
-        user_jim = User.objects.create_user(
-                username='jim',
-                email='jim@example.com',
-                password='jimjim')
+    def _createUser(self, name):
+        result = User.objects.create_user(
+                username=name,
+                email=name+'@example.com',
+                password=name+name)
+        result.save()
+        return result
 
 class AuthTests(UnChapeauTestCase):
     def test_create_app(self):
@@ -253,16 +249,16 @@ class StatusTests(UnChapeauTestCase):
                 self.assertIn(key, status)
 
     def test_sensitive_status(self):
-        self._createFred()
+        fred = self._createUser("fred")
 
         for sensitive_by_default in (False, True):
 
             if sensitive_by_default:
-                self.user_fred.default_sensitive = True
-                self.user_fred.save()
+                fred.default_sensitive = True
+                fred.save()
 
             ordinary_status = Status.objects.create(
-                posted_by = self.user_fred,
+                posted_by = fred,
                 status = 'I like cheese. It is delicious.',
                 )
 
@@ -270,7 +266,7 @@ class StatusTests(UnChapeauTestCase):
                     sensitive_by_default)
 
             nsfw_status = Status.objects.create(
-                posted_by = self.user_fred,
+                posted_by = fred,
                 status = 'I was very naughty today.',
                 sensitive = True,
                 )
@@ -278,7 +274,7 @@ class StatusTests(UnChapeauTestCase):
             self.assertEqual(nsfw_status.is_sensitive(), True)
 
             spoiler_status = Status.objects.create(
-                posted_by = self.user_fred,
+                posted_by = fred,
                 spoiler_text = 'Spoilers for Jekyll and Hyde',
                 status = 'They turn out to be the same guy.',
                 )
@@ -286,7 +282,7 @@ class StatusTests(UnChapeauTestCase):
             self.assertEqual(spoiler_status.is_sensitive(), True)
 
             nsfw_spoiler_status = Status.objects.create(
-                posted_by = self.user_fred,
+                posted_by = fred,
                 sensitive = True,
                 spoiler_text = 'Lex Luthor being naughty.',
                 status = 'He stole 40 cakes.',
@@ -297,29 +293,29 @@ class StatusTests(UnChapeauTestCase):
 class UserTests(UnChapeauTestCase):
 
     def test_status_count(self):
-        self._createFred()
+        fred = self._createUser("fred")
 
-        self.assertEqual(self.user_fred.statuses_count(), 0)
+        self.assertEqual(fred.statuses_count(), 0)
 
         for i in range(1, 13):
             Status.objects.create(
                     status= 'Hello world!',
-                    posted_by = self.user_fred,
+                    posted_by = fred,
                     )
-            self.assertEqual(self.user_fred.statuses_count(), i)
+            self.assertEqual(fred.statuses_count(), i)
 
 class TimelineTests(UnChapeauTestCase):
 
     CREATE_COUNT = 20
 
     def test_public_timeline(self):
-        self._createFred()
+        fred = self._createUser("fred")
 
         statuses = []
         for i in range(self.CREATE_COUNT):
             statuses.append(Status.objects.create(
                     status = 'Hello %04d!' % (i,),
-                    posted_by = self.user_fred,
+                    posted_by = fred,
                     ))
 
         c = UnChapeauClient()
