@@ -304,6 +304,44 @@ class UserTests(UnChapeauTestCase):
                     )
             self.assertEqual(fred.statuses_count(), i)
 
+    def test_following(self):
+
+        fred = self._createUser("fred")
+        jim = self._createUser("jim")
+
+        self.assertEqual(fred.is_following(jim), False)
+        self.assertEqual(jim.is_following(fred), False)
+        self.assertEqual(fred.is_followed_by(jim), False)
+        self.assertEqual(jim.is_followed_by(fred), False)
+
+        fred.follow(jim)
+
+        self.assertEqual(fred.is_following(jim), True)
+        self.assertEqual(jim.is_following(fred), False)
+        self.assertEqual(fred.is_followed_by(jim), False)
+        self.assertEqual(jim.is_followed_by(fred), True)
+
+        jim.follow(fred)
+
+        self.assertEqual(fred.is_following(jim), True)
+        self.assertEqual(jim.is_following(fred), True)
+        self.assertEqual(fred.is_followed_by(jim), True)
+        self.assertEqual(jim.is_followed_by(fred), True)
+
+        fred.unfollow(jim)
+
+        self.assertEqual(fred.is_following(jim), False)
+        self.assertEqual(jim.is_following(fred), True)
+        self.assertEqual(fred.is_followed_by(jim), False)
+        self.assertEqual(jim.is_followed_by(fred), True)
+
+        jim.unfollow(fred)
+
+        self.assertEqual(fred.is_following(jim), False)
+        self.assertEqual(jim.is_following(fred), False)
+        self.assertEqual(fred.is_followed_by(jim), False)
+        self.assertEqual(jim.is_followed_by(fred), False)
+
 class TimelineTests(UnChapeauTestCase):
 
     CREATE_COUNT = 20
