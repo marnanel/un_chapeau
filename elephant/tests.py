@@ -332,8 +332,8 @@ class UserTests(UnChapeauTestCase):
 
         self.assertEqual(fred.is_following(jim), False)
         self.assertEqual(jim.is_following(fred), True)
-        self.assertEqual(fred.is_followed_by(jim), False)
-        self.assertEqual(jim.is_followed_by(fred), True)
+        self.assertEqual(fred.is_followed_by(jim), True)
+        self.assertEqual(jim.is_followed_by(fred), False)
 
         jim.unfollow(fred)
 
