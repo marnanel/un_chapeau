@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.mixins import LoginRequiredMixin
 from un_chapeau.settings import UN_CHAPEAU_SETTINGS
-from .models import Status, User, VISIBILITY_NAMES
+from .models import Status, User, VISIBILITY_PUBLIC
 from .serializers import *
 from rest_framework import generics, response
 from rest_framework.permissions import IsAuthenticated
@@ -82,5 +82,5 @@ class AbstractTimeline(generics.ListAPIView):
 class PublicTimeline(AbstractTimeline):
 
     def get_queryset(self):
-        return Status.objects.filter(visibility=VISIBILITY_NAMES['public'])
+        return Status.objects.filter(visibility=VISIBILITY_PUBLIC)
 

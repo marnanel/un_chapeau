@@ -5,16 +5,17 @@ from un_chapeau.settings import UN_CHAPEAU_SETTINGS
 
 #############################
 
-VISIBILITY = {
-        0: 'private', # seems like a safe choice for zero
-        1: 'unlisted',
-        2: 'public',
-        3: 'direct',
-        }
+VISIBILITY_PRIVATE = 'X'
+VISIBILITY_UNLISTED = 'U'
+VISIBILITY_PUBLIC = 'P'
+VISIBILITY_DIRECT = 'D'
 
-VISIBILITY_NAMES = dict([(v,k) for k,v in VISIBILITY.items()])
-
-VISIBILITY_CHOICES = VISIBILITY.items()
+VISIBILITY_CHOICES = (
+        (VISIBILITY_PRIVATE, 'private'),
+        (VISIBILITY_UNLISTED, 'unlisted'),
+        (VISIBILITY_PUBLIC, 'public'),
+        (VISIBILITY_DIRECT, 'direct'),
+        )
 
 #############################
 
@@ -81,9 +82,10 @@ class User(AbstractUser):
     default_sensitive = models.BooleanField(
             default=False)
 
-    default_visibility = models.IntegerField(
+    default_visibility = models.CharField(
+            max_length = 1,
             choices = VISIBILITY_CHOICES,
-            default = VISIBILITY_NAMES["public"],
+            default = VISIBILITY_PUBLIC,
             )
 
     def acct(self):
@@ -224,8 +226,10 @@ class Status(models.Model):
 
     spoiler_text = models.CharField(max_length=255, default='')
 
-    visibility = models.IntegerField(
+    visibility = models.CharField(
+            max_length = 1,
             choices = VISIBILITY_CHOICES,
+            default = None,
             )
 
     idempotency_key = models.CharField(max_length=255, default='')
