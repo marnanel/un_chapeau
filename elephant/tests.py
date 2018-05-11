@@ -311,36 +311,72 @@ class UserTests(UnChapeauTestCase):
 
         self.assertEqual(fred.is_following(jim), False)
         self.assertEqual(jim.is_following(fred), False)
-        self.assertEqual(fred.is_followed_by(jim), False)
-        self.assertEqual(jim.is_followed_by(fred), False)
 
         fred.follow(jim)
 
         self.assertEqual(fred.is_following(jim), True)
         self.assertEqual(jim.is_following(fred), False)
-        self.assertEqual(fred.is_followed_by(jim), False)
-        self.assertEqual(jim.is_followed_by(fred), True)
 
         jim.follow(fred)
 
         self.assertEqual(fred.is_following(jim), True)
         self.assertEqual(jim.is_following(fred), True)
-        self.assertEqual(fred.is_followed_by(jim), True)
-        self.assertEqual(jim.is_followed_by(fred), True)
 
         fred.unfollow(jim)
 
         self.assertEqual(fred.is_following(jim), False)
         self.assertEqual(jim.is_following(fred), True)
-        self.assertEqual(fred.is_followed_by(jim), True)
-        self.assertEqual(jim.is_followed_by(fred), False)
 
         jim.unfollow(fred)
 
         self.assertEqual(fred.is_following(jim), False)
         self.assertEqual(jim.is_following(fred), False)
-        self.assertEqual(fred.is_followed_by(jim), False)
-        self.assertEqual(jim.is_followed_by(fred), False)
+
+    def test_locked_account_accepted(self):
+
+        fred = self._createUser("fred")
+        jim = self._createUser("jim")
+
+        jim.locked = True
+        jim.save()
+
+        self.assertEqual(fred.is_following(jim), False)
+        self.assertEqual(jim.is_following(fred), False)
+
+        fred.follow(jim)
+
+        self.assertEqual(fred.is_following(jim), False)
+        self.assertEqual(jim.is_following(fred), False)
+
+        self.assertIn(fred, jim.followRequests())
+        jim.dealWithRequest(fred, accept=True)
+        self.assertNotIn(fred, jim.followRequests())
+
+        self.assertEqual(fred.is_following(jim), True)
+        self.assertEqual(jim.is_following(fred), False)
+
+    def test_locked_account_rejected(self):
+
+        fred = self._createUser("fred")
+        jim = self._createUser("jim")
+
+        jim.locked = True
+        jim.save()
+
+        self.assertEqual(fred.is_following(jim), False)
+        self.assertEqual(jim.is_following(fred), False)
+
+        fred.follow(jim)
+
+        self.assertEqual(fred.is_following(jim), False)
+        self.assertEqual(jim.is_following(fred), False)
+
+        self.assertIn(fred, jim.followRequests())
+        jim.dealWithRequest(fred, accept=False)
+        self.assertNotIn(fred, jim.followRequests())
+
+        self.assertEqual(fred.is_following(jim), False)
+        self.assertEqual(jim.is_following(fred), False)
 
 class TimelineTests(UnChapeauTestCase):
 

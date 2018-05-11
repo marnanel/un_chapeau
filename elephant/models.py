@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.timezone import now
+from django.core.exceptions import ObjectDoesNotExist
 from un_chapeau.settings import UN_CHAPEAU_SETTINGS
 
 #############################
@@ -19,10 +20,9 @@ VISIBILITY_CHOICES = (
 
 #############################
 
+RELATIONSHIP_NONE = '-'
 RELATIONSHIP_IS_FOLLOWING = 'F'
-RELATIONSHIP_HAS_BLOCKED = 'B'
-RELATIONSHIP_HAS_MUTED = 'M'
-RELATIONSHIP_HAS_MUTED_NOTIFICATIONS = 'N'
+RELATIONSHIP_IS_BLOCKED_BY = 'B'
 RELATIONSHIP_HAS_REQUESTED_ACCESS_TO = 'R'
 
 RELATIONSHIP_CHOICES = (
@@ -30,10 +30,9 @@ RELATIONSHIP_CHOICES = (
         # of an eighties sex ed film
 
         (RELATIONSHIP_IS_FOLLOWING, 'is following'),
-        (RELATIONSHIP_HAS_BLOCKED, 'has blocked'),
-        (RELATIONSHIP_HAS_MUTED, 'has muted'),
-        (RELATIONSHIP_HAS_MUTED_NOTIFICATIONS, 'has muted notifications'),
+        (RELATIONSHIP_IS_BLOCKED_BY, 'is blocked by'),
         (RELATIONSHIP_HAS_REQUESTED_ACCESS_TO, 'has requested access to'),
+        # RELATIONSHIP_NONE can't appear in a record
         )
 
 #############################
@@ -111,89 +110,131 @@ class User(AbstractUser):
         # XXX
         return self.header
 
-    ############### Relationships (friending, muting, blocking, etc)
+    ############### Relationship (friending, muting, blocking, etc)
 
-    def _make_relationship(self, someone, type_):
-        rel = Relationship(
-                us = self,
-                them = someone,
-                what = type_)
-        rel.save()
+    def _set_relationship(self, them, what, us=None):
 
-    def _destroy_relationship(self, someone, type_):
-        rel = Relationship.objects.get(
-                us = self,
-                them = someone,
-                what = type_).delete()
+        if us is None:
+            us = self
 
-    def _query_relationship(self, someone, type_):
-        return Relationship.objects.filter(
-                us = self,
-                them = someone,
-                what = type_).exists()
+        try:
+            already = Relationship.objects.get(us=us, them=them)
+
+            if what==RELATIONSHIP_NONE:
+                already.delete()
+            else:
+                already.what = what
+                already.save()
+
+        except ObjectDoesNotExist:
+            
+            if what==RELATIONSHIP_NONE:
+                # it ain't broken...
+                return
+
+            rel = Relationship(
+                us = us,
+                them = them,
+                what = what)
+            rel.save()
+
+    def _get_relationship(self, them, us=None):
+
+        if us is None:
+            us = self
+
+        try:
+            rel = Relationship.objects.get(us=us, them=them)
+            return rel.what
+
+        except ObjectDoesNotExist:
+            return RELATIONSHIP_NONE
 
     def block(self, someone):
-        self._make_relationship(someone,
-                RELATIONSHIP_HAS_BLOCKED)
+        """
+        Blocks another user. The other user should
+        henceforth be unaware of our existence.
+
+        See above for why we use "is blocked by"
+        instead of "has blocked".
+        """
+        self._set_relationship(
+                us=someone,
+                them=self,
+                what=RELATIONSHIP_IS_BLOCKED_BY)
+
+        self._set_relationship(
+                us=self,
+                them=someone,
+                what=RELATIONSHIP_NONE)
 
     def unblock(self, someone):
-        self._destroy_relationship(someone,
-                RELATIONSHIP_HAS_BLOCKED)
+        """
+        Unblocks another user.
+        """
 
-    def has_blocked(self, someone):
-        return self._query_relationship(someone,
-                RELATIONSHIP_HAS_BLOCKED)
+        if someone._get_relationship(self)!=RELATIONSHIP_IS_BLOCKED_BY:
+            raise ValueError("%s wasn't blocked by %s" % (
+                someone, self))
 
-    def _mute_type(self, with_notifications):
-        if with_notifications:
-            return RELATIONSHIP_HAS_MUTED_NOTIFICATIONS
-        else:
-            return RELATIONSHIP_HAS_MUTED
-
-    def mute(self, someone,
-            with_notifications=False):
-        self._make_relationship(someone,
-                self._mute_type(with_notifications))
-
-    def unmute(self, someone,
-            with_notifications=False):
-        self._destroy_relationship(someone,
-                self._mute_type(with_notifications))
-
-    def has_muted(self, someone):
-        return self._query_relationship(someone,
-                self._mute_type(with_notifications))
+        self._set_relationship(
+                us=someone,
+                them=self,
+                what=RELATIONSHIP_NONE)
 
     def follow(self, someone):
-        self._make_relationship(someone,
-                RELATIONSHIP_IS_FOLLOWING)
+        """
+        Follows another user.
+        This has the side-effect of unblocking them;
+        I don't know whether that's reasonable.
+
+        If the other user's account is locked,
+        this will request access rather than following.
+        """
+
+        if self._get_relationship(someone)==RELATIONSHIP_IS_BLOCKED_BY:
+            raise ValueError("Can't follow: blocked.")
+
+        if someone.locked:
+            self._set_relationship(someone,
+                    RELATIONSHIP_HAS_REQUESTED_ACCESS_TO)
+        else:
+            self._set_relationship(someone,
+                    RELATIONSHIP_IS_FOLLOWING)
 
     def unfollow(self, someone):
-        self._destroy_relationship(someone,
-                RELATIONSHIP_IS_FOLLOWING)
+
+        if self._get_relationship(someone)!=RELATIONSHIP_IS_FOLLOWING:
+            raise ValueError("%s wasn't following %s" % (
+                someone, self))
+
+        self._set_relationship(someone,
+                RELATIONSHIP_NONE)
 
     def is_following(self, someone):
-        return self._query_relationship(someone,
-                RELATIONSHIP_IS_FOLLOWING)
+        return self._get_relationship(someone)==RELATIONSHIP_IS_FOLLOWING
 
-    def is_followed_by(self, someone):
-        return Relationship.objects.filter(
-                us = someone,
-                them = self,
-                what = RELATIONSHIP_IS_FOLLOWING).exists()
+    def followRequests(self):
+        """
+        Returns the list of follow requests. This only makes
+        sense for locked accounts.
+        """
+        return [r.us for r in Relationship.objects.filter(them=self,
+                what=RELATIONSHIP_HAS_REQUESTED_ACCESS_TO)]
 
-    def request_access(self, someone):
-        self._make_relationship(someone,
-                RELATIONSHIP_HAS_REQUESTED_ACCESS)
+    def dealWithRequest(self, someone, accept=False):
+        if someone._get_relationship(self)!=RELATIONSHIP_HAS_REQUESTED_ACCESS_TO:
+            raise ValueError("%s hadn't requested access to %s" % (
+                someone, self))
 
-    def unrequest_access(self, someone):
-        # I don't know whether that's the proper word
-        self._destroy_relationship(someone,
-                RELATIONSHIP_HAS_REQUESTED_ACCESS)
+        if accept:
+            new_relationship = RELATIONSHIP_IS_FOLLOWING
+        else:
+            new_relationship = RELATIONSHIP_NONE
 
-    def has_requested_access(self, someone):
-        return self._query_relationship(someone,
-                RELATIONSHIP_HAS_REQUESTED_ACCESS)
+        self._set_relationship(
+                us=someone, them=self,
+                what=new_relationship)
 
 #############################
 
@@ -324,6 +365,14 @@ class Relationship(models.Model):
     Don't use this class directly: use the accessors
     in User.
     """
+
+    class Meta:
+        unique_together = (('us', 'them'),)
+
+        indexes = [
+            models.Index(fields=['us', 'them']),
+        ]
+
     us = models.ForeignKey(User,
             on_delete = models.DO_NOTHING,
             related_name = 'active',
