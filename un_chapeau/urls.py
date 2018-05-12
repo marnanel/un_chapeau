@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 import oauth2_provider.views as oauth2_views
-from trilby_api import views
+import trilby_api.urls
 import un_chapeau.settings as settings
 
 ##################################
@@ -40,11 +40,7 @@ urlpatterns = [
 
     path('oauth/', include((oauth2_endpoint_views, 'oauth2_provider'), namespace="oauth2_provider")),
 
-    path('api/v1/instance', views.Instance.as_view()),
-    path('api/v1/apps', views.Apps.as_view()),
-    path('api/v1/accounts/verify_credentials', views.Verify_Credentials.as_view()),
-    path('api/v1/statuses', views.Statuses.as_view()),
-    path('api/v1/timelines/public', views.PublicTimeline.as_view()),
+    path('api/', include((trilby_api.urls.endpoints, 'trilby_api'), namespace="trilby_api")),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
