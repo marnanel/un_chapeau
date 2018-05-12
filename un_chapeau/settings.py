@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'corsheaders',
 
-    'elephant',
+    'trilby_api',
 ]
 
 MIDDLEWARE = [
@@ -158,7 +158,7 @@ REST_FRAMEWORK = {
             ),
         }
 
-AUTH_USER_MODEL = 'elephant.User'
+AUTH_USER_MODEL = 'trilby_api.User'
 
 ########################
 

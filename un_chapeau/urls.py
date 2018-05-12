@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 import oauth2_provider.views as oauth2_views
-from elephant import views
+from trilby_api import views
 import un_chapeau.settings as settings
 
 ##################################

@@ -1,5 +1,5 @@
 from django.test import TestCase, Client
-from elephant.models import *
+from trilby_api.models import *
 
 # Create your tests here.
 
