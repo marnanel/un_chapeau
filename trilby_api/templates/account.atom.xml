@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"
+        xmlns:thr="http://purl.org/syndication/thread/1.0"
+        xmlns:activity="http://activitystrea.ms/spec/1.0/"
+        xmlns:poco="http://portablecontacts.net/spec/1.0"
+        xmlns:media="http://purl.org/syndication/atommedia"
+        xmlns:ostatus="http://ostatus.org/schema/1.0"
+        xmlns:mastodon="http://mastodon.social/schema/1.0">
+
+        <id>{{ feed_url }} </id>
+        <title>{{ username }}</title>
+        <subtitle>{{ bio }}</subtitle>
+
+        <updated>{{ date }}</updated>
+        <icon>{{ userpic }}</icon>
+        <logo>{{ userpic }}</logo>
+
+        <author>
+                <id>{{ user_url }}</id>
+                <activity:object-type>http://activitystrea.ms/schema/1.0/person</activity:object-type>
+                <name>{{ user_name }}</name>
+                <email>{{ user_name}}@{{ server_name }}</email>
+                <summary type="html">&lt;p&gt;{{ bio }}&lt;/p&gt;</summary>
+                <link rel="avatar" type="{{ userpic.mime_type}}" media:width="{{ userpic.width }}" media:height="{{ userpic.height}}" href="{{ userpic.url }}"/>
+                <link rel="header" type="{{ header.mime_type}}" media:width="{{ header.width }}" media:height="{{ header.height}}" href="{{ header.url }}"/>
+                <poco:preferredUsername>{{ username }}</poco:preferredUsername>
+                <poco:displayName>{{ username }}</poco:displayName>
+                <poco:note>{{ bio }}</poco:note>
+                <mastodon:scope>public</mastodon:scope>
+        </author>
+
+        <link rel="self" type="application/atom+xml" href="{{ self_url }}"/>
+        <link rel="hub" href="{{ hub_url }}"/>
+        <link rel="salmon" href="{{ salmon_url }}"/>
+
+        {% for s in statuses %}
+        <entry>
+                <id>{{ s.url }}</id>
+                <published>{{ s.created }}</published>
+                <updated>{{ s.created }}</updated>
+                <title>{{ s.title }}</title>
+                <activity:object-type>http://activitystrea.ms/schema/1.0/note</activity:object-type>
+                <activity:verb>http://activitystrea.ms/schema/1.0/post</activity:verb>
+                <link rel="alternate" type="application/activity+json" href="{{ s.activity_url }}"/>
+                <content type="html">{{ s.content | html}}</content>
+                <link rel="mentioned" ostatus:object-type="http://activitystrea.ms/schema/1.0/collection" href="http://activityschema.org/collection/public"/>
+                <mastodon:scope>public</mastodon:scope>
+                <link rel="self" type="application/atom+xml" href="{{ s.atom_url }}"/>
+                <ostatus:conversation ref="{{ s.ostatus_tag }}"/>
+        </entry>
+        {% endfor %}
+
+</feed>
