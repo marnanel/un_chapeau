@@ -1,12 +1,26 @@
 Things we still need to fix in un_chapeau
 =========================================
-Offers of help are welcome. First, try to get un_chapeau working
-on your own machine; feel free to ask questions if it doesn't work.
-Then, let's talk about what part of the remaining work you fancy.
+Offers of help are welcome.
 
-Apps
+Fixture
+-------
+- We need a standard database fixture for testing.
+
+Admin
+-----
+- Status should use radio buttons for the privacy and security options, and
+  one of them should be "default for user".
+
+Tests
 ----
-Works fine.
+- Separate tests out into integration and unit tests.
+- Tests for RSS.
+
+Interoperability
+----------------
+- Incoming salmon
+- Incoming webfinger
+- Hub
 
 Statuses
 --------
@@ -20,7 +34,6 @@ Statuses
 
 Timelines
 ---------
-- home
 - hashtag
 - lists
 
