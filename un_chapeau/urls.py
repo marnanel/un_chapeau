@@ -19,6 +19,7 @@ from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 import oauth2_provider.views as oauth2_views
 import trilby_api.urls
+import trilby_api.views
 import un_chapeau.settings as settings
 
 ##################################
@@ -41,6 +42,9 @@ urlpatterns = [
     path('oauth/', include((oauth2_endpoint_views, 'oauth2_provider'), namespace="oauth2_provider")),
 
     path('api/', include((trilby_api.urls.endpoints, 'trilby_api'), namespace="trilby_api")),
+
+    # XXX this should be in trilby_api's urls.py, not here
+    path('users/<username>/feed', trilby_api.views.UserFeed.as_view()),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

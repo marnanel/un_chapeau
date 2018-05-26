@@ -7,31 +7,31 @@
         xmlns:ostatus="http://ostatus.org/schema/1.0"
         xmlns:mastodon="http://mastodon.social/schema/1.0">
 
-        <id>{{ feed_url }} </id>
-        <title>{{ username }}</title>
-        <subtitle>{{ bio }}</subtitle>
+        <id>{{ user.feedURL }} </id>
+        <title>{{ user.username }}</title>
+        <subtitle>{{ user.bio }}</subtitle>
 
         <updated>{{ date }}</updated>
-        <icon>{{ userpic }}</icon>
-        <logo>{{ userpic }}</logo>
+        <icon>{{ user.avatar.url }}</icon>
+        <logo>{{ user.avatar.url }}</logo>
 
         <author>
-                <id>{{ user_url }}</id>
+                <id>{{ user.profileURL }}</id>
                 <activity:object-type>http://activitystrea.ms/schema/1.0/person</activity:object-type>
-                <name>{{ user_name }}</name>
-                <email>{{ user_name}}@{{ server_name }}</email>
-                <summary type="html">&lt;p&gt;{{ bio }}&lt;/p&gt;</summary>
-                <link rel="avatar" type="{{ userpic.mime_type}}" media:width="{{ userpic.width }}" media:height="{{ userpic.height}}" href="{{ userpic.url }}"/>
-                <link rel="header" type="{{ header.mime_type}}" media:width="{{ header.width }}" media:height="{{ header.height}}" href="{{ header.url }}"/>
-                <poco:preferredUsername>{{ username }}</poco:preferredUsername>
-                <poco:displayName>{{ username }}</poco:displayName>
-                <poco:note>{{ bio }}</poco:note>
+                <name>{{ user.username }}</name>
+                <email>{{ user.username }}@{{ server_name }}</email>
+                <summary type="html">&lt;p&gt;{{ user.bio | escape }}&lt;/p&gt;</summary>
+                <link rel="avatar" type="{{ user.avatar.mime_type}}" media:width="{{ user.avatar.width }}" media:height="{{ user.avatar.height}}" href="{{ user.avatar.url }}"/>
+                <link rel="header" type="{{ user.header.mime_type}}" media:width="{{ user.header.width }}" media:height="{{ user.header.height}}" href="{{ user.header.url }}"/>
+                <poco:preferredUsername>{{ user.username }}</poco:preferredUsername>
+                <poco:displayName>{{ user.username }}</poco:displayName>
+                <poco:note>{{ user.bio }}</poco:note>
                 <mastodon:scope>public</mastodon:scope>
         </author>
 
-        <link rel="self" type="application/atom+xml" href="{{ self_url }}"/>
-        <link rel="hub" href="{{ hub_url }}"/>
-        <link rel="salmon" href="{{ salmon_url }}"/>
+        <link rel="self" type="application/atom+xml" href="{{ feedURL }}"/>
+        <link rel="hub" href="{{ hubURL }}"/>
+        <link rel="salmon" href="{{ user.salmonURL }}"/>
 
         {% for s in statuses %}
         <entry>
@@ -41,13 +41,12 @@
                 <title>{{ s.title }}</title>
                 <activity:object-type>http://activitystrea.ms/schema/1.0/note</activity:object-type>
                 <activity:verb>http://activitystrea.ms/schema/1.0/post</activity:verb>
-                <link rel="alternate" type="application/activity+json" href="{{ s.activity_url }}"/>
-                <content type="html">{{ s.content | html}}</content>
+                <link rel="alternate" type="application/activity+json" href="{{ s.activityURL }}"/>
+                <content type="html">{{ s.content | escape }}</content>
                 <link rel="mentioned" ostatus:object-type="http://activitystrea.ms/schema/1.0/collection" href="http://activityschema.org/collection/public"/>
                 <mastodon:scope>public</mastodon:scope>
-                <link rel="self" type="application/atom+xml" href="{{ s.atom_url }}"/>
+                <link rel="self" type="application/atom+xml" href="{{ s.atomURL }}"/>
                 <ostatus:conversation ref="{{ s.ostatus_tag }}"/>
         </entry>
         {% endfor %}
-
 </feed>

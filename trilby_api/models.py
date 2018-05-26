@@ -40,6 +40,34 @@ RELATIONSHIP_CHOICES = (
 def iso_date(date):
     return date.isoformat()+'Z'
 
+#############################
+
+class Media(object):
+
+    # This will be a proper Model at some point,
+    # but at present we only need it to be a class.
+
+    def __init__(self, url,
+            width=None, height=None):
+
+        self.url = url
+        self.width = width
+        self.height = height
+
+def default_avatar(variation=0):
+    return Media(
+            url='un_chapeau/static/defaults/avatar_{0}.jpg'.format(
+                variation % 10,
+                ),
+            width=120, height=120)
+
+def default_header():
+    return Media(
+            url='un_chapeau/static/defaults/default_header.jpg',
+            width=700, height=335)
+
+#############################
+
 class User(AbstractUser):
 
     REQUIRED_FIELDS = ['username']
@@ -77,6 +105,10 @@ class User(AbstractUser):
     # XXX this should really use reverse()
     header = models.CharField(max_length=255,
             default='/static/un_chapeau/defaults/avatar_1.jpg')
+
+    # XXX horrible hack while I fix templates
+    avatarOb = default_avatar()
+    headerOb = default_header()
 
     default_sensitive = models.BooleanField(
             default=False)
@@ -236,6 +268,25 @@ class User(AbstractUser):
                 us=someone, them=self,
                 what=new_relationship)
 
+    def profileURL(self):
+        return UN_CHAPEAU_SETTINGS['USER_URLS'] % {
+                'hostname': UN_CHAPEAU_SETTINGS['HOSTNAME'],
+                'username': self.username,
+                }
+
+    def feedURL(self):
+        return UN_CHAPEAU_SETTINGS['USER_FEED_URLS'] % {
+                'hostname': UN_CHAPEAU_SETTINGS['HOSTNAME'],
+                'username': self.username,
+                }
+
+    def salmonURL(self):
+        return UN_CHAPEAU_SETTINGS['USER_SALMON_URLS'] % {
+                'hostname': UN_CHAPEAU_SETTINGS['HOSTNAME'],
+                'username': self.username,
+                }
+
+
 #############################
 
 class Status(models.Model):
@@ -265,7 +316,8 @@ class Status(models.Model):
     sensitive = models.BooleanField(default=None)
     # applies to the media, not the text
 
-    spoiler_text = models.CharField(max_length=255, default='')
+    spoiler_text = models.CharField(max_length=255, default='',
+            blank=True)
 
     visibility = models.CharField(
             max_length = 1,
@@ -273,7 +325,8 @@ class Status(models.Model):
             default = None,
             )
 
-    idempotency_key = models.CharField(max_length=255, default='')
+    idempotency_key = models.CharField(max_length=255, default='',
+            blank=True)
 
     def save(self, *args, **kwargs):
 
@@ -288,7 +341,7 @@ class Status(models.Model):
         return self.spoiler_text!='' or self.sensitive
 
     def __str__(self):
-        return str(self.user) + " - " + self.content
+        return str(self.posted_by) + " - " + self.content
 
     def _path_formatting(self, formatting):
         return UN_CHAPEAU_SETTINGS[formatting] % {

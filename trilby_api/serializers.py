@@ -42,6 +42,7 @@ class UserSerializerWithSource(UserSerializer):
                 'note': instance.note,
                 }
 
+
 class StatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Status
@@ -117,4 +118,3 @@ class StatusSerializer(serializers.ModelSerializer):
     idempotency_key = serializers.CharField(
             write_only = True,
             required = False)
-

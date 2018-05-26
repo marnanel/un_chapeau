@@ -9,5 +9,7 @@ endpoints = [
     path('v1/statuses', Statuses.as_view()),
     path('v1/timelines/public', PublicTimeline.as_view()),
 
+    path('users/<username>/feed', UserFeed.as_view()),
+
     ]
 

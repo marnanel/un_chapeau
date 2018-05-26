@@ -169,8 +169,14 @@ UN_CHAPEAU_SETTINGS = {
         'CONTACT_ACCOUNT': 'marnanel',
         'CONTACT_EMAIL': 'marnanel@example.com',
         'LANGUAGES': ['en'],
+
+        # XXX what are these?
         'URI_FORMAT': 'https://%(hostname)s/users/%(username)s/statuses/%(id)d',
         'URL_FORMAT': 'https://%(hostname)s/@%(username)s/%(id)d',
+
+        'USER_URLS': 'https://%(hostname)s/users/%(username)s',
+        'USER_FEED_URLS': 'https://%(hostname)s/users/%(username)s/feed',
+        'USER_SALMON_URLS': 'https://%(hostname)s/users/%(username)s/salmon',
         }
 
 ######################################

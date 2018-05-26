@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.http import HttpResponse, JsonResponse
 from oauth2_provider.models import Application
@@ -83,4 +83,29 @@ class PublicTimeline(AbstractTimeline):
 
     def get_queryset(self):
         return Status.objects.filter(visibility=VISIBILITY_PUBLIC)
+
+########################################
+
+class UserFeed(View):
+
+    def get(self, request, username, *args, **kwargs):
+
+        user = get_object_or_404(User, username=username)
+        statuses = Status.objects.filter(posted_by=user)
+
+        context = {
+                'user': user,
+                'statuses': statuses,
+                'server_name': UN_CHAPEAU_SETTINGS['HOSTNAME'],
+                'hub_url': 'https://%s/hub' % ( # XXX ugh
+                    UN_CHAPEAU_SETTINGS['HOSTNAME'],),
+            }
+
+        return render(
+                request=request,
+                template_name='account.atom.xml',
+                context=context,
+                content_type='application/atom+xml',
+                )
+
 
