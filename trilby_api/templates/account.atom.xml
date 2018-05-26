@@ -12,8 +12,8 @@
         <subtitle>{{ user.bio }}</subtitle>
 
         <updated>{{ date }}</updated>
-        <icon>{{ user.avatar.url }}</icon>
-        <logo>{{ user.avatar.url }}</logo>
+        <icon>{{ user.avatarOb.url }}</icon>
+        <logo>{{ user.avatarOb.url }}</logo>
 
         <author>
                 <id>{{ user.profileURL }}</id>
@@ -21,8 +21,8 @@
                 <name>{{ user.username }}</name>
                 <email>{{ user.username }}@{{ server_name }}</email>
                 <summary type="html">&lt;p&gt;{{ user.bio | escape }}&lt;/p&gt;</summary>
-                <link rel="avatar" type="{{ user.avatar.mime_type}}" media:width="{{ user.avatar.width }}" media:height="{{ user.avatar.height}}" href="{{ user.avatar.url }}"/>
-                <link rel="header" type="{{ user.header.mime_type}}" media:width="{{ user.header.width }}" media:height="{{ user.header.height}}" href="{{ user.header.url }}"/>
+                <link rel="avatar" type="{{ user.avatarOb.mime_type}}" media:width="{{ user.avatarOb.width }}" media:height="{{ user.avatarOb.height}}" href="{{ user.avatarOb.url }}"/>
+                <link rel="header" type="{{ user.headerOb.mime_type}}" media:width="{{ user.headerOb.width }}" media:height="{{ user.headerOb.height}}" href="{{ user.headerOb.url }}"/>
                 <poco:preferredUsername>{{ user.username }}</poco:preferredUsername>
                 <poco:displayName>{{ user.username }}</poco:displayName>
                 <poco:note>{{ user.bio }}</poco:note>

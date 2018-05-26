@@ -56,14 +56,14 @@ class Media(object):
 
 def default_avatar(variation=0):
     return Media(
-            url='un_chapeau/static/defaults/avatar_{0}.jpg'.format(
+            url='/static/un_chapeau/defaults/avatar_{0}.jpg'.format(
                 variation % 10,
                 ),
             width=120, height=120)
 
 def default_header():
     return Media(
-            url='un_chapeau/static/defaults/default_header.jpg',
+            url='/static/un_chapeau/defaults/default_header.jpg',
             width=700, height=335)
 
 #############################
