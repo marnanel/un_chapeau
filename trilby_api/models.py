@@ -340,6 +340,15 @@ class Status(models.Model):
     def is_sensitive(self):
         return self.spoiler_text!='' or self.sensitive
 
+    def title(self):
+        """
+        Returns the title of this status.
+
+        This isn't anything useful, but the Atom feed
+        requires it. So we return some vacuous string.
+        """ 
+        return 'Status by %s' % (self.posted_by.username, )
+
     def __str__(self):
         return str(self.posted_by) + " - " + self.content
 
