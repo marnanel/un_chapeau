@@ -1,0 +1,225 @@
+[
+{
+  "model": "trilby_api.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$100000$M0AKN3AhuYDH$Z//LMtbDAcvI5MQ6UXlbOvVP32K+sqKN8R1s9uvmiD0=",
+    "last_login": null,
+    "is_superuser": true,
+    "first_name": "Alice",
+    "last_name": "Test",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2018-05-28T14:18:21Z",
+    "username": "alice",
+    "email": "alice@example.com",
+    "display_name": "",
+    "locked": false,
+    "created_at": "2018-05-28T14:18:21.030Z",
+    "note": "",
+    "url": "",
+    "moved_to": "",
+    "avatar": "/static/un_chapeau/testing/alice.jpg",
+    "header": "/static/un_chapeau/defaults/header.jpg",
+    "default_sensitive": false,
+    "default_visibility": "P",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "trilby_api.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$100000$Z9PA4XcXjlUq$wvgaInG9H7kLeU8mYt0LPVSEP5ZNcH8sUJiFq9CU5Ro=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "Bob",
+    "last_name": "Test",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-05-28T14:20:04Z",
+    "username": "bob",
+    "email": "bob@example.com",
+    "display_name": "",
+    "locked": false,
+    "created_at": "2018-05-28T14:20:04.244Z",
+    "note": "",
+    "url": "",
+    "moved_to": "",
+    "avatar": "/static/un_chapeau/testing/bob.jpg",
+    "header": "/static/un_chapeau/defaults/header.jpg",
+    "default_sensitive": false,
+    "default_visibility": "P",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "trilby_api.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$100000$ufg0BY5asyK7$Qj4spNJu2CyR+jcdbO9kYJOZ7oqEQaErM4A//UuhZnc=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "Carol",
+    "last_name": "Test",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-05-28T14:21:04Z",
+    "username": "carol",
+    "email": "carol@example.com",
+    "display_name": "",
+    "locked": false,
+    "created_at": "2018-05-28T14:21:04.809Z",
+    "note": "",
+    "url": "",
+    "moved_to": "",
+    "avatar": "/static/un_chapeau/testing/carol.jpg",
+    "header": "/static/un_chapeau/defaults/header.jpg",
+    "default_sensitive": false,
+    "default_visibility": "P",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "trilby_api.status",
+  "pk": 3,
+  "fields": {
+    "posted_by": 2,
+    "content": "What's down the rabbit hole?",
+    "created_at": "2018-05-28T14:49:46.057Z",
+    "in_reply_to_id": null,
+    "sensitive": false,
+    "spoiler_text": "",
+    "visibility": "X",
+    "idempotency_key": ""
+  }
+},
+{
+  "model": "trilby_api.status",
+  "pk": 4,
+  "fields": {
+    "posted_by": 2,
+    "content": "some pretty weird stuff tbh",
+    "created_at": "2018-05-28T14:50:19.294Z",
+    "in_reply_to_id": 3,
+    "sensitive": false,
+    "spoiler_text": "",
+    "visibility": "X",
+    "idempotency_key": ""
+  }
+},
+{
+  "model": "trilby_api.status",
+  "pk": 5,
+  "fields": {
+    "posted_by": 2,
+    "content": "@bob@localhost Do you know anything about playing cards?",
+    "created_at": "2018-05-28T14:51:00.762Z",
+    "in_reply_to_id": null,
+    "sensitive": false,
+    "spoiler_text": "",
+    "visibility": "X",
+    "idempotency_key": ""
+  }
+},
+{
+  "model": "trilby_api.status",
+  "pk": 6,
+  "fields": {
+    "posted_by": 3,
+    "content": "@alice@localhost No, why?",
+    "created_at": "2018-05-28T14:51:21.110Z",
+    "in_reply_to_id": 5,
+    "sensitive": false,
+    "spoiler_text": "",
+    "visibility": "P",
+    "idempotency_key": ""
+  }
+},
+{
+  "model": "trilby_api.status",
+  "pk": 7,
+  "fields": {
+    "posted_by": 2,
+    "content": "@bob@localhost er, asking for a friend?",
+    "created_at": "2018-05-28T14:51:50.689Z",
+    "in_reply_to_id": 6,
+    "sensitive": false,
+    "spoiler_text": "",
+    "visibility": "X",
+    "idempotency_key": ""
+  }
+},
+{
+  "model": "trilby_api.status",
+  "pk": 8,
+  "fields": {
+    "posted_by": 3,
+    "content": "This is a public status...",
+    "created_at": "2018-05-28T14:52:31.913Z",
+    "in_reply_to_id": null,
+    "sensitive": false,
+    "spoiler_text": "",
+    "visibility": "X",
+    "idempotency_key": ""
+  }
+},
+{
+  "model": "trilby_api.status",
+  "pk": 9,
+  "fields": {
+    "posted_by": 3,
+    "content": "he comes back three days later",
+    "created_at": "2018-05-28T14:53:08.142Z",
+    "in_reply_to_id": null,
+    "sensitive": false,
+    "spoiler_text": "spoilers for Mark's gospel",
+    "visibility": "P",
+    "idempotency_key": ""
+  }
+},
+{
+  "model": "trilby_api.status",
+  "pk": 10,
+  "fields": {
+    "posted_by": 3,
+    "content": "This status is unlisted.",
+    "created_at": "2018-05-28T14:53:54.504Z",
+    "in_reply_to_id": null,
+    "sensitive": false,
+    "spoiler_text": "",
+    "visibility": "U",
+    "idempotency_key": ""
+  }
+},
+{
+  "model": "trilby_api.relationship",
+  "pk": 1,
+  "fields": {
+    "us": 2,
+    "them": 3,
+    "what": "F"
+  }
+},
+{
+  "model": "trilby_api.relationship",
+  "pk": 2,
+  "fields": {
+    "us": 3,
+    "them": 2,
+    "what": "F"
+  }
+},
+{
+  "model": "trilby_api.relationship",
+  "pk": 3,
+  "fields": {
+    "us": 2,
+    "them": 4,
+    "what": "F"
+  }
+}
+]
