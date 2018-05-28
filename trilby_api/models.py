@@ -449,3 +449,10 @@ class Relationship(models.Model):
             max_length = 1,
             choices = RELATIONSHIP_CHOICES,
             )
+
+    def __str__(self):
+        return '%s %s %s' % (
+                self.us,
+                dict(RELATIONSHIP_CHOICES)[self.what],
+                self.them,
+                )
