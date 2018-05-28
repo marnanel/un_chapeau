@@ -86,9 +86,6 @@ class User(AbstractUser):
 
     locked = models.BooleanField(default=False)
 
-    created_at = models.DateTimeField(default=now,
-            editable=False)
-
     note = models.CharField(max_length=255,
             default='')
 
