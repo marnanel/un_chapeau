@@ -25,4 +25,5 @@ class TrilbyUserAdmin(UserAdmin):
 
 admin.site.register(models.User, TrilbyUserAdmin)
 admin.site.register(models.Status)
+admin.site.register(models.Relationship)
 
