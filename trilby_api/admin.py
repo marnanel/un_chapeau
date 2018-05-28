@@ -1,7 +1,28 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Status
+from django.contrib.auth.forms import UserChangeForm
+import trilby_api.models as models
 
-admin.site.register(User, UserAdmin)
-admin.site.register(Status)
+class TrilbyUserChangeForm(UserChangeForm):
+    class Meta(UserChangeForm.Meta):
+        model = models.User
+
+class TrilbyUserAdmin(UserAdmin):
+
+    form = TrilbyUserChangeForm
+
+    fieldsets = UserAdmin.fieldsets + (
+            (None, {
+                'fields': (
+                    'avatar',
+                    'header',
+                    'locked',
+                    'note',
+                    'url',
+                    'moved_to',
+                    )}),
+            )
+
+admin.site.register(models.User, TrilbyUserAdmin)
+admin.site.register(models.Status)
 
