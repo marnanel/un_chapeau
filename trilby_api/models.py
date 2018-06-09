@@ -145,12 +145,10 @@ class User(AbstractUser):
         return self.username
 
     def followers_count(self):
-        # XXX
-        return 0
+        return Relationship.objects.filter(them=self).count()
 
     def following_count(self):
-        # XXX
-        return 0
+        return Relationship.objects.filter(us=self).count()
 
     def statuses_count(self):
         return Status.objects.filter(posted_by=self).count()
