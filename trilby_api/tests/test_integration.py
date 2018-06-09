@@ -1,8 +1,6 @@
 from django.test import TestCase, Client
 from trilby_api.models import *
 
-# Create your tests here.
-
 APPS_CREATE_PARAMS = {
         'client_name': 'un_chapeau tests',
         'scopes': 'read write follow',
@@ -14,7 +12,7 @@ TOKEN_REQUEST_PARAMS = {
         'client_secret': '',
         'client_id': '',
         'grant_type': 'password',
-        'username': 'fred@example.com',
+        'username': 'dory@example.com',
         'password': 'i_like_bananas',
         'scope': 'read write follow',
         }
@@ -85,11 +83,17 @@ class UnChapeauClient(Client):
 
         return result
 
-    def login(self):
+    def login(self,
+            token_params = TOKEN_REQUEST_PARAMS):
+        """
+        Logs you in.
+
+        @param token_params Parameters for the token. This defaults
+                            to TOKEN_REQUEST_PARAMS, which will log
+                            you in as bob@example.com.
+        """
 
         self.app = self.post('/api/v1/apps', APPS_CREATE_PARAMS).json()
-
-        token_params = TOKEN_REQUEST_PARAMS
 
         self.user = User.objects.create_user(
                 username=token_params['username'],
@@ -103,16 +107,10 @@ class UnChapeauClient(Client):
 
         self.authorization = 'Bearer '+self.token['access_token']
 
-class UnChapeauTestCase(TestCase):
-    def _createUser(self, name):
-        result = User.objects.create_user(
-                username=name,
-                email=name+'@example.com',
-                password=name+name)
-        result.save()
-        return result
+class AuthTests(TestCase):
 
-class AuthTests(UnChapeauTestCase):
+    fixtures = ['alicebobcarol']
+
     def test_create_app(self):
         c = UnChapeauClient()
 
@@ -221,12 +219,9 @@ class AuthTests(UnChapeauTestCase):
 
                 expected_status_code = 401)
 
-    def test_client_login_method(self):
-        c = UnChapeauClient()
+class StatusTests(TestCase):
 
-        c.login()
-
-class StatusTests(UnChapeauTestCase):
+    fixtures = ['alicebobcarol']
 
     def test_post_status(self):
         c = UnChapeauClient()
@@ -248,156 +243,16 @@ class StatusTests(UnChapeauTestCase):
                 'mentions', 'tags']:
                 self.assertIn(key, status)
 
-    def test_sensitive_status(self):
-        fred = self._createUser("fred")
+class UserTests(TestCase):
 
-        for sensitive_by_default in (False, True):
+    fixtures = ['alicebobcarol']
 
-            if sensitive_by_default:
-                fred.default_sensitive = True
-                fred.save()
-
-            ordinary_status = Status.objects.create(
-                posted_by = fred,
-                status = 'I like cheese. It is delicious.',
-                )
-
-            self.assertEqual(ordinary_status.is_sensitive(),
-                    sensitive_by_default)
-
-            nsfw_status = Status.objects.create(
-                posted_by = fred,
-                status = 'I was very naughty today.',
-                sensitive = True,
-                )
-
-            self.assertEqual(nsfw_status.is_sensitive(), True)
-
-            spoiler_status = Status.objects.create(
-                posted_by = fred,
-                spoiler_text = 'Spoilers for Jekyll and Hyde',
-                status = 'They turn out to be the same guy.',
-                )
-
-            self.assertEqual(spoiler_status.is_sensitive(), True)
-
-            nsfw_spoiler_status = Status.objects.create(
-                posted_by = fred,
-                sensitive = True,
-                spoiler_text = 'Lex Luthor being naughty.',
-                status = 'He stole 40 cakes.',
-                )
-
-            self.assertEqual(nsfw_spoiler_status.is_sensitive(), True)
-
-class UserTests(UnChapeauTestCase):
-
-    def test_status_count(self):
-        fred = self._createUser("fred")
-
-        self.assertEqual(fred.statuses_count(), 0)
-
-        for i in range(1, 13):
-            Status.objects.create(
-                    status= 'Hello world!',
-                    posted_by = fred,
-                    )
-            self.assertEqual(fred.statuses_count(), i)
-
-    def test_following(self):
-
-        fred = self._createUser("fred")
-        jim = self._createUser("jim")
-
-        self.assertEqual(fred.is_following(jim), False)
-        self.assertEqual(jim.is_following(fred), False)
-
-        fred.follow(jim)
-
-        self.assertEqual(fred.is_following(jim), True)
-        self.assertEqual(jim.is_following(fred), False)
-
-        jim.follow(fred)
-
-        self.assertEqual(fred.is_following(jim), True)
-        self.assertEqual(jim.is_following(fred), True)
-
-        fred.unfollow(jim)
-
-        self.assertEqual(fred.is_following(jim), False)
-        self.assertEqual(jim.is_following(fred), True)
-
-        jim.unfollow(fred)
-
-        self.assertEqual(fred.is_following(jim), False)
-        self.assertEqual(jim.is_following(fred), False)
-
-    def test_locked_account_accepted(self):
-
-        fred = self._createUser("fred")
-        jim = self._createUser("jim")
-
-        jim.locked = True
-        jim.save()
-
-        self.assertEqual(fred.is_following(jim), False)
-        self.assertEqual(jim.is_following(fred), False)
-
-        fred.follow(jim)
-
-        self.assertEqual(fred.is_following(jim), False)
-        self.assertEqual(jim.is_following(fred), False)
-
-        self.assertIn(fred, jim.followRequests())
-        jim.dealWithRequest(fred, accept=True)
-        self.assertNotIn(fred, jim.followRequests())
-
-        self.assertEqual(fred.is_following(jim), True)
-        self.assertEqual(jim.is_following(fred), False)
-
-    def test_locked_account_rejected(self):
-
-        fred = self._createUser("fred")
-        jim = self._createUser("jim")
-
-        jim.locked = True
-        jim.save()
-
-        self.assertEqual(fred.is_following(jim), False)
-        self.assertEqual(jim.is_following(fred), False)
-
-        fred.follow(jim)
-
-        self.assertEqual(fred.is_following(jim), False)
-        self.assertEqual(jim.is_following(fred), False)
-
-        self.assertIn(fred, jim.followRequests())
-        jim.dealWithRequest(fred, accept=False)
-        self.assertNotIn(fred, jim.followRequests())
-
-        self.assertEqual(fred.is_following(jim), False)
-        self.assertEqual(jim.is_following(fred), False)
-
-class TimelineTests(UnChapeauTestCase):
-
-    CREATE_COUNT = 20
-
-    def test_public_timeline(self):
-        fred = self._createUser("fred")
-
-        statuses = []
-        for i in range(self.CREATE_COUNT):
-            statuses.append(Status.objects.create(
-                    status = 'Hello %04d!' % (i,),
-                    posted_by = fred,
-                    ))
+    def test_public_timeline(self,
+            status_create_count = 20):
+        bob = User.objects.get(username='bob')
 
         c = UnChapeauClient()
 
         timeline = c.get('/api/v1/timelines/public').json()
 
-        self.assertEqual(len(timeline), len(statuses))
-
-        for i, status in enumerate(statuses):
-            self.assertEqual(status.content,
-                    timeline[i]['content'])
+        # XXX right, and...?

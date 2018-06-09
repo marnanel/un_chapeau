@@ -155,7 +155,7 @@
   "pk": 8,
   "fields": {
     "posted_by": 3,
-    "content": "This is a public status...",
+    "content": "This is a private status...",
     "created_at": "2018-05-28T14:52:31.913Z",
     "in_reply_to_id": null,
     "sensitive": false,
