@@ -436,8 +436,10 @@ class Status(models.Model):
         return False
 
     def in_reply_to_account_id(self):
-        # XXX
-        return None
+        if self.in_reply_to_id is None:
+            return None
+        else:
+            return self.in_reply_to_id.posted_by.pk
 
     def application(self):
         # XXX
