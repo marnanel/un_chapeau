@@ -15,6 +15,8 @@ class UserSerializer(serializers.ModelSerializer):
     header_static = serializers.CharField(source='header_or_default',
             read_only = True)
 
+    url = serializers.URLField(source='linked_url')
+
     class Meta:
         model = User
         fields = (

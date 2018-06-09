@@ -99,7 +99,7 @@ class User(AbstractUser):
     note = models.CharField(max_length=255,
             default='')
 
-    url = models.URLField(max_length=255,
+    linked_url = models.URLField(max_length=255,
             default='')
 
     moved_to = models.CharField(max_length=255,
@@ -379,6 +379,9 @@ class Status(models.Model):
                 }
 
     def url(self):
+        """
+        Returns the URL of the user's page on *this* server.
+        """
         return self._path_formatting('URL_FORMAT')
 
     def uri(self):
