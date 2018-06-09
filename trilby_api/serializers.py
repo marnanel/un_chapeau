@@ -3,6 +3,18 @@ from .models import User, Status
 from oauth2_provider.models import Application
 
 class UserSerializer(serializers.ModelSerializer):
+    avatar = serializers.CharField(source='avatar_or_default',
+            read_only = True)
+    header = serializers.CharField(source='header_or_default',
+            read_only = True)
+
+    # for the moment, treat these as the same.
+    # the spec doesn't actually explain the difference!
+    avatar_static = serializers.CharField(source='avatar_or_default',
+            read_only = True)
+    header_static = serializers.CharField(source='header_or_default',
+            read_only = True)
+
     class Meta:
         model = User
         fields = (

@@ -68,6 +68,16 @@ def default_header():
 
 #############################
 
+def avatar_upload_to(instance, filename):
+    return 'avatars/%s.jpg' % (
+            instance.username,
+            )
+
+def header_upload_to(instance, filename):
+    return 'headers/%s.jpg' % (
+            instance.username,
+            )
+
 class User(AbstractUser):
 
     REQUIRED_FIELDS = ['username']
@@ -95,17 +105,26 @@ class User(AbstractUser):
     moved_to = models.CharField(max_length=255,
             default='')
 
-    # XXX this should really use reverse()
-    avatar = models.CharField(max_length=255,
-            default='/static/un_chapeau/defaults/avatar_1.jpg')
+    avatar = models.ImageField(
+            upload_to = avatar_upload_to,
+            default=None,
+            )
+    header = models.ImageField(
+            upload_to = header_upload_to,
+            default=None,
+            )
 
-    # XXX this should really use reverse()
-    header = models.CharField(max_length=255,
-            default='/static/un_chapeau/defaults/avatar_1.jpg')
+    def avatar_or_default(self):
+        if self.avatar is None:
+            return default_avatar(variation=self.pk)
+        else:
+            return self.avatar
 
-    # XXX horrible hack while I fix templates
-    avatarOb = default_avatar()
-    headerOb = default_header()
+    def header_or_default(self):
+        if self.header is None:
+            return default_header()
+        else:
+            return self.header
 
     default_sensitive = models.BooleanField(
             default=False)
@@ -115,6 +134,11 @@ class User(AbstractUser):
             choices = VISIBILITY_CHOICES,
             default = VISIBILITY_PUBLIC,
             )
+
+    def created_at(self):
+        # Alias for Django's date_joined. Mastodon calls this created_at,
+        # and it makes things easier if the model can call it that too.
+        return self.date_joined
 
     def acct(self):
         # XXX for remote ones we need to spilt this up
