@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.mixins import LoginRequiredMixin
 from un_chapeau.settings import UN_CHAPEAU_SETTINGS
-from .models import Status, User, VISIBILITY_PUBLIC
+from .models import Status, User, Visibility
 from .serializers import *
 from rest_framework import generics, response
 from rest_framework.permissions import IsAuthenticated
@@ -79,10 +79,19 @@ class AbstractTimeline(generics.ListAPIView):
     def get_queryset(self):
         raise RuntimeError("cannot query abstract timeline")
 
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = self.serializer_class(queryset,
+                many = True,
+                context = {
+                    'request': request,
+                    })
+        return Response(serializer.data)
+
 class PublicTimeline(AbstractTimeline):
 
     def get_queryset(self):
-        return Status.objects.filter(visibility=VISIBILITY_PUBLIC)
+        return Status.objects.filter(visibility=Visibility('public').name)
 
 ########################################
 

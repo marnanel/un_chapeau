@@ -1,3 +1,4 @@
+from enum import Enum
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.timezone import now
@@ -6,34 +7,18 @@ from un_chapeau.settings import UN_CHAPEAU_SETTINGS
 
 #############################
 
-VISIBILITY_PRIVATE = 'X'
-VISIBILITY_UNLISTED = 'U'
-VISIBILITY_PUBLIC = 'P'
-VISIBILITY_DIRECT = 'D'
-
-VISIBILITY_CHOICES = (
-        (VISIBILITY_PRIVATE, 'private'),
-        (VISIBILITY_UNLISTED, 'unlisted'),
-        (VISIBILITY_PUBLIC, 'public'),
-        (VISIBILITY_DIRECT, 'direct'),
-        )
+class Visibility(Enum):
+    P = 'public'
+    X = 'private'
+    U = 'unlisted'
+    D = 'direct'
 
 #############################
 
-RELATIONSHIP_NONE = '-'
-RELATIONSHIP_IS_FOLLOWING = 'F'
-RELATIONSHIP_IS_BLOCKED_BY = 'B'
-RELATIONSHIP_HAS_REQUESTED_ACCESS_TO = 'R'
-
-RELATIONSHIP_CHOICES = (
-        # ugh, that sounds like the title
-        # of an eighties sex ed film
-
-        (RELATIONSHIP_IS_FOLLOWING, 'is following'),
-        (RELATIONSHIP_IS_BLOCKED_BY, 'is blocked by'),
-        (RELATIONSHIP_HAS_REQUESTED_ACCESS_TO, 'has requested access to'),
-        # RELATIONSHIP_NONE can't appear in a record
-        )
+class RelationshipType(Enum):
+    F = 'is following'
+    B = 'is blocked by'
+    R = 'has requested access to'
 
 #############################
 
@@ -131,8 +116,8 @@ class User(AbstractUser):
 
     default_visibility = models.CharField(
             max_length = 1,
-            choices = VISIBILITY_CHOICES,
-            default = VISIBILITY_PUBLIC,
+            choices = [(tag.name, tag.value) for tag in Visibility],
+            default = Visibility('public').name,
             )
 
     def created_at(self):
@@ -171,22 +156,22 @@ class User(AbstractUser):
         try:
             already = Relationship.objects.get(us=us, them=them)
 
-            if what==RELATIONSHIP_NONE:
+            if what is None:
                 already.delete()
             else:
-                already.what = what
+                already.what = what.name
                 already.save()
 
         except ObjectDoesNotExist:
             
-            if what==RELATIONSHIP_NONE:
+            if what is None:
                 # it ain't broken...
                 return
 
             rel = Relationship(
                 us = us,
                 them = them,
-                what = what)
+                what = what.name)
             rel.save()
 
     def _get_relationship(self, them, us=None):
@@ -196,42 +181,39 @@ class User(AbstractUser):
 
         try:
             rel = Relationship.objects.get(us=us, them=them)
-            return rel.what
+            return RelationshipType[rel.what]
 
         except ObjectDoesNotExist:
-            return RELATIONSHIP_NONE
+            return None
 
     def block(self, someone):
         """
         Blocks another user. The other user should
         henceforth be unaware of our existence.
-
-        See above for why we use "is blocked by"
-        instead of "has blocked".
         """
         self._set_relationship(
                 us=someone,
                 them=self,
-                what=RELATIONSHIP_IS_BLOCKED_BY)
+                what=RelationshipType('is blocked by'))
 
         self._set_relationship(
                 us=self,
                 them=someone,
-                what=RELATIONSHIP_NONE)
+                what=None)
 
     def unblock(self, someone):
         """
         Unblocks another user.
         """
 
-        if someone._get_relationship(self)!=RELATIONSHIP_IS_BLOCKED_BY:
+        if someone._get_relationship(self)!=RelationshipType('is blocked by'):
             raise ValueError("%s wasn't blocked by %s" % (
                 someone, self))
 
         self._set_relationship(
                 us=someone,
                 them=self,
-                what=RELATIONSHIP_NONE)
+                what=None)
 
     def follow(self, someone):
         """
@@ -243,27 +225,27 @@ class User(AbstractUser):
         this will request access rather than following.
         """
 
-        if self._get_relationship(someone)==RELATIONSHIP_IS_BLOCKED_BY:
+        if self._get_relationship(someone)==RelationshipType('is blocked by'):
             raise ValueError("Can't follow: blocked.")
 
         if someone.locked:
             self._set_relationship(someone,
-                    RELATIONSHIP_HAS_REQUESTED_ACCESS_TO)
+                    RelationshipType('has requested access to'))
         else:
             self._set_relationship(someone,
-                    RELATIONSHIP_IS_FOLLOWING)
+                    RelationshipType('is following'))
 
     def unfollow(self, someone):
 
-        if self._get_relationship(someone)!=RELATIONSHIP_IS_FOLLOWING:
+        if self._get_relationship(someone)!=RelationshipType('is following'):
             raise ValueError("%s wasn't following %s" % (
                 someone, self))
 
         self._set_relationship(someone,
-                RELATIONSHIP_NONE)
+                None)
 
     def is_following(self, someone):
-        return self._get_relationship(someone)==RELATIONSHIP_IS_FOLLOWING
+        return self._get_relationship(someone)==RelationshipType('is following')
 
     def followRequests(self):
         """
@@ -271,17 +253,17 @@ class User(AbstractUser):
         sense for locked accounts.
         """
         return [r.us for r in Relationship.objects.filter(them=self,
-                what=RELATIONSHIP_HAS_REQUESTED_ACCESS_TO)]
+                what=RelationshipType('has requested access to').name)]
 
     def dealWithRequest(self, someone, accept=False):
-        if someone._get_relationship(self)!=RELATIONSHIP_HAS_REQUESTED_ACCESS_TO:
+        if someone._get_relationship(self)!=RelationshipType('has requested access to'):
             raise ValueError("%s hadn't requested access to %s" % (
                 someone, self))
 
         if accept:
-            new_relationship = RELATIONSHIP_IS_FOLLOWING
+            new_relationship = RelationshipType('is following')
         else:
-            new_relationship = RELATIONSHIP_NONE
+            new_relationship = None
 
         self._set_relationship(
                 us=someone, them=self,
@@ -340,7 +322,7 @@ class Status(models.Model):
 
     visibility = models.CharField(
             max_length = 1,
-            choices = VISIBILITY_CHOICES,
+            choices = [(tag.name, tag.value) for tag in Visibility],
             default = None,
             )
 
@@ -348,7 +330,6 @@ class Status(models.Model):
             blank=True)
 
     def save(self, *args, **kwargs):
-
         if self.visibility is None:
             self.visibility = self.posted_by.default_visibility
         if self.sensitive is None:
@@ -471,12 +452,14 @@ class Relationship(models.Model):
 
     what = models.CharField(
             max_length = 1,
-            choices = RELATIONSHIP_CHOICES,
+            choices = [(tag.name, tag.value)
+                for tag in RelationshipType
+                if tag.value!='none'],
             )
 
     def __str__(self):
         return '%s %s %s' % (
                 self.us,
-                dict(RELATIONSHIP_CHOICES)[self.what],
+                RelationshipType[self.what],
                 self.them,
                 )

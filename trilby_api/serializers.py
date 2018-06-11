@@ -1,6 +1,17 @@
 from rest_framework import serializers
-from .models import User, Status
+from .models import User, Status, Visibility
 from oauth2_provider.models import Application
+
+class _VisibilityField(serializers.CharField):
+    # Is there really no general enum field?
+    def to_representation(self, obj):
+        return Visibility[obj].value
+
+    def to_internal_value(self, obj):
+        try:
+            return Visibility(obj).name
+        except KeyError:
+            raise serializers.ValidationError('invalid visibility')
 
 class UserSerializer(serializers.ModelSerializer):
     avatar = serializers.CharField(source='avatar_or_default',
@@ -86,6 +97,14 @@ class StatusSerializer(serializers.ModelSerializer):
                 'idempotency_key',
                 )
 
+    def create(self, validated_data):
+
+        posted_by = self.context['request'].user
+        validated_data['posted_by'] = posted_by
+
+        result = Status.objects.create(**validated_data)
+        return result
+
     id = serializers.IntegerField(
             read_only = True)
 
@@ -120,13 +139,13 @@ class StatusSerializer(serializers.ModelSerializer):
     spoiler_text = serializers.CharField(
             required = False)
 
-    visibility = serializers.CharField(
+    visibility = _VisibilityField(
             required = False)
 
     def visibility_validation(self, value):
-        if value not in Status.VISIBILITY_VALUES:
-            raise serializers.ValidationError(
-                    'valid visibilities are: '+(' '.join(Status.VISIBILITY_VALUES)))
+        if value not in Visibility:
+            raise serializers.ValidationError('invalid visibility')
+
         return value
 
     idempotency_key = serializers.CharField(
