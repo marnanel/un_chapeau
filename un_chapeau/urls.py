@@ -45,6 +45,7 @@ urlpatterns = [
 
     # XXX this should be in trilby_api's urls.py, not here
     path('users/<username>/feed', trilby_api.views.UserFeed.as_view()),
+    path('.well-known/webfinger', trilby_api.views.Webfinger.as_view()),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

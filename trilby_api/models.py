@@ -287,6 +287,41 @@ class User(AbstractUser):
                 'username': self.username,
                 }
 
+    def public_key(self):
+        return '' # XXX TODO
+
+    def links(self):
+        return [
+                {
+                'rel': 'http://webfinger.net/rel/profile-page',
+                'type': 'text/html',
+                'href': self.profileURL(),
+                },
+                {
+                'rel': 'http://schemas.google.com/g/2010#updates-from',
+                'type': 'application/atom+xml',
+                'href': self.feedURL(),
+                },
+                {
+                'rel': 'self',
+                'type': 'application/activity+json',
+                'href': self.feedURL(),
+                },
+                {
+                'rel': 'salmon',
+                'href': self.salmonURL(),
+                },
+                {
+                'rel': 'magic-public-key',
+                'href': self.public_key(),
+                },
+                {
+                'rel': 'http://ostatus.org/schema/1.0/subscribe',
+                'href': UN_CHAPEAU_SETTINGS['AUTHORIZE_FOLLOW_TEMPLATE'] % {
+                    'hostname': UN_CHAPEAU_SETTINGS['HOSTNAME'],
+                    },
+                },
+               ]
 
 #############################
 

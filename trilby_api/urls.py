@@ -11,5 +11,6 @@ endpoints = [
 
     path('users/<username>/feed', UserFeed.as_view()),
 
+    path('.well-known/webfinger', Webfinger.as_view()),
     ]
 

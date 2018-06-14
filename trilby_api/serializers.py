@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import User, Status, Visibility
 from oauth2_provider.models import Application
 
+#########################################
+
 class _VisibilityField(serializers.CharField):
     # Is there really no general enum field?
     def to_representation(self, obj):
@@ -12,6 +14,8 @@ class _VisibilityField(serializers.CharField):
             return Visibility(obj).name
         except KeyError:
             raise serializers.ValidationError('invalid visibility')
+
+#########################################
 
 class UserSerializer(serializers.ModelSerializer):
     avatar = serializers.CharField(source='avatar_or_default',
@@ -50,6 +54,8 @@ class UserSerializer(serializers.ModelSerializer):
                 'moved_to',
                 )
 
+#########################################
+
 class UserSerializerWithSource(UserSerializer):
 
     class Meta:
@@ -67,6 +73,8 @@ class UserSerializerWithSource(UserSerializer):
                 'note': instance.note,
                 }
 
+
+#########################################
 
 class StatusSerializer(serializers.ModelSerializer):
     class Meta:
@@ -151,3 +159,32 @@ class StatusSerializer(serializers.ModelSerializer):
     idempotency_key = serializers.CharField(
             write_only = True,
             required = False)
+
+#########################################
+
+class WebfingerSerializer(serializers.ModelSerializer):
+
+    # XXX need read_only=True
+
+    class Meta:
+        model = User
+        fields = [
+                'subject',
+                'aliases',
+                'links',
+                ]
+
+    def get_subject(self, instance):
+        return 'acct:{}'.format(instance.username)
+
+    def get_aliases(self, instance):
+        return [
+                instance.profileURL(),
+                ]
+
+    def get_links(self, instance):
+        return instance.links()
+
+    subject = serializers.SerializerMethodField()
+    aliases = serializers.SerializerMethodField()
+    links = serializers.SerializerMethodField()

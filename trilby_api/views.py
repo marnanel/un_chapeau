@@ -12,6 +12,7 @@ from rest_framework import generics, response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 import json
+import re
 
 ###########################
 
@@ -117,4 +118,45 @@ class UserFeed(View):
                 content_type='application/atom+xml',
                 )
 
+########################################
 
+class Webfinger(generics.GenericAPIView):
+
+    serializer_class = WebfingerSerializer
+    permission_classes = ()
+
+    def get(self, request):
+
+        user = request.GET['resource']
+        user = re.sub(r'^acct:', '', user)
+
+        if '@' not in user:
+            return HttpResponse(
+                    status = 404,
+                    reason = 'absolute name required',
+                    content = 'Please use the absolute form of the username.',
+                    content_type = 'text/plain',
+                    )
+
+        username, hostname = user.split('@', 2)
+
+        if hostname!=UN_CHAPEAU_SETTINGS['HOSTNAME']:
+            return HttpResponse(
+                    status = 404,
+                    reason = 'not this server',
+                    content = 'That user lives on another server.',
+                    content_type = 'text/plain',
+                    )
+
+        try:
+            queryset = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return HttpResponse(
+                    status = 404,
+                    reason = 'no such user',
+                    content = 'We don\'t have a user with that name.',
+                    content_type = 'text/plain',
+                    )
+
+        serializer = self.serializer_class(queryset)
+        return Response(serializer.data)

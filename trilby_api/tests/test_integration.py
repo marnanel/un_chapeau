@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 from trilby_api.models import *
+from un_chapeau.settings import UN_CHAPEAU_SETTINGS
 
 APPS_CREATE_PARAMS = {
         'client_name': 'un_chapeau tests',
@@ -256,3 +257,46 @@ class UserTests(TestCase):
         timeline = c.get('/api/v1/timelines/public').json()
 
         # XXX right, and...?
+
+class WebfingerTests(TestCase):
+
+    fixtures = ['alicebobcarol']
+
+    def request(self, resource, expected_status_code):
+        c = UnChapeauClient()
+
+        return c.get('/.well-known/webfinger?resource={}'.format(
+            resource),
+            expected_status_code=expected_status_code)
+
+    def test_weirdname(self):
+        self.request('womble', expected_status_code=404)
+
+    def test_remote_name(self):
+        self.request('un_chapeau@toot.love', expected_status_code=404)
+
+    def test_success(self):
+        c = UnChapeauClient()
+
+        checking_account = 'bob@' + UN_CHAPEAU_SETTINGS['HOSTNAME']
+
+        for prefix in ['', 'acct:']:
+            webfinger = self.request(
+                prefix+checking_account,
+                expected_status_code=200).json()
+
+            for field in [
+                    'subject',
+                    'aliases',
+                    'links',
+                    ]:
+                self.assertIn(field, webfinger)
+
+            for link in webfinger['links']:
+                for field in [
+                        'rel',
+                        'href',
+                        ]:
+                    self.assertIn(field, link)
+
+                    # XXX test semantics too
