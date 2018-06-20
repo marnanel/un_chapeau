@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.timezone import now
 from django.core.exceptions import ObjectDoesNotExist
 from un_chapeau.settings import UN_CHAPEAU_SETTINGS
+from trilby_api.crypto import Key
 
 #############################
 
@@ -98,6 +99,22 @@ class User(AbstractUser):
             upload_to = header_upload_to,
             default=None,
             )
+
+    private_key = models.BinaryField(
+            editable = False,
+            )
+    magic_envelope_public_key = models.CharField(
+            max_length=255,
+            editable = False,
+            )
+
+    def save(self, *args, **kwargs):
+        if not self.private_key:
+            key = Key()
+            self.private_key = key.as_pem()
+            self.magic_envelope_public_key = key.magic_envelope()
+
+        super().save(*args, **kwargs)
 
     def avatar_or_default(self):
         if self.avatar is None:
@@ -288,7 +305,7 @@ class User(AbstractUser):
                 }
 
     def public_key(self):
-        return '' # XXX TODO
+        return self.magic_envelope_public_key
 
     def links(self):
         return [
