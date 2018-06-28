@@ -107,8 +107,7 @@ class UserFeed(View):
                 'user': user,
                 'statuses': statuses,
                 'server_name': UN_CHAPEAU_SETTINGS['HOSTNAME'],
-                'hub_url': 'https://%s/hub' % ( # XXX ugh
-                    UN_CHAPEAU_SETTINGS['HOSTNAME'],),
+                'hub_url': UN_CHAPEAU_SETTINGS['HUB'],
             }
 
         return render(

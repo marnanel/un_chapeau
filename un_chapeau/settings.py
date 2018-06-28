@@ -179,6 +179,8 @@ UN_CHAPEAU_SETTINGS = {
         'USER_FEED_URLS': 'https://%(hostname)s/users/%(username)s/feed',
         'USER_SALMON_URLS': 'https://%(hostname)s/users/%(username)s/salmon',
 
+        'HUB': 'https://switchboard.p3k.io/', # or whatever
+
         # the "{uri}" in AUTHORIZE_FOLLOW_TEMPLATE is for the client to
         # fill in, not us. We pass it out as is.
         'AUTHORIZE_FOLLOW_TEMPLATE': 'https://%(hostname)s/authorize_follow?acct={uri}',
