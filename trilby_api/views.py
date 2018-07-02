@@ -5,6 +5,8 @@ from oauth2_provider.models import Application
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.datastructures import MultiValueDictKeyError
+from django.core.exceptions import SuspiciousOperation
 from un_chapeau.settings import UN_CHAPEAU_SETTINGS
 from .models import Status, User, Visibility
 from .serializers import *
@@ -120,13 +122,22 @@ class UserFeed(View):
 ########################################
 
 class Webfinger(generics.GenericAPIView):
+    """
+    RFC7033 webfinger support.
+    """
 
     serializer_class = WebfingerSerializer
     permission_classes = ()
 
     def get(self, request):
 
-        user = request.GET['resource']
+        try:
+            user = request.GET['resource']
+        except MultiValueDictKeyError:
+            raise SuspiciousOperation('no resource for webfinger')
+
+        # Generally, user resources should be prefaced with "acct:",
+        # per RFC7565. We support this, but we don't enforce it.
         user = re.sub(r'^acct:', '', user)
 
         if '@' not in user:
