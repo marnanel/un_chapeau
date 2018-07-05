@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 import oauth2_provider.views as oauth2_views
 import trilby_api.urls
 import trilby_api.views
+import buckethat_salmon.views
 import un_chapeau.settings as settings
 
 ##################################
@@ -46,6 +47,8 @@ urlpatterns = [
     # XXX this should be in trilby_api's urls.py, not here
     path('users/<username>/feed', trilby_api.views.UserFeed.as_view()),
     path('.well-known/webfinger', trilby_api.views.Webfinger.as_view()),
+
+    path('users/<username>/salmon', buckethat_salmon.views.Salmon.as_view()),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

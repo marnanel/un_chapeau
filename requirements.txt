@@ -6,5 +6,6 @@ oauth2-provider
 django-cors-headers
 django-oauth-toolkit
 django-rest-framework
+djangorestframework-xml
 pillow
 pycrypto
