@@ -330,7 +330,7 @@ class User(AbstractUser):
                 },
                 {
                 'rel': 'magic-public-key',
-                'href': self.public_key(),
+                'href': 'data:'+self.public_key(),
                 },
                 {
                 'rel': 'http://ostatus.org/schema/1.0/subscribe',
