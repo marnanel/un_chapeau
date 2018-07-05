@@ -62,7 +62,6 @@ class Apps(View):
 class Verify_Credentials(generics.GenericAPIView):
 
     queryset = User.objects.all()
-    permission_classes = (IsAuthenticated, )
 
     def get(self, request):
         serializer = UserSerializerWithSource(request.user)
@@ -72,7 +71,6 @@ class Statuses(generics.ListCreateAPIView):
 
     queryset = Status.objects.all()
     serializer_class = StatusSerializer
-    permission_classes = (IsAuthenticated, )
 
 class AbstractTimeline(generics.ListAPIView):
 
@@ -93,12 +91,16 @@ class AbstractTimeline(generics.ListAPIView):
 
 class PublicTimeline(AbstractTimeline):
 
+    permission_classes = ()
+
     def get_queryset(self):
         return Status.objects.filter(visibility=Visibility('public').name)
 
 ########################################
 
 class UserFeed(View):
+
+    permission_classes = ()
 
     def get(self, request, username, *args, **kwargs):
 
