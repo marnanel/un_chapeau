@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from trilby_api.models import *
 from un_chapeau.settings import UN_CHAPEAU_SETTINGS
+import json
 
 APPS_CREATE_PARAMS = {
         'client_name': 'un_chapeau tests',
@@ -281,9 +282,18 @@ class WebfingerTests(TestCase):
         checking_account = 'bob@' + UN_CHAPEAU_SETTINGS['HOSTNAME']
 
         for prefix in ['', 'acct:']:
-            webfinger = self.request(
+            webfinger_response = self.request(
                 prefix+checking_account,
-                expected_status_code=200).json()
+                expected_status_code=200)
+
+            self.assertEqual(
+                    webfinger_response.get('Content-Type'),
+                    'application/jrd+json; charset=utf-8',
+                    )
+
+            webfinger = json.loads(
+                    webfinger_response.content.decode(
+                        webfinger_response.charset))
 
             for field in [
                     'subject',
@@ -293,10 +303,32 @@ class WebfingerTests(TestCase):
                 self.assertIn(field, webfinger)
 
             for link in webfinger['links']:
-                for field in [
-                        'rel',
-                        'href',
-                        ]:
-                    self.assertIn(field, link)
 
-                    # XXX test semantics too
+                self.assertIn('rel', link)
+
+                if link['rel']=='magic-public-key':
+                    self.assertIn(
+                            'data:application/magic-public-key,RSA',
+                            link['href'],
+                            )
+
+                if link['rel']=="http://ostatus.org/schema/1.0/subscribe":
+                    self.assertIn(
+                            'template',
+                            link,
+                            )
+                else:
+                    self.assertIn(
+                            'href',
+                            link,
+                            )
+
+
+            self.assertEqual(
+                    webfinger['subject'],
+                    'acct:{}@{}'.format(
+                        checking_account,
+                        UN_CHAPEAU_SETTINGS['HOSTNAME'],
+                        ))
+
+            
