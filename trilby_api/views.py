@@ -13,6 +13,7 @@ from .serializers import *
 from rest_framework import generics, response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
 import json
 import re
 
@@ -130,6 +131,7 @@ class Webfinger(generics.GenericAPIView):
 
     serializer_class = WebfingerSerializer
     permission_classes = ()
+    renderer_classes = (JSONRenderer, )
 
     def get(self, request):
 
@@ -171,4 +173,5 @@ class Webfinger(generics.GenericAPIView):
                     )
 
         serializer = self.serializer_class(queryset)
-        return Response(serializer.data)
+        return Response(serializer.data,
+                content_type='application/jrd+json; charset=utf-8')
