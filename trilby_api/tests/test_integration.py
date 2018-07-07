@@ -323,12 +323,10 @@ class WebfingerTests(TestCase):
                             link,
                             )
 
-
             self.assertEqual(
                     webfinger['subject'],
-                    'acct:{}@{}'.format(
+                    'acct:{}'.format(
                         checking_account,
-                        UN_CHAPEAU_SETTINGS['HOSTNAME'],
                         ))
 
             
