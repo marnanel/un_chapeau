@@ -305,7 +305,10 @@ class User(AbstractUser):
                 }
 
     def public_key(self):
-        return self.magic_envelope_public_key
+        return 'data:{},{}'.format(
+                'application/magic-public-key',
+                self.magic_envelope_public_key,
+                )
 
     def links(self):
         return [
