@@ -175,7 +175,7 @@ class WebfingerSerializer(serializers.ModelSerializer):
                 ]
 
     def get_subject(self, instance):
-        return 'acct:{}'.format(instance.username)
+        return 'acct:{}'.format(instance.acct())
 
     def get_aliases(self, instance):
         return [
