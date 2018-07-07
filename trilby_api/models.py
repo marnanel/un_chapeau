@@ -143,8 +143,11 @@ class User(AbstractUser):
         return self.date_joined
 
     def acct(self):
-        # XXX for remote ones we need to spilt this up
-        return self.username
+        # XXX obviously we need to do something else for remote accounts
+        return '{0}@{1}'.format(
+                self.username,
+                UN_CHAPEAU_SETTINGS['HOSTNAME'],
+                )
 
     def followers_count(self):
         return Relationship.objects.filter(them=self).count()
@@ -333,11 +336,11 @@ class User(AbstractUser):
                 },
                 {
                 'rel': 'magic-public-key',
-                'href': 'data:'+self.public_key(),
+                'href': self.public_key(),
                 },
                 {
                 'rel': 'http://ostatus.org/schema/1.0/subscribe',
-                'href': UN_CHAPEAU_SETTINGS['AUTHORIZE_FOLLOW_TEMPLATE'] % {
+                'template': UN_CHAPEAU_SETTINGS['AUTHORIZE_FOLLOW_TEMPLATE'] % {
                     'hostname': UN_CHAPEAU_SETTINGS['HOSTNAME'],
                     },
                 },
