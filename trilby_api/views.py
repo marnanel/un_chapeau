@@ -115,12 +115,43 @@ class UserFeed(View):
                 'hub_url': UN_CHAPEAU_SETTINGS['HUB'],
             }
 
-        return render(
+        result = render(
                 request=request,
                 template_name='account.atom.xml',
                 context=context,
                 content_type='application/atom+xml',
                 )
+
+        link_context = {
+                'hostname': UN_CHAPEAU_SETTINGS['HOSTNAME'],
+                'username': user.username,
+                'acct': user.acct(),
+                }
+
+        links = ', '.join(
+                [ '<{}>; rel="{}"; type="{}"'.format(uri, rel, mimetype)
+                    for uri, rel, mimetype in
+                    [
+                        (UN_CHAPEAU_SETTINGS['USER_WEBFINGER_URLS'] % link_context,
+                            'lrdd',
+                            'application/xrd+xml',
+                            ),
+
+                        (UN_CHAPEAU_SETTINGS['USER_FEED_URLS'] % link_context,
+                            'alternate',
+                            'application/atom+xml',
+                            ),
+
+                        (UN_CHAPEAU_SETTINGS['USER_URLS'] % link_context,
+                            'alternate',
+                            'application/activity+json',
+                            )
+                        ]
+                    ])
+
+        result['Link'] = links
+
+        return result
 
 ########################################
 
