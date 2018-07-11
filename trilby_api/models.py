@@ -1,5 +1,6 @@
 from enum import Enum
 from random import randint
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.timezone import now
@@ -475,6 +476,27 @@ class Status(models.Model):
 
     def atomURL(self):
         return self._path_formatting('STATUS_FEED_URLS')
+
+    def conversation(self):
+        """
+        The string ID of the conversation this Status belongs to.
+
+        If we're a reply to another Status, we inherit the
+        conversation ID of that Status. Otherwise, we make up
+        our own ID, which should be a tag: URL as defined by RFC4151.
+        """
+
+        # XXX check in_reply_to
+
+        now = datetime.now()
+
+        return 'tag:%s,%04d-%02d-%02d:objectId=%d:objectType=Conversation' % (
+                UN_CHAPEAU_SETTINGS['HOSTNAME'],
+                now.year,
+                now.month,
+                now.day,
+                self.id,
+                )
 
 class Relationship(models.Model):
     """
