@@ -18,16 +18,12 @@ class _VisibilityField(serializers.CharField):
 #########################################
 
 class UserSerializer(serializers.ModelSerializer):
-    avatar = serializers.CharField(source='avatar_or_default',
-            read_only = True)
-    header = serializers.CharField(source='header_or_default',
-            read_only = True)
 
     # for the moment, treat these as the same.
     # the spec doesn't actually explain the difference!
-    avatar_static = serializers.CharField(source='avatar_or_default',
+    avatar_static = serializers.CharField(source='avatar',
             read_only = True)
-    header_static = serializers.CharField(source='header_or_default',
+    header_static = serializers.CharField(source='header',
             read_only = True)
 
     url = serializers.URLField(source='linked_url')
@@ -41,6 +37,8 @@ class UserSerializer(serializers.ModelSerializer):
                 'display_name',
                 'email',
                 'locked',
+                'avatar',
+                'header',
                 'created_at',
                 'followers_count',
                 'following_count',
