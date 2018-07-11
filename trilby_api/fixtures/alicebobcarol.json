@@ -1,228 +1,712 @@
 [
 {
-  "model": "trilby_api.user",
-  "pk": 2,
-  "fields": {
-    "password": "pbkdf2_sha256$100000$M0AKN3AhuYDH$Z//LMtbDAcvI5MQ6UXlbOvVP32K+sqKN8R1s9uvmiD0=",
-    "last_login": null,
-    "is_superuser": true,
-    "first_name": "Alice",
-    "last_name": "Test",
-    "is_staff": true,
-    "is_active": true,
-    "date_joined": "2018-05-28T14:18:21Z",
-    "username": "alice",
-    "email": "alice@example.com",
-    "display_name": "Alice Test",
-    "locked": false,
-    "note": "",
-    "linked_url": "https://example.com/people/alice",
-    "moved_to": "",
-    "avatar": "/static/un_chapeau/testing/alice.jpg",
-    "header": "/static/un_chapeau/defaults/header.jpg",
-    "private_key": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlDWEFJQkFBS0JnUUN4V3UxY2lqNjA5Mkh5REpEbHk2QWNTOGd5b0dIWDBZSHY1NWNwOGRsbXFYZVJMVUU0CjlSWXpGUHNERFhzSUFSbFo0ajNObGl0MlZwcWdjb2JLSDhMNE5DTVVrYlAraVJUeGw1WGkva2xVVVE5RkpEZjkKZm95bkJ3ZXlIdThlRzdETEk5b01PbEpNSml0UVNhSkpiR1YrTEN5QzFNc2lHRlZBS3hxc0VBQ1BKUUlEQVFBQgpBb0dBSGozWjhZaWxMcWhzTENEV2FFaXpjWCsra0Z0bXM2MUcwY2lVcnhOTk5jTTUzeWh2VWE0QTdnN3F5bGQzCkhpTkoxbGpNbnd5M05vT0g5RW56RCs0Z2lYZDNpQTNzdXlCOHN1bE1kYzBFQ1k2Q1NOdG9qYUZJcUE1bTVhQlcKRVBlaEd2bHRLd09tUFlOUlRWazgzck1Cd25PUlNSVW5wZXhWYTJHd1JXZTNCWUVDUVFEVWozMWMydnhlbytQbQo0elhNNFR1RldaeEdyb0Z5MGhoenlreG05UGVEdmg1OTREc3k1c0xtdXBVMGoyZlVRaDFjV2N4S2tFd0Q5dzcwCm5hZ3lWdmVoQWtFQTFabWFoSWNRZW55MFpORTJBMk02S1J3OENRSHZkaUdSVXFPNlhBSG80cmdKemRzYi9USjMKeDJlOFNMb1hGb005SXRsRjJCUU0vYm9KdlVuaHRiOFpCUUpBWXZiL3hpakxFWUU2emJnQng0Y2lRRDd0ak5jWQp2QTNuaHBtc29zN3hJcXgwNCtSdmk0NTNOaGV1K2s2K1o4djBnWmZwanRuS0dwcC9veEo0U2gvRm9RSkJBTFF2CnVKWjFyYVAyVU9ML1RaWTcvWk15ZXo2S0FHeGgwc3Fvell2U0hKZ3M4akJTMXVDWDAwMUdxQ0dkd2Q0KzViTGgKSUxjdjZ1bWJKNTRqbGlFUVROVUNRRkFWOGZXQ2IzcTFOWUVLZS8wOE1KcVd6ZHdnU2lMMkRQbzhzRWJvRXFRZwpCQTdJZWpVNUdVaVRZUG40bjNhcmErUkcybElWaG5CMGZ2QlBzaWxNaGJrPQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQ==",
-    "magic_envelope_public_key": "RSA.sVrtXIo-tPdh8gyQ5cugHEvIMqBh19GB7-eXKfHZZql3kS1BOPUWMxT7Aw17CAEZWeI9zZYrdlaaoHKGyh_C-DQjFJGz_okU8ZeV4v5JVFEPRSQ3_X6MpwcHsh7vHhuwyyPaDDpSTCYrUEmiSWxlfiwsgtTLIhhVQCsarBAAjyU=.AQAB",
-    "default_sensitive": false,
-    "default_visibility": "P",
-    "groups": [],
-    "user_permissions": []
-  }
+    "model": "contenttypes.contenttype",
+    "pk": 1,
+    "fields": {
+        "app_label": "admin",
+        "model": "logentry"
+    }
 },
 {
-  "model": "trilby_api.user",
-  "pk": 3,
-  "fields": {
-    "password": "pbkdf2_sha256$100000$Z9PA4XcXjlUq$wvgaInG9H7kLeU8mYt0LPVSEP5ZNcH8sUJiFq9CU5Ro=",
-    "last_login": null,
-    "is_superuser": false,
-    "first_name": "Bob",
-    "last_name": "Test",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2018-05-28T14:20:04Z",
-    "username": "bob",
-    "email": "bob@example.com",
-    "display_name": "Bob Test",
-    "locked": false,
-    "note": "",
-    "linked_url": "https://example.com/people/bob",
-    "moved_to": "",
-    "avatar": "/static/un_chapeau/testing/bob.jpg",
-    "header": "/static/un_chapeau/defaults/header.jpg",
-    "private_key": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlDWFFJQkFBS0JnUURwd3I5ZVJLTS9nT1I4ZHpEWmtSTWZzTExoV0xCSk5EclgyTHNzRktUN1VYeDBpc3AxClJaTTI2c1JzR3lMOWk1ZnpJUm11TnZ6M1ptZmlYamI4bnBCOXZmNXk3TE5BUVpDMFZqS2hHdWd6TW5TSXZmaXIKUi9BV25HN3A0WEpoSDd4TkFLQk1jRDVoUnUyZkRUMnJDK2IzWGdzUTJBUExKdHNDS2FIS2owaVB4UUlEQVFBQgpBb0dBQ3VMUzNxVDdwVDF2Wm94MmJldGZwSjRwOW15VzZSSFJtN093SThGaVhZSFI5ZXR3dWoxZk9iTjlLanVwClNYMXl1aFBVaWxSdE8yZzlka0ZFOWthOEc4Z3NSMVlTMFZvSVpWdlF2ZmlUSzUyVXh2cmUzRFdvSUJXd0pJUmcKTittY092VEtCZ0xabEFCcXFuT1MxbGtPYi9VS0R2Z1l5ODdFbTdMYlltWWY5d0VDUVFEcmlreW9CcHFYRGJLZQpwMlJTWlJONHFkSVg2bWpXLzk5QkpBaFpyUkdoT1pxVEprUkMwSWRhWjQ0TllZZk0yRGNFaVh3WGhyclpVYUoxCkp6L0hHVldSQWtFQS9oRGdubW1YZ01MT1hYTHVLV0dPWWpCVUNUYnZNSDJvbkFkQng4cjllWGM5NnVETkRaYmgKZVRlbWM5ZEhmYnZMSVU0L0E1eWNRQlMrQjhPVVlxanM5UUpCQUkzbTdSWFJuTExpV3JsQWlhMG1IZHYxRzVDeQo5V1NLRkx1TzlNVHFBcFFLT3pqcHRmZzIzMFMwM0p6dEpENWlDSXRnTlBXTGd1aElTVUtoV2NnZVdERUNRSEx6CmgrMmtzTnVkU0dtWG1wSTJoWWwvZkVZL0NMSFQ2UG5QZnIrNjVEeVU2dnJlZzJobW45V01qRTlWVkE5YmJHakIKVWxsNy9tWXYvRnJlN3NCRTFoRUNRUUNSTDNQN2VqeEJvd1A2d0N2Z1VYMElPbkczS1BHK0I4anExS2xxSlc4WApmZGdxYmxwNmw3YWJCZGMzQkZIaXAwVmVtOGl2elhZbkFibUJHT1VjR1VnVQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQ==",
-    "magic_envelope_public_key": "RSA.6cK_XkSjP4DkfHcw2ZETH7Cy4ViwSTQ619i7LBSk-1F8dIrKdUWTNurEbBsi_YuX8yEZrjb892Zn4l42_J6Qfb3-cuyzQEGQtFYyoRroMzJ0iL34q0fwFpxu6eFyYR-8TQCgTHA-YUbtnw09qwvm914LENgDyybbAimhyo9Ij8U=.AQAB",
-    "default_sensitive": false,
-    "default_visibility": "P",
-    "groups": [],
-    "user_permissions": []
-  }
+    "model": "contenttypes.contenttype",
+    "pk": 2,
+    "fields": {
+        "app_label": "auth",
+        "model": "group"
+    }
 },
 {
-  "model": "trilby_api.user",
-  "pk": 4,
-  "fields": {
-    "password": "pbkdf2_sha256$100000$ufg0BY5asyK7$Qj4spNJu2CyR+jcdbO9kYJOZ7oqEQaErM4A//UuhZnc=",
-    "last_login": null,
-    "is_superuser": false,
-    "first_name": "Carol",
-    "last_name": "Test",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2018-05-28T14:21:04Z",
-    "username": "carol",
-    "email": "carol@example.com",
-    "display_name": "Carol Test",
-    "locked": false,
-    "note": "https://example.com/people/carol",
-    "linked_url": "",
-    "moved_to": "",
-    "avatar": "/static/un_chapeau/testing/carol.jpg",
-    "header": "/static/un_chapeau/defaults/header.jpg",
-    "private_key": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlDWGdJQkFBS0JnUURpVkFTQVlUSEF1OXlqVmxaV1pGUk8zMzhMQWJJTVJ0cXk1dVp5Szl0YVZPbFVOWWJnClJUOVFqUUhOd3E4TkppL3Z1bFBKY1lwdHJjY2lIWGZOR0I4WGMrckw0YVZpc3JZOTFydkpaRlNLY1htcCtjaVkKeUNNRFpJdW5XUGRTeEMyMWIrYjVkdmd6VWlBTWphY3MyUHEvdmlFVGNVUFBlK0VZTGp6QVZvN2ZsUUlEQVFBQgpBb0dCQUpqckczK0NMQk9FMnJhaGh3UW9GYTZVNDBtVWc3QTN6MXhCRmtMZHp2OWhqNlVONVd0eVhpMFdtTGxsCmFORUJsREh0T3Q5SWo3YzdTdWlKOEgvcVpGWTI2b3dQWVA4Z0F6bnJsTGthZTZRNXd3TkUyV1RXb1pWOGZEQTkKMkt2Ryt3dzE2Z3JNd1VnR3hFZjhkbXZLN0F3cnArWk96QVB6ekFyVXJuM2ttOVdoQWtFQTY0cW1MQ2RRYVF3QgpYT0VCRURHaG9ZRWswVjYxVXNES055czlKelNYaWNVdVVzajZkN29lU3JHdXdvdkJhMXEzaXFtdm9sYk1LSWRkCkRMb1ZCN2dndHdKQkFQWDhnVkpCS3RkZFp1VXFRdG84dVpyZy90aHJJS1lNaXQ0dlhINEdCSElaK1pSb3NBSFAKR1JsT0xzeEZ5TUZYTVJhNGk5NkxsNXVZUlR1S3kyTnBIaE1DUURGd2ZNaXZ4OVVFekJSdXRnWnNKSHo5Mm5pSAo1STltSUF2TWE1MmJFR08rbTZhTXdPWDRqdnNtcUlQMVNiZjY1cU9ZVW1GRXpyMkREQ2pydGhaVXM2a0NRUUMyClBnN3BpOUpib0oxYzV3U0VmenpiWEJveTZKdFZxakV3RDFLdEkzUWp2TTdGZnhIM0pTSHBONTFBUmV0SUluc0IKNUZQcjJ1dkZvUGlaOW1oZERFSDFBa0VBdEFVNTcyN3FlSkFJQjZrNVljMWY5WVN2eUlqSVNRem1ic0J6TVJUTAp5VTErWTZOWWNXUHZZMG5HRnpGamYzQnBUcUh5TzZFYmNUS1p6b3FINnhGOW93PT0KLS0tLS1FTkQgUlNBIFBSSVZBVEUgS0VZLS0tLS0=",
-    "magic_envelope_public_key": "RSA.4lQEgGExwLvco1ZWVmRUTt9_CwGyDEbasubmcivbWlTpVDWG4EU_UI0BzcKvDSYv77pTyXGKba3HIh13zRgfF3Pqy-GlYrK2Pda7yWRUinF5qfnImMgjA2SLp1j3UsQttW_m-Xb4M1IgDI2nLNj6v74hE3FDz3vhGC48wFaO35U=.AQAB",
-    "default_sensitive": false,
-    "default_visibility": "P",
-    "groups": [],
-    "user_permissions": []
-  }
+    "model": "contenttypes.contenttype",
+    "pk": 3,
+    "fields": {
+        "app_label": "auth",
+        "model": "permission"
+    }
 },
 {
-  "model": "trilby_api.status",
-  "pk": 3,
-  "fields": {
-    "posted_by": 2,
-    "content": "What's down the rabbit hole?",
-    "created_at": "2018-05-28T14:49:46.057Z",
-    "in_reply_to_id": null,
-    "sensitive": false,
-    "spoiler_text": "",
-    "visibility": "X",
-    "idempotency_key": ""
-  }
+    "model": "contenttypes.contenttype",
+    "pk": 4,
+    "fields": {
+        "app_label": "contenttypes",
+        "model": "contenttype"
+    }
 },
 {
-  "model": "trilby_api.status",
-  "pk": 4,
-  "fields": {
-    "posted_by": 2,
-    "content": "some pretty weird stuff tbh",
-    "created_at": "2018-05-28T14:50:19.294Z",
-    "in_reply_to_id": 3,
-    "sensitive": false,
-    "spoiler_text": "",
-    "visibility": "X",
-    "idempotency_key": ""
-  }
+    "model": "contenttypes.contenttype",
+    "pk": 5,
+    "fields": {
+        "app_label": "sessions",
+        "model": "session"
+    }
 },
 {
-  "model": "trilby_api.status",
-  "pk": 5,
-  "fields": {
-    "posted_by": 2,
-    "content": "@bob@localhost Do you know anything about playing cards?",
-    "created_at": "2018-05-28T14:51:00.762Z",
-    "in_reply_to_id": null,
-    "sensitive": false,
-    "spoiler_text": "",
-    "visibility": "X",
-    "idempotency_key": ""
-  }
+    "model": "contenttypes.contenttype",
+    "pk": 6,
+    "fields": {
+        "app_label": "oauth2_provider",
+        "model": "application"
+    }
 },
 {
-  "model": "trilby_api.status",
-  "pk": 6,
-  "fields": {
-    "posted_by": 3,
-    "content": "@alice@localhost No, why?",
-    "created_at": "2018-05-28T14:51:21.110Z",
-    "in_reply_to_id": 5,
-    "sensitive": false,
-    "spoiler_text": "",
-    "visibility": "P",
-    "idempotency_key": ""
-  }
+    "model": "contenttypes.contenttype",
+    "pk": 7,
+    "fields": {
+        "app_label": "oauth2_provider",
+        "model": "grant"
+    }
 },
 {
-  "model": "trilby_api.status",
-  "pk": 7,
-  "fields": {
-    "posted_by": 2,
-    "content": "@bob@localhost er, asking for a friend?",
-    "created_at": "2018-05-28T14:51:50.689Z",
-    "in_reply_to_id": 6,
-    "sensitive": false,
-    "spoiler_text": "",
-    "visibility": "X",
-    "idempotency_key": ""
-  }
+    "model": "contenttypes.contenttype",
+    "pk": 8,
+    "fields": {
+        "app_label": "oauth2_provider",
+        "model": "accesstoken"
+    }
 },
 {
-  "model": "trilby_api.status",
-  "pk": 8,
-  "fields": {
-    "posted_by": 3,
-    "content": "This is a private status...",
-    "created_at": "2018-05-28T14:52:31.913Z",
-    "in_reply_to_id": null,
-    "sensitive": false,
-    "spoiler_text": "",
-    "visibility": "X",
-    "idempotency_key": ""
-  }
+    "model": "contenttypes.contenttype",
+    "pk": 9,
+    "fields": {
+        "app_label": "oauth2_provider",
+        "model": "refreshtoken"
+    }
 },
 {
-  "model": "trilby_api.status",
-  "pk": 9,
-  "fields": {
-    "posted_by": 3,
-    "content": "he comes back three days later",
-    "created_at": "2018-05-28T14:53:08.142Z",
-    "in_reply_to_id": null,
-    "sensitive": false,
-    "spoiler_text": "spoilers for Mark's gospel",
-    "visibility": "P",
-    "idempotency_key": ""
-  }
+    "model": "contenttypes.contenttype",
+    "pk": 10,
+    "fields": {
+        "app_label": "trilby_api",
+        "model": "user"
+    }
 },
 {
-  "model": "trilby_api.status",
-  "pk": 10,
-  "fields": {
-    "posted_by": 3,
-    "content": "This status is unlisted.",
-    "created_at": "2018-05-28T14:53:54.504Z",
-    "in_reply_to_id": null,
-    "sensitive": false,
-    "spoiler_text": "",
-    "visibility": "U",
-    "idempotency_key": ""
-  }
+    "model": "contenttypes.contenttype",
+    "pk": 11,
+    "fields": {
+        "app_label": "trilby_api",
+        "model": "relationship"
+    }
 },
 {
-  "model": "trilby_api.relationship",
-  "pk": 1,
-  "fields": {
-    "us": 2,
-    "them": 3,
-    "what": "F"
-  }
+    "model": "contenttypes.contenttype",
+    "pk": 12,
+    "fields": {
+        "app_label": "trilby_api",
+        "model": "status"
+    }
 },
 {
-  "model": "trilby_api.relationship",
-  "pk": 2,
-  "fields": {
-    "us": 3,
-    "them": 2,
-    "what": "F"
-  }
+    "model": "contenttypes.contenttype",
+    "pk": 13,
+    "fields": {
+        "app_label": "buckethat_salmon",
+        "model": "message"
+    }
 },
 {
-  "model": "trilby_api.relationship",
-  "pk": 3,
-  "fields": {
-    "us": 2,
-    "them": 4,
-    "what": "F"
-  }
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+        "name": "Can add log entry",
+        "content_type": 1,
+        "codename": "add_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 2,
+    "fields": {
+        "name": "Can change log entry",
+        "content_type": 1,
+        "codename": "change_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 3,
+    "fields": {
+        "name": "Can delete log entry",
+        "content_type": 1,
+        "codename": "delete_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 4,
+    "fields": {
+        "name": "Can add group",
+        "content_type": 2,
+        "codename": "add_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 5,
+    "fields": {
+        "name": "Can change group",
+        "content_type": 2,
+        "codename": "change_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 6,
+    "fields": {
+        "name": "Can delete group",
+        "content_type": 2,
+        "codename": "delete_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 7,
+    "fields": {
+        "name": "Can add permission",
+        "content_type": 3,
+        "codename": "add_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 8,
+    "fields": {
+        "name": "Can change permission",
+        "content_type": 3,
+        "codename": "change_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 9,
+    "fields": {
+        "name": "Can delete permission",
+        "content_type": 3,
+        "codename": "delete_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 10,
+    "fields": {
+        "name": "Can add content type",
+        "content_type": 4,
+        "codename": "add_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 11,
+    "fields": {
+        "name": "Can change content type",
+        "content_type": 4,
+        "codename": "change_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 12,
+    "fields": {
+        "name": "Can delete content type",
+        "content_type": 4,
+        "codename": "delete_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 13,
+    "fields": {
+        "name": "Can add session",
+        "content_type": 5,
+        "codename": "add_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 14,
+    "fields": {
+        "name": "Can change session",
+        "content_type": 5,
+        "codename": "change_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 15,
+    "fields": {
+        "name": "Can delete session",
+        "content_type": 5,
+        "codename": "delete_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 16,
+    "fields": {
+        "name": "Can add application",
+        "content_type": 6,
+        "codename": "add_application"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 17,
+    "fields": {
+        "name": "Can change application",
+        "content_type": 6,
+        "codename": "change_application"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 18,
+    "fields": {
+        "name": "Can delete application",
+        "content_type": 6,
+        "codename": "delete_application"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 19,
+    "fields": {
+        "name": "Can add grant",
+        "content_type": 7,
+        "codename": "add_grant"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 20,
+    "fields": {
+        "name": "Can change grant",
+        "content_type": 7,
+        "codename": "change_grant"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 21,
+    "fields": {
+        "name": "Can delete grant",
+        "content_type": 7,
+        "codename": "delete_grant"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 22,
+    "fields": {
+        "name": "Can add access token",
+        "content_type": 8,
+        "codename": "add_accesstoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 23,
+    "fields": {
+        "name": "Can change access token",
+        "content_type": 8,
+        "codename": "change_accesstoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 24,
+    "fields": {
+        "name": "Can delete access token",
+        "content_type": 8,
+        "codename": "delete_accesstoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 25,
+    "fields": {
+        "name": "Can add refresh token",
+        "content_type": 9,
+        "codename": "add_refreshtoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 26,
+    "fields": {
+        "name": "Can change refresh token",
+        "content_type": 9,
+        "codename": "change_refreshtoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 27,
+    "fields": {
+        "name": "Can delete refresh token",
+        "content_type": 9,
+        "codename": "delete_refreshtoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 28,
+    "fields": {
+        "name": "Can add user",
+        "content_type": 10,
+        "codename": "add_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 29,
+    "fields": {
+        "name": "Can change user",
+        "content_type": 10,
+        "codename": "change_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 30,
+    "fields": {
+        "name": "Can delete user",
+        "content_type": 10,
+        "codename": "delete_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 31,
+    "fields": {
+        "name": "Can add relationship",
+        "content_type": 11,
+        "codename": "add_relationship"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 32,
+    "fields": {
+        "name": "Can change relationship",
+        "content_type": 11,
+        "codename": "change_relationship"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 33,
+    "fields": {
+        "name": "Can delete relationship",
+        "content_type": 11,
+        "codename": "delete_relationship"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 34,
+    "fields": {
+        "name": "Can add status",
+        "content_type": 12,
+        "codename": "add_status"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 35,
+    "fields": {
+        "name": "Can change status",
+        "content_type": 12,
+        "codename": "change_status"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 36,
+    "fields": {
+        "name": "Can delete status",
+        "content_type": 12,
+        "codename": "delete_status"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 37,
+    "fields": {
+        "name": "Can add message",
+        "content_type": 13,
+        "codename": "add_message"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 38,
+    "fields": {
+        "name": "Can change message",
+        "content_type": 13,
+        "codename": "change_message"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 39,
+    "fields": {
+        "name": "Can delete message",
+        "content_type": 13,
+        "codename": "delete_message"
+    }
+},
+{
+    "model": "trilby_api.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$100000$M0AKN3AhuYDH$Z//LMtbDAcvI5MQ6UXlbOvVP32K+sqKN8R1s9uvmiD0=",
+        "last_login": null,
+        "is_superuser": true,
+        "first_name": "Alice",
+        "last_name": "Test",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2018-05-28T14:18:21Z",
+        "username": "alice",
+        "email": "alice@example.com",
+        "display_name": "Alice Test",
+        "locked": false,
+        "note": "We'll see how deep the rabbithole really goes.",
+        "linked_url": "https://example.com/people/alice",
+        "moved_to": "",
+        "avatar": "/static/testing/alice.jpg",
+        "header": "/static/defaults/header.jpg",
+        "private_key": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlDWEFJQkFBS0JnUUN4V3UxY2lqNjA5Mkh5REpEbHk2QWNTOGd5b0dIWDBZSHY1NWNwOGRsbXFYZVJMVUU0CjlSWXpGUHNERFhzSUFSbFo0ajNObGl0MlZwcWdjb2JLSDhMNE5DTVVrYlAraVJUeGw1WGkva2xVVVE5RkpEZjkKZm95bkJ3ZXlIdThlRzdETEk5b01PbEpNSml0UVNhSkpiR1YrTEN5QzFNc2lHRlZBS3hxc0VBQ1BKUUlEQVFBQgpBb0dBSGozWjhZaWxMcWhzTENEV2FFaXpjWCsra0Z0bXM2MUcwY2lVcnhOTk5jTTUzeWh2VWE0QTdnN3F5bGQzCkhpTkoxbGpNbnd5M05vT0g5RW56RCs0Z2lYZDNpQTNzdXlCOHN1bE1kYzBFQ1k2Q1NOdG9qYUZJcUE1bTVhQlcKRVBlaEd2bHRLd09tUFlOUlRWazgzck1Cd25PUlNSVW5wZXhWYTJHd1JXZTNCWUVDUVFEVWozMWMydnhlbytQbQo0elhNNFR1RldaeEdyb0Z5MGhoenlreG05UGVEdmg1OTREc3k1c0xtdXBVMGoyZlVRaDFjV2N4S2tFd0Q5dzcwCm5hZ3lWdmVoQWtFQTFabWFoSWNRZW55MFpORTJBMk02S1J3OENRSHZkaUdSVXFPNlhBSG80cmdKemRzYi9USjMKeDJlOFNMb1hGb005SXRsRjJCUU0vYm9KdlVuaHRiOFpCUUpBWXZiL3hpakxFWUU2emJnQng0Y2lRRDd0ak5jWQp2QTNuaHBtc29zN3hJcXgwNCtSdmk0NTNOaGV1K2s2K1o4djBnWmZwanRuS0dwcC9veEo0U2gvRm9RSkJBTFF2CnVKWjFyYVAyVU9ML1RaWTcvWk15ZXo2S0FHeGgwc3Fvell2U0hKZ3M4akJTMXVDWDAwMUdxQ0dkd2Q0KzViTGgKSUxjdjZ1bWJKNTRqbGlFUVROVUNRRkFWOGZXQ2IzcTFOWUVLZS8wOE1KcVd6ZHdnU2lMMkRQbzhzRWJvRXFRZwpCQTdJZWpVNUdVaVRZUG40bjNhcmErUkcybElWaG5CMGZ2QlBzaWxNaGJrPQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQ==",
+        "magic_envelope_public_key": "RSA.sVrtXIo-tPdh8gyQ5cugHEvIMqBh19GB7-eXKfHZZql3kS1BOPUWMxT7Aw17CAEZWeI9zZYrdlaaoHKGyh_C-DQjFJGz_okU8ZeV4v5JVFEPRSQ3_X6MpwcHsh7vHhuwyyPaDDpSTCYrUEmiSWxlfiwsgtTLIhhVQCsarBAAjyU=.AQAB",
+        "default_sensitive": false,
+        "default_visibility": "P",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "trilby_api.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$100000$Z9PA4XcXjlUq$wvgaInG9H7kLeU8mYt0LPVSEP5ZNcH8sUJiFq9CU5Ro=",
+        "last_login": null,
+        "is_superuser": false,
+        "first_name": "Bob",
+        "last_name": "Test",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-05-28T14:20:04Z",
+        "username": "bob",
+        "email": "bob@example.com",
+        "display_name": "Bob Test",
+        "locked": false,
+        "note": "Short for Bob.",
+        "linked_url": "https://example.com/people/bob",
+        "moved_to": "",
+        "avatar": "/static/testing/bob.jpg",
+        "header": "/static/defaults/header.jpg",
+        "private_key": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlDWFFJQkFBS0JnUURwd3I5ZVJLTS9nT1I4ZHpEWmtSTWZzTExoV0xCSk5EclgyTHNzRktUN1VYeDBpc3AxClJaTTI2c1JzR3lMOWk1ZnpJUm11TnZ6M1ptZmlYamI4bnBCOXZmNXk3TE5BUVpDMFZqS2hHdWd6TW5TSXZmaXIKUi9BV25HN3A0WEpoSDd4TkFLQk1jRDVoUnUyZkRUMnJDK2IzWGdzUTJBUExKdHNDS2FIS2owaVB4UUlEQVFBQgpBb0dBQ3VMUzNxVDdwVDF2Wm94MmJldGZwSjRwOW15VzZSSFJtN093SThGaVhZSFI5ZXR3dWoxZk9iTjlLanVwClNYMXl1aFBVaWxSdE8yZzlka0ZFOWthOEc4Z3NSMVlTMFZvSVpWdlF2ZmlUSzUyVXh2cmUzRFdvSUJXd0pJUmcKTittY092VEtCZ0xabEFCcXFuT1MxbGtPYi9VS0R2Z1l5ODdFbTdMYlltWWY5d0VDUVFEcmlreW9CcHFYRGJLZQpwMlJTWlJONHFkSVg2bWpXLzk5QkpBaFpyUkdoT1pxVEprUkMwSWRhWjQ0TllZZk0yRGNFaVh3WGhyclpVYUoxCkp6L0hHVldSQWtFQS9oRGdubW1YZ01MT1hYTHVLV0dPWWpCVUNUYnZNSDJvbkFkQng4cjllWGM5NnVETkRaYmgKZVRlbWM5ZEhmYnZMSVU0L0E1eWNRQlMrQjhPVVlxanM5UUpCQUkzbTdSWFJuTExpV3JsQWlhMG1IZHYxRzVDeQo5V1NLRkx1TzlNVHFBcFFLT3pqcHRmZzIzMFMwM0p6dEpENWlDSXRnTlBXTGd1aElTVUtoV2NnZVdERUNRSEx6CmgrMmtzTnVkU0dtWG1wSTJoWWwvZkVZL0NMSFQ2UG5QZnIrNjVEeVU2dnJlZzJobW45V01qRTlWVkE5YmJHakIKVWxsNy9tWXYvRnJlN3NCRTFoRUNRUUNSTDNQN2VqeEJvd1A2d0N2Z1VYMElPbkczS1BHK0I4anExS2xxSlc4WApmZGdxYmxwNmw3YWJCZGMzQkZIaXAwVmVtOGl2elhZbkFibUJHT1VjR1VnVQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQ==",
+        "magic_envelope_public_key": "RSA.6cK_XkSjP4DkfHcw2ZETH7Cy4ViwSTQ619i7LBSk-1F8dIrKdUWTNurEbBsi_YuX8yEZrjb892Zn4l42_J6Qfb3-cuyzQEGQtFYyoRroMzJ0iL34q0fwFpxu6eFyYR-8TQCgTHA-YUbtnw09qwvm914LENgDyybbAimhyo9Ij8U=.AQAB",
+        "default_sensitive": false,
+        "default_visibility": "P",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "trilby_api.user",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$100000$ufg0BY5asyK7$Qj4spNJu2CyR+jcdbO9kYJOZ7oqEQaErM4A//UuhZnc=",
+        "last_login": null,
+        "is_superuser": false,
+        "first_name": "Carol",
+        "last_name": "Test",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-05-28T14:21:04Z",
+        "username": "carol",
+        "email": "carol@example.com",
+        "display_name": "Carol Test",
+        "locked": false,
+        "note": "Every star shall sing a Carol.",
+        "linked_url": "https://example.com/people/carol",
+        "moved_to": "",
+        "avatar": "/static/testing/carol.jpg",
+        "header": "/static/defaults/header.jpg",
+        "private_key": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlDWGdJQkFBS0JnUURpVkFTQVlUSEF1OXlqVmxaV1pGUk8zMzhMQWJJTVJ0cXk1dVp5Szl0YVZPbFVOWWJnClJUOVFqUUhOd3E4TkppL3Z1bFBKY1lwdHJjY2lIWGZOR0I4WGMrckw0YVZpc3JZOTFydkpaRlNLY1htcCtjaVkKeUNNRFpJdW5XUGRTeEMyMWIrYjVkdmd6VWlBTWphY3MyUHEvdmlFVGNVUFBlK0VZTGp6QVZvN2ZsUUlEQVFBQgpBb0dCQUpqckczK0NMQk9FMnJhaGh3UW9GYTZVNDBtVWc3QTN6MXhCRmtMZHp2OWhqNlVONVd0eVhpMFdtTGxsCmFORUJsREh0T3Q5SWo3YzdTdWlKOEgvcVpGWTI2b3dQWVA4Z0F6bnJsTGthZTZRNXd3TkUyV1RXb1pWOGZEQTkKMkt2Ryt3dzE2Z3JNd1VnR3hFZjhkbXZLN0F3cnArWk96QVB6ekFyVXJuM2ttOVdoQWtFQTY0cW1MQ2RRYVF3QgpYT0VCRURHaG9ZRWswVjYxVXNES055czlKelNYaWNVdVVzajZkN29lU3JHdXdvdkJhMXEzaXFtdm9sYk1LSWRkCkRMb1ZCN2dndHdKQkFQWDhnVkpCS3RkZFp1VXFRdG84dVpyZy90aHJJS1lNaXQ0dlhINEdCSElaK1pSb3NBSFAKR1JsT0xzeEZ5TUZYTVJhNGk5NkxsNXVZUlR1S3kyTnBIaE1DUURGd2ZNaXZ4OVVFekJSdXRnWnNKSHo5Mm5pSAo1STltSUF2TWE1MmJFR08rbTZhTXdPWDRqdnNtcUlQMVNiZjY1cU9ZVW1GRXpyMkREQ2pydGhaVXM2a0NRUUMyClBnN3BpOUpib0oxYzV3U0VmenpiWEJveTZKdFZxakV3RDFLdEkzUWp2TTdGZnhIM0pTSHBONTFBUmV0SUluc0IKNUZQcjJ1dkZvUGlaOW1oZERFSDFBa0VBdEFVNTcyN3FlSkFJQjZrNVljMWY5WVN2eUlqSVNRem1ic0J6TVJUTAp5VTErWTZOWWNXUHZZMG5HRnpGamYzQnBUcUh5TzZFYmNUS1p6b3FINnhGOW93PT0KLS0tLS1FTkQgUlNBIFBSSVZBVEUgS0VZLS0tLS0=",
+        "magic_envelope_public_key": "RSA.4lQEgGExwLvco1ZWVmRUTt9_CwGyDEbasubmcivbWlTpVDWG4EU_UI0BzcKvDSYv77pTyXGKba3HIh13zRgfF3Pqy-GlYrK2Pda7yWRUinF5qfnImMgjA2SLp1j3UsQttW_m-Xb4M1IgDI2nLNj6v74hE3FDz3vhGC48wFaO35U=.AQAB",
+        "default_sensitive": false,
+        "default_visibility": "P",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "trilby_api.user",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$100000$RUkxP556EAlO$IqiRKEAjs0AxQebO3ohhnGP9mQCf47LxjmW3V0j7gG8=",
+        "last_login": null,
+        "is_superuser": true,
+        "first_name": "",
+        "last_name": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2018-07-10T19:12:50.728Z",
+        "username": "marnanel",
+        "email": "marnanel@thurman.org.uk",
+        "display_name": "",
+        "locked": false,
+        "note": "",
+        "linked_url": "",
+        "moved_to": "",
+        "avatar": "/static/defaults/avatar_3.jpg",
+        "header": "/static/defaults/header.jpg",
+        "private_key": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlDWFFJQkFBS0JnUUREZ09mZEQrREpRZW01ZnYyOU1zVVF5N2VmQkF4QWN0SFVzcHNSS2dVRDlzNFdiSDlRClVTWWtrODZ3Wm5uWFhVOTRIdjh5aHd6TTB2Q1JuMTVzSkQ5ell1WU52OE53K3phTm1SZzdTU2dIZk1PcGZpTCsKd0FmVGhCMXFKdzJOaW9OVUpNY1I3V21McFNuNFFKUXN6NFp5enhhaWxOL3NxTXFtbnNBMlQ1UDMzUUlEQVFBQgpBb0dCQUllWUNqaHFZTTkxWmJOLy9tQ1FxOWxBVWJSNlREME81YldOd3JzZTE2ZXVMN1dodnBOb0ZQcGRnWWNiCksvcFEvMk1pcklEUTVmSFJnNFNjY2hLeStVWElpNWRwNVBkd2hjMVBqY0UycUNlcmFpK2hiWEhhUXVXcndDRFEKeVQvR3ZjV21kYldZOXV4cENaSk9zcURCVmpvTEp0dmZxVis0OW5RNUJ0ZGVyOW1KQWtFQXpKdWNOWXpReGNNOApveHdkU1hkWXpwTmFOeFBjMkxxdEtLZStMNkRSNnF3WmIzTFk1azUxN3Q2Vk9aMUR4cE1WMWVCU1lzRHc5NzIrCnpKNUhBejdNTndKQkFQU2I0aWxmbThZS2ljZmkwRWtERVA4SVA1OWk2MHZ4TTNueENJcVJXWFVlVUtrcTFvZkYKNkxDSEFCVGUxS1dtMlhJWUFjaUFZRmlVdGVhdkFTcHVtb3NDUURBbW9zRmJiVHBOTXZUenhkU25PSWdNMTF0RQoybUZLdFR0dkZtdmcvZVdyTUtVd3N1aW9LRXJacU9hUkl3VVZVanN0K2xWeE1JUXM3RHo5TnBzRjZVc0NRUUNKCnQ2SXpyUktsQTVYakpqNGlmVWw2YlFoMUVscHJuVmRnRm1hNnJXN3lVNmtTTlg0blh6UE0vNVQ2S3lNS1NOQXcKUG5meWpPU3h1cmhYTXJ5elNTWlZBa0JMaldBeEtmRjRDUTA2WVFoNzh4YmRoMVltQnhDcHpoSXBrL2tOMERDZgpIbVRpRGZiZXROQUs0VXNPQXA1WHdXakhrMzNYYzZSTEtPaG5DK0FCdXhIWAotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQ==",
+        "magic_envelope_public_key": "RSA.w4Dn3Q_gyUHpuX79vTLFEMu3nwQMQHLR1LKbESoFA_bOFmx_UFEmJJPOsGZ5111PeB7_MocMzNLwkZ9ebCQ_c2LmDb_DcPs2jZkYO0koB3zDqX4i_sAH04QdaicNjYqDVCTHEe1pi6Up-ECULM-Gcs8WopTf7KjKpp7ANk-T990=.AQAB",
+        "default_sensitive": false,
+        "default_visibility": "P",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "trilby_api.status",
+    "pk": 3,
+    "fields": {
+        "posted_by": 2,
+        "content": "What's down the rabbit hole?",
+        "created_at": "2018-05-28T14:49:46.057Z",
+        "in_reply_to_id": null,
+        "sensitive": false,
+        "spoiler_text": "",
+        "visibility": "X",
+        "idempotency_key": ""
+    }
+},
+{
+    "model": "trilby_api.status",
+    "pk": 4,
+    "fields": {
+        "posted_by": 2,
+        "content": "some pretty weird stuff tbh",
+        "created_at": "2018-05-28T14:50:19.294Z",
+        "in_reply_to_id": 3,
+        "sensitive": false,
+        "spoiler_text": "",
+        "visibility": "X",
+        "idempotency_key": ""
+    }
+},
+{
+    "model": "trilby_api.status",
+    "pk": 5,
+    "fields": {
+        "posted_by": 2,
+        "content": "@bob@localhost Do you know anything about playing cards?",
+        "created_at": "2018-05-28T14:51:00.762Z",
+        "in_reply_to_id": null,
+        "sensitive": false,
+        "spoiler_text": "",
+        "visibility": "X",
+        "idempotency_key": ""
+    }
+},
+{
+    "model": "trilby_api.status",
+    "pk": 6,
+    "fields": {
+        "posted_by": 3,
+        "content": "@alice@localhost No, why?",
+        "created_at": "2018-05-28T14:51:21.110Z",
+        "in_reply_to_id": 5,
+        "sensitive": false,
+        "spoiler_text": "",
+        "visibility": "P",
+        "idempotency_key": ""
+    }
+},
+{
+    "model": "trilby_api.status",
+    "pk": 7,
+    "fields": {
+        "posted_by": 2,
+        "content": "@bob@localhost er, asking for a friend?",
+        "created_at": "2018-05-28T14:51:50.689Z",
+        "in_reply_to_id": 6,
+        "sensitive": false,
+        "spoiler_text": "",
+        "visibility": "X",
+        "idempotency_key": ""
+    }
+},
+{
+    "model": "trilby_api.status",
+    "pk": 8,
+    "fields": {
+        "posted_by": 3,
+        "content": "This is a private status...",
+        "created_at": "2018-05-28T14:52:31.913Z",
+        "in_reply_to_id": null,
+        "sensitive": false,
+        "spoiler_text": "",
+        "visibility": "X",
+        "idempotency_key": ""
+    }
+},
+{
+    "model": "trilby_api.status",
+    "pk": 9,
+    "fields": {
+        "posted_by": 3,
+        "content": "he comes back three days later",
+        "created_at": "2018-05-28T14:53:08.142Z",
+        "in_reply_to_id": null,
+        "sensitive": false,
+        "spoiler_text": "spoilers for Mark's gospel",
+        "visibility": "P",
+        "idempotency_key": ""
+    }
+},
+{
+    "model": "trilby_api.status",
+    "pk": 10,
+    "fields": {
+        "posted_by": 3,
+        "content": "This status is unlisted.",
+        "created_at": "2018-05-28T14:53:54.504Z",
+        "in_reply_to_id": null,
+        "sensitive": false,
+        "spoiler_text": "",
+        "visibility": "U",
+        "idempotency_key": ""
+    }
+},
+{
+    "model": "trilby_api.relationship",
+    "pk": 1,
+    "fields": {
+        "us": 2,
+        "them": 3,
+        "what": "F"
+    }
+},
+{
+    "model": "trilby_api.relationship",
+    "pk": 2,
+    "fields": {
+        "us": 3,
+        "them": 2,
+        "what": "F"
+    }
+},
+{
+    "model": "trilby_api.relationship",
+    "pk": 3,
+    "fields": {
+        "us": 2,
+        "them": 4,
+        "what": "F"
+    }
 }
 ]

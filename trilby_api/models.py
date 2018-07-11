@@ -1,8 +1,11 @@
 from enum import Enum
+from random import randint
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.timezone import now
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.staticfiles.storage import StaticFilesStorage
+from django.core.files.images import ImageFile
 from un_chapeau.settings import UN_CHAPEAU_SETTINGS
 from trilby_api.crypto import Key
 
@@ -28,29 +31,20 @@ def iso_date(date):
 
 #############################
 
-class Media(object):
+def default_avatar():
+    path = 'defaults/avatar_{0}.jpg'.format(randint(0,9))
 
-    # This will be a proper Model at some point,
-    # but at present we only need it to be a class.
-
-    def __init__(self, url,
-            width=None, height=None):
-
-        self.url = url
-        self.width = width
-        self.height = height
-
-def default_avatar(variation=0):
-    return Media(
-            url='/static/un_chapeau/defaults/avatar_{0}.jpg'.format(
-                variation % 10,
-                ),
-            width=120, height=120)
+    return ImageFile(
+            open(
+                StaticFilesStorage().path(path), 'rb')
+            )
 
 def default_header():
-    return Media(
-            url='/static/un_chapeau/defaults/default_header.jpg',
-            width=700, height=335)
+    path = 'defaults/header.jpg'
+    return ImageFile(
+            open(
+                StaticFilesStorage().path(path), 'rb')
+            )
 
 #############################
 
@@ -95,6 +89,7 @@ class User(AbstractUser):
             upload_to = avatar_upload_to,
             default=None,
             )
+
     header = models.ImageField(
             upload_to = header_upload_to,
             default=None,
@@ -114,19 +109,13 @@ class User(AbstractUser):
             self.private_key = key.as_pem()
             self.magic_envelope_public_key = key.magic_envelope()
 
+        if not self.avatar:
+            self.avatar = default_avatar()
+
+        if not self.header:
+            self.header = default_header()
+
         super().save(*args, **kwargs)
-
-    def avatar_or_default(self):
-        if self.avatar is None:
-            return default_avatar(variation=self.pk)
-        else:
-            return self.avatar
-
-    def header_or_default(self):
-        if self.header is None:
-            return default_header()
-        else:
-            return self.header
 
     default_sensitive = models.BooleanField(
             default=False)
@@ -165,6 +154,9 @@ class User(AbstractUser):
     def header_static(self):
         # XXX
         return self.header
+
+    def updated(self):
+        return Status.objects.filter(posted_by=self).latest('created_at').created_at
 
     ############### Relationship (friending, muting, blocking, etc)
 
@@ -421,10 +413,7 @@ class Status(models.Model):
         """
         Returns the URL of the user's page on *this* server.
         """
-        return self._path_formatting('URL_FORMAT')
-
-    def uri(self):
-        return self._path_formatting('URI_FORMAT')
+        return self._path_formatting('STATUS_URLS')
 
     def emojis(self):
         # I suppose we should do emojis eventually
@@ -483,6 +472,9 @@ class Status(models.Model):
     def application(self):
         # XXX
         return None
+
+    def atomURL(self):
+        return self._path_formatting('STATUS_FEED_URLS')
 
 class Relationship(models.Model):
     """
