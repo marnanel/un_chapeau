@@ -477,6 +477,9 @@ class Status(models.Model):
     def atomURL(self):
         return self._path_formatting('STATUS_FEED_URLS')
 
+    def activityURL(self):
+        return self._path_formatting('STATUS_ACTIVITY_URLS')
+
     def conversation(self):
         """
         The string ID of the conversation this Status belongs to.
