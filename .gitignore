@@ -3,4 +3,4 @@
 *.swo
 *.pyc
 __pycache__/
-
+un_chapeau/localsettings.py
