@@ -411,10 +411,10 @@ class Status(models.Model):
                 }
 
     def url(self):
-        """
-        Returns the URL of the user's page on *this* server.
-        """
         return self._path_formatting('STATUS_URLS')
+
+    def uri(self):
+        return self.url()
 
     def emojis(self):
         # I suppose we should do emojis eventually
