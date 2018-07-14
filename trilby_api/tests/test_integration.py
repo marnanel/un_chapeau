@@ -330,3 +330,14 @@ class WebfingerTests(TestCase):
                         ))
 
             
+class HostMetaTests(TestCase):
+    def test_hostmeta(self):
+        c = UnChapeauClient()
+
+        result = c.get('/.well-known/host-meta',
+            expected_content_type='application/xrd+xml',
+            expected_status_code=200)
+
+        # XXX FIXME
+        # check Link is to webfinger
+

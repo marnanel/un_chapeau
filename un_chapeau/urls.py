@@ -30,9 +30,9 @@ urlpatterns = [
 
     path('api/', include((trilby_api.urls.endpoints, 'trilby_api'), namespace="trilby_api")),
 
-    # XXX this should be in trilby_api's urls.py, not here
     path('users/<username>/feed', trilby_api.views.UserFeed.as_view()),
     path('.well-known/webfinger', trilby_api.views.Webfinger.as_view()),
+    path('.well-known/host-meta', trilby_api.views.HostMeta.as_view()),
 
     path('users/<username>/salmon', buckethat_salmon.views.Salmon.as_view()),
 

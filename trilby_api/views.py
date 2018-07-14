@@ -206,3 +206,26 @@ class Webfinger(generics.GenericAPIView):
         serializer = self.serializer_class(queryset)
         return Response(serializer.data,
                 content_type='application/jrd+json; charset=utf-8')
+
+########################################
+
+class HostMeta(View):
+
+    permission_classes = ()
+
+    def get(self, request):
+
+        context = {
+                'server_name': UN_CHAPEAU_SETTINGS['HOSTNAME'],
+            }
+
+        result = render(
+                request=request,
+                template_name='host-meta.xml',
+                context=context,
+                content_type='application/jrd+xml',
+                )
+
+        return result
+
+
