@@ -116,7 +116,7 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = '/var/www/ucmedia/'
 MEDIA_URL = '/media/'
 
-APPEND_SLASH = False
+APPEND_SLASH = True
 
 OAUTH2_PROVIDER = {
 

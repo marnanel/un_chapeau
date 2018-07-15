@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+        <head>
+        <title>{{ user.username }}</title>
+        </head>
+        
+        <body>
+                <p style="text-align:center"><img src="{{user.header}}" /></p>
+        <h1 style="text-align: center">{{ user.username }}</h1>
+                <p style="text-align:center"><img src="{{user.avatar}}" /></p>
+        <p style="text-style:italic; text-align:center">{{ user.note }}</p>
+
+        {% for s in statuses %}
+        <hr />
+        <p lang="{{s.lang}}">
+        <blockquote>
+               {{ s.content | escape }}
+        </blockquote>
+        </p>
+        {% endfor %}
+</feed>

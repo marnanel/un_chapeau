@@ -38,6 +38,7 @@ urlpatterns = [
 
     path('', tophat_ui.views.FrontPage.as_view()),
     path('about', tophat_ui.views.FrontPage.as_view()),
+    path('users/<username>/', tophat_ui.views.UserPage.as_view()),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
         + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
