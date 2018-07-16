@@ -7,7 +7,7 @@ from django.utils.timezone import now
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.staticfiles.storage import StaticFilesStorage
 from django.core.files.images import ImageFile
-from un_chapeau.settings import UN_CHAPEAU_SETTINGS
+from un_chapeau.config import config
 from trilby_api.crypto import Key
 
 #############################
@@ -136,7 +136,7 @@ class User(AbstractUser):
         # XXX obviously we need to do something else for remote accounts
         return '{0}@{1}'.format(
                 self.username,
-                UN_CHAPEAU_SETTINGS['HOSTNAME'],
+                config['HOSTNAME'],
                 )
 
     def followers_count(self):
@@ -283,22 +283,29 @@ class User(AbstractUser):
                 what=new_relationship)
 
     def profileURL(self):
-        return UN_CHAPEAU_SETTINGS['USER_URLS'] % {
-                'hostname': UN_CHAPEAU_SETTINGS['HOSTNAME'],
-                'username': self.username,
-                }
+        return config.get('USER_URLS',
+                username = self.username,
+                )
 
     def feedURL(self):
-        return UN_CHAPEAU_SETTINGS['USER_FEED_URLS'] % {
-                'hostname': UN_CHAPEAU_SETTINGS['HOSTNAME'],
-                'username': self.username,
-                }
+        return config.get('USER_FEED_URLS',
+                username = self.username,
+                )
 
     def salmonURL(self):
-        return UN_CHAPEAU_SETTINGS['USER_SALMON_URLS'] % {
-                'hostname': UN_CHAPEAU_SETTINGS['HOSTNAME'],
-                'username': self.username,
-                }
+        return config.get('USER_SALMON_URLS',
+                username = self.username,
+                )
+
+    def followersURL(self):
+        return config.get('USER_FOLLOWERS_URLS',
+                username = self.username,
+                )
+
+    def followingURL(self):
+        return config.get('USER_FOLLOWING_URLS',
+                username = self.username,
+                )
 
     def public_key(self):
         return 'data:{},{}'.format(
@@ -333,9 +340,7 @@ class User(AbstractUser):
                 },
                 {
                 'rel': 'http://ostatus.org/schema/1.0/subscribe',
-                'template': UN_CHAPEAU_SETTINGS['AUTHORIZE_FOLLOW_TEMPLATE'] % {
-                    'hostname': UN_CHAPEAU_SETTINGS['HOSTNAME'],
-                    },
+                'template': config.get('AUTHORIZE_FOLLOW_TEMPLATE'),
                 },
                ]
 
@@ -404,11 +409,10 @@ class Status(models.Model):
         return str(self.posted_by) + " - " + self.content
 
     def _path_formatting(self, formatting):
-        return UN_CHAPEAU_SETTINGS[formatting] % {
-                'hostname': UN_CHAPEAU_SETTINGS['HOSTNAME'],
-                'username': self.posted_by.username,
-                'id': self.id,
-                }
+        return config.get(formatting,
+                username=self.posted_by.username,
+                id=self.id,
+                )
 
     def url(self):
         return self._path_formatting('STATUS_URLS')
@@ -494,7 +498,7 @@ class Status(models.Model):
         now = datetime.now()
 
         return 'tag:%s,%04d-%02d-%02d:objectId=%d:objectType=Conversation' % (
-                UN_CHAPEAU_SETTINGS['HOSTNAME'],
+                config['HOSTNAME'],
                 now.year,
                 now.month,
                 now.day,

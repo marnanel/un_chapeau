@@ -7,7 +7,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core.exceptions import SuspiciousOperation
-from un_chapeau.settings import UN_CHAPEAU_SETTINGS
+from un_chapeau.config import config
 from .models import Status, User, Visibility
 from .serializers import *
 from rest_framework import generics, response
@@ -25,13 +25,13 @@ class Instance(View):
 
         result = {
             'uri': 'http://127.0.0.1',
-            'title': UN_CHAPEAU_SETTINGS['INSTANCE_NAME'],
-            'description': UN_CHAPEAU_SETTINGS['INSTANCE_DESCRIPTION'],
-            'email': UN_CHAPEAU_SETTINGS['CONTACT_EMAIL'],
+            'title': config['INSTANCE_NAME'],
+            'description': config['INSTANCE_DESCRIPTION'],
+            'email': config['CONTACT_EMAIL'],
             'version': 'un_chapeau 0.0.1',
             'urls': {},
-            'languages': UN_CHAPEAU_SETTINGS['LANGUAGES'],
-            'contact_account': UN_CHAPEAU_SETTINGS['CONTACT_ACCOUNT'],
+            'languages': config['LANGUAGES'],
+            'contact_account': config['CONTACT_ACCOUNT'],
             }
 
         return JsonResponse(result)
@@ -111,8 +111,8 @@ class UserFeed(View):
         context = {
                 'user': user,
                 'statuses': statuses,
-                'server_name': UN_CHAPEAU_SETTINGS['HOSTNAME'],
-                'hubURL': UN_CHAPEAU_SETTINGS['HUB'],
+                'server_name': config['HOSTNAME'],
+                'hubURL': config['HUB'],
             }
 
         result = render(
@@ -123,7 +123,7 @@ class UserFeed(View):
                 )
 
         link_context = {
-                'hostname': UN_CHAPEAU_SETTINGS['HOSTNAME'],
+                'hostname': config['HOSTNAME'],
                 'username': user.username,
                 'acct': user.acct(),
                 }
@@ -132,17 +132,17 @@ class UserFeed(View):
                 [ '<{}>; rel="{}"; type="{}"'.format(uri, rel, mimetype)
                     for uri, rel, mimetype in
                     [
-                        (UN_CHAPEAU_SETTINGS['USER_WEBFINGER_URLS'] % link_context,
+                        (config['USER_WEBFINGER_URLS'] % link_context,
                             'lrdd',
                             'application/xrd+xml',
                             ),
 
-                        (UN_CHAPEAU_SETTINGS['USER_FEED_URLS'] % link_context,
+                        (config['USER_FEED_URLS'] % link_context,
                             'alternate',
                             'application/atom+xml',
                             ),
 
-                        (UN_CHAPEAU_SETTINGS['USER_URLS'] % link_context,
+                        (config['USER_URLS'] % link_context,
                             'alternate',
                             'application/activity+json',
                             )
@@ -185,7 +185,7 @@ class Webfinger(generics.GenericAPIView):
 
         username, hostname = user.split('@', 2)
 
-        if hostname!=UN_CHAPEAU_SETTINGS['HOSTNAME']:
+        if hostname!=config['HOSTNAME']:
             return HttpResponse(
                     status = 404,
                     reason = 'not this server',
@@ -216,7 +216,7 @@ class HostMeta(View):
     def get(self, request):
 
         context = {
-                'server_name': UN_CHAPEAU_SETTINGS['HOSTNAME'],
+                'server_name': config['HOSTNAME'],
             }
 
         result = render(

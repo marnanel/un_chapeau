@@ -144,7 +144,7 @@ AUTH_USER_MODEL = 'trilby_api.User'
 
 ########################
 
-UN_CHAPEAU_SETTINGS = {
+UN_CHAPEAU = {
         'HOSTNAME': 'unchapeau-dev.marnanel.org', # XXX there has to be a better way
         'INSTANCE_NAME': 'un_chapeau test',
         'INSTANCE_DESCRIPTION': 'this is a test',
@@ -164,7 +164,7 @@ UN_CHAPEAU_SETTINGS = {
 
         # the "{uri}" in AUTHORIZE_FOLLOW_TEMPLATE is for the client to
         # fill in, not us. We pass it out as is.
-        'AUTHORIZE_FOLLOW_TEMPLATE': 'https://%(hostname)s/authorize_follow?acct={uri}',
+        'AUTHORIZE_FOLLOW_TEMPLATE': 'https://%(hostname)s/authorize_follow?acct={{uri}}',
         }
 
 ######################################

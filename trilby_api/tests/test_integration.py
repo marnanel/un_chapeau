@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from trilby_api.models import *
-from un_chapeau.settings import UN_CHAPEAU_SETTINGS
+from un_chapeau.config import config
 import json
 
 APPS_CREATE_PARAMS = {
@@ -279,7 +279,7 @@ class WebfingerTests(TestCase):
     def test_success(self):
         c = UnChapeauClient()
 
-        checking_account = 'bob@' + UN_CHAPEAU_SETTINGS['HOSTNAME']
+        checking_account = 'bob@' + config['HOSTNAME']
 
         for prefix in ['', 'acct:']:
             webfinger_response = self.request(
