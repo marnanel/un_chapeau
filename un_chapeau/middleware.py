@@ -7,7 +7,7 @@ def middleware(get_response):
         if request.path_info.endswith('/') and request.path_info!='/':
             request.path_info = request.path_info[:-1]
 
-        if 'application/activity+json' in request.META['HTTP_ACCEPT']: 
+        if 'application/activity+json' in request.META.get('HTTP_ACCEPT', ''):
             request.path_info = request.path_info+ACTIVITY_SUFFIX
 
         #################
