@@ -27,9 +27,9 @@ urlpatterns = [
     path('accounts/login', auth_views.login, name='login'),
     path('accounts/logout', auth_views.logout, name='logout'),
 
-    path('oauth', include((oauth2_endpoint_views, 'oauth2_provider'), namespace="oauth2_provider")),
+    path('oauth/', include((oauth2_endpoint_views, 'oauth2_provider'), namespace="oauth2_provider")),
 
-    path('api', include((trilby_api.urls.endpoints, 'trilby_api'), namespace="trilby_api")),
+    path('api/', include((trilby_api.urls.endpoints, 'trilby_api'), namespace="trilby_api")),
 
     path('users/<username>/feed', trilby_api.views.UserFeed.as_view()),
     path('.well-known/webfinger', trilby_api.views.Webfinger.as_view()),
