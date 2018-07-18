@@ -86,12 +86,12 @@ class User(AbstractUser):
     moved_to = models.CharField(max_length=255,
             default='')
 
-    avatar = models.ImageField(
+    _avatar = models.ImageField(
             upload_to = avatar_upload_to,
             default=None,
             )
 
-    header = models.ImageField(
+    _header = models.ImageField(
             upload_to = header_upload_to,
             default=None,
             )
