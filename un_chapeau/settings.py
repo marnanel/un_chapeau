@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'django_fields',
 
     'trilby_api',
+    'kepi_activity',
     'buckethat_salmon',
     'tophat_ui',
 ]
@@ -36,6 +37,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'corsheaders.middleware.CorsMiddleware',
+
+    'trilby_api.middleware.middleware',
 ]
 
 ROOT_URLCONF = 'un_chapeau.urls'
@@ -116,7 +119,7 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = '/var/www/ucmedia/'
 MEDIA_URL = '/media/'
 
-APPEND_SLASH = True
+APPEND_SLASH = False
 
 OAUTH2_PROVIDER = {
 
