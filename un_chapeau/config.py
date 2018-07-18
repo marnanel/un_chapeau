@@ -8,7 +8,7 @@ class Config(object):
     def get(self, field, **kwargs):
         return UN_CHAPEAU[field].format(
                 hostname = UN_CHAPEAU['HOSTNAME'],
-                *kwargs,
+                **kwargs,
                 )
 
 config = Config()
