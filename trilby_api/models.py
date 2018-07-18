@@ -307,6 +307,16 @@ class User(AbstractUser):
                 username = self.username,
                 )
 
+    def inboxURL(self):
+        return config.get('USER_INBOX_URLS',
+                username = self.username,
+                )
+
+    def outboxURL(self):
+        return config.get('USER_OUTBOX_URLS',
+                username = self.username,
+                )
+
     def public_key(self):
         return 'data:{},{}'.format(
                 'application/magic-public-key',

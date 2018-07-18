@@ -7,6 +7,7 @@ import trilby_api.urls
 import trilby_api.views
 import buckethat_salmon.views
 import tophat_ui.views
+import kepi_activity.views
 import un_chapeau.settings as settings
 
 ##################################
@@ -38,6 +39,7 @@ urlpatterns = [
 
     path('', tophat_ui.views.FrontPage.as_view()),
     path('about', tophat_ui.views.FrontPage.as_view()),
+    path('users/<username>.json', kepi_activity.views.User.as_view()),
     path('users/<username>', tophat_ui.views.UserPage.as_view()),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \

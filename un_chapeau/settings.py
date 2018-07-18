@@ -155,13 +155,18 @@ UN_CHAPEAU = {
         'CONTACT_EMAIL': 'marnanel@example.com',
         'LANGUAGES': ['en'],
 
-        'STATUS_URLS': 'https://%(hostname)s/users/%(username)s/%(id)d',
-        'STATUS_FEED_URLS': 'https://%(hostname)s/users/%(username)s/feed/%(id)d',
-        'STATUS_ACTIVITY_URLS': 'https://%(hostname)s/users/%(username)s/%(id)d/json',
-        'USER_URLS': 'https://%(hostname)s/users/%(username)s',
-        'USER_FEED_URLS': 'https://%(hostname)s/users/%(username)s/feed',
-        'USER_SALMON_URLS': 'https://%(hostname)s/users/%(username)s/salmon',
-        'USER_WEBFINGER_URLS': 'https://%(hostname)s/.well-known/webfinger?resource=acct:%(acct)s',
+        'STATUS_URLS': 'https://{hostname}/users/{username}/{id}',
+        'STATUS_FEED_URLS': 'https://{hostname}/users/{username}/feed/{id}',
+        'STATUS_ACTIVITY_URLS': 'https://{hostname}/users/{username}/{id}/json',
+        'USER_URLS': 'https://{hostname}/users/{username}',
+        'USER_FEED_URLS': 'https://{hostname}/users/{username}/feed',
+        'USER_SALMON_URLS': 'https://{hostname}/users/{username}/salmon',
+        'USER_WEBFINGER_URLS': 'https://{hostname}/.well-known/webfinger?resource=acct:{acct}',
+        'USER_FOLLOWING_URLS': 'https://{hostname}/users/{username}/following',
+        'USER_FOLLOWERS_URLS': 'https://{hostname}/users/{username}/followers',
+        'USER_INBOX_URLS': 'https://{hostname}/users/{username}/inbox',
+        'USER_OUTBOX_URLS': 'https://{hostname}/users/{username}/outbox',
+        'SHARED_INBOX_URL': 'https://{hostname}/inbox',
 
         'HUB': 'https://switchboard.p3k.io/', # or whatever
 
