@@ -38,7 +38,7 @@ MIDDLEWARE = [
 
     'corsheaders.middleware.CorsMiddleware',
 
-    'trilby_api.middleware.middleware',
+    'un_chapeau.middleware.middleware',
 ]
 
 ROOT_URLCONF = 'un_chapeau.urls'
