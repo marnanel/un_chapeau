@@ -8,6 +8,7 @@ def render(data):
     result = JsonResponse(
             data=data,
             json_dumps_params={
+                'sort_keys': True,
                 'indent': 2,
                 }
             )
