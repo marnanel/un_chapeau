@@ -32,8 +32,8 @@ def iso_date(date):
 
 #############################
 
-def default_avatar():
-    path = 'defaults/avatar_{0}.jpg'.format(randint(0,9))
+def default_avatar(variation=0):
+    path = 'defaults/avatar_{0}.jpg'.format(variation%10)
 
     return ImageFile(
             open(
@@ -88,11 +88,13 @@ class User(AbstractUser):
 
     _avatar = models.ImageField(
             upload_to = avatar_upload_to,
+            blank=True,
             default=None,
             )
 
     _header = models.ImageField(
             upload_to = header_upload_to,
+            blank=True,
             default=None,
             )
 
@@ -104,17 +106,25 @@ class User(AbstractUser):
             editable = False,
             )
 
+    @property
+    def avatar(self):
+        if self._avatar is not None:
+            return self._avatar
+        else:
+            return default_avatar(variation=self.pw)
+
+    @property
+    def header(self):
+        if self._header is not None:
+            return self._header
+        else:
+            return default_header()
+
     def save(self, *args, **kwargs):
         if not self.private_key:
             key = Key()
             self.private_key = key.as_pem()
             self.magic_envelope_public_key = key.magic_envelope()
-
-        if not self.avatar:
-            self.avatar = default_avatar()
-
-        if not self.header:
-            self.header = default_header()
 
         super().save(*args, **kwargs)
 

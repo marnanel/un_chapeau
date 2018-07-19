@@ -161,7 +161,7 @@ UN_CHAPEAU = {
         'USER_URLS': 'https://{hostname}/users/{username}',
         'USER_FEED_URLS': 'https://{hostname}/users/{username}/feed',
         'USER_SALMON_URLS': 'https://{hostname}/users/{username}/salmon',
-        'USER_WEBFINGER_URLS': 'https://{hostname}/.well-known/webfinger?resource=acct:{acct}',
+        'USER_WEBFINGER_URLS': 'https://{hostname}/.well-known/webfinger?resource=acct:{{acct}}',
         'USER_FOLLOWING_URLS': 'https://{hostname}/users/{username}/following',
         'USER_FOLLOWERS_URLS': 'https://{hostname}/users/{username}/followers',
         'USER_INBOX_URLS': 'https://{hostname}/users/{username}/inbox',

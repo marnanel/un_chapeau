@@ -129,23 +129,25 @@ class UserFeed(View):
                 }
 
         links = ', '.join(
-                [ '<{}>; rel="{}"; type="{}"'.format(uri, rel, mimetype)
+                [ '<{}>; rel="{}"; type="{}"'.format(
+                    config.get(uri, username=user.username, acct=user.display_name),
+                    rel, mimetype)
                     for uri, rel, mimetype in
                     [
-                        (config['USER_WEBFINGER_URLS'] % link_context,
+                        ('USER_WEBFINGER_URLS',
                             'lrdd',
                             'application/xrd+xml',
                             ),
 
-                        (config['USER_FEED_URLS'] % link_context,
+                        ('USER_FEED_URLS',
                             'alternate',
                             'application/atom+xml',
                             ),
 
-                        (config['USER_URLS'] % link_context,
+                        ('USER_FEED_URLS',
                             'alternate',
                             'application/activity+json',
-                            )
+                            ),
                         ]
                     ])
 

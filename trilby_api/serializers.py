@@ -19,6 +19,11 @@ class _VisibilityField(serializers.CharField):
 
 class UserSerializer(serializers.ModelSerializer):
 
+    avatar = serializers.CharField(
+            read_only = True)
+    header = serializers.CharField(
+            read_only = True)
+
     # for the moment, treat these as the same.
     # the spec doesn't actually explain the difference!
     avatar_static = serializers.CharField(source='avatar',
