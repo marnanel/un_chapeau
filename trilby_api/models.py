@@ -98,10 +98,12 @@ class User(AbstractUser):
             default=None,
             )
 
-    private_key = models.BinaryField(
+    public_key = models.CharField(
+            max_length=255,
             editable = False,
             )
-    magic_envelope_public_key = models.CharField(
+
+    private_key = models.CharField(
             max_length=255,
             editable = False,
             )
@@ -123,8 +125,8 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
         if not self.private_key:
             key = Key()
-            self.private_key = key.as_pem()
-            self.magic_envelope_public_key = key.magic_envelope()
+            self.private_key = key.private_as_pem()
+            self.public_key = key.public_as_pem()
 
         super().save(*args, **kwargs)
 
@@ -327,12 +329,6 @@ class User(AbstractUser):
                 username = self.username,
                 )
 
-    def public_key(self):
-        return 'data:{},{}'.format(
-                'application/magic-public-key',
-                self.magic_envelope_public_key,
-                )
-
     def links(self):
         return [
                 {
@@ -353,10 +349,6 @@ class User(AbstractUser):
                 {
                 'rel': 'salmon',
                 'href': self.salmonURL(),
-                },
-                {
-                'rel': 'magic-public-key',
-                'href': self.public_key(),
                 },
                 {
                 'rel': 'http://ostatus.org/schema/1.0/subscribe',

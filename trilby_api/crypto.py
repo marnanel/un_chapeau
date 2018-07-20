@@ -39,8 +39,11 @@ class Key(object):
     def __init__(self):
         self._rsa_key = RSA.generate(1024)
 
-    def as_pem(self):
+    def private_as_pem(self):
         return self._rsa_key.exportKey('PEM')
+
+    def public_as_pem(self):
+        return self._rsa_key.publickey().exportKey('PEM')
 
     def modulus(self):
         return self._rsa_key.n

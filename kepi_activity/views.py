@@ -50,7 +50,7 @@ class User(View):
                 "publicKey": {
                     "owner": user.profileURL(),
                     "id": '{}#main-key'.format(user.profileURL()),
-                    "publicKeyPem": user.public_key(),
+                    "publicKeyPem": user.public_key,
                     }, 
 
                 # XXX Mastodon has the "featured" collection here; what is it?
