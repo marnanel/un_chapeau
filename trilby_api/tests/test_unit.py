@@ -9,14 +9,14 @@ class UserTests(TestCase):
 
         carol = User.objects.get(username="carol")
 
-        self.assertEqual(carol.statuses_count(), 0)
+        self.assertEqual(carol.statuses().count(), 0)
 
         for i in range(1, 13):
             Status.objects.create(
                     status='Hello world! {}'.format(i),
                     posted_by = carol,
                     )
-            self.assertEqual(carol.statuses_count(), i)
+            self.assertEqual(carol.statuses().count(), i)
 
     def test_following(self):
 

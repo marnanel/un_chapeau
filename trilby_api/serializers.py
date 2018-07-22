@@ -33,6 +33,19 @@ class UserSerializer(serializers.ModelSerializer):
 
     url = serializers.URLField(source='linked_url')
 
+    following_count = serializers.SerializerMethodField()
+    followers_count = serializers.SerializerMethodField()
+    statuses_count = serializers.SerializerMethodField()
+
+    def get_following_count(self, obj):
+        return obj.following().count()
+
+    def get_followers_count(self, obj):
+        return obj.followers().count()
+
+    def get_statuses_count(self, obj):
+        return obj.statuses().count()
+
     class Meta:
         model = User
         fields = (

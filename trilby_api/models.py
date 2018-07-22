@@ -151,14 +151,14 @@ class User(AbstractUser):
                 config['HOSTNAME'],
                 )
 
-    def followers_count(self):
-        return Relationship.objects.filter(them=self).count()
+    def followers(self):
+        return Relationship.objects.filter(them=self)
 
-    def following_count(self):
-        return Relationship.objects.filter(us=self).count()
+    def following(self):
+        return Relationship.objects.filter(us=self)
 
-    def statuses_count(self):
-        return Status.objects.filter(posted_by=self).count()
+    def statuses(self):
+        return Status.objects.filter(posted_by=self)
 
     def avatar_static(self):
         # XXX
@@ -441,11 +441,11 @@ class Status(models.Model):
         return None
 
     def reblogs_count(self):
-        # XXX
+        # XXX change to a ResultSet
         return 0
 
     def favourites_count(self):
-        # XXX
+        # XXX change to a ResultSet
         return 0
 
     def reblogged(self):
