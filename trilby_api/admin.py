@@ -31,8 +31,8 @@ class TrilbyUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
             (None, {
                 'fields': (
-                    'avatar',
-                    'header',
+                    '_avatar',
+                    '_header',
                     'locked',
                     'note',
                     'linked_url',
