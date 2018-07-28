@@ -38,10 +38,10 @@ class UserSerializer(serializers.ModelSerializer):
     statuses_count = serializers.SerializerMethodField()
 
     def get_following_count(self, obj):
-        return obj.following().count()
+        return obj.following.count()
 
     def get_followers_count(self, obj):
-        return obj.followers().count()
+        return obj.followers.count()
 
     def get_statuses_count(self, obj):
         return obj.statuses().count()

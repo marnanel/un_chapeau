@@ -20,12 +20,17 @@
         "moved_to": "",
         "_avatar": "/static/testing/alice.jpg",
         "_header": "/static/defaults/_header.jpg",
-        "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIICXwIBAAKBgQDJtAZt9hgB/7bNozWtv9Er+Pnfum97oM8cxRlqRqUXZk0wuST9\nA0eY5EUsN8j3qc6msZjDPSDQELr/U/o+zJLp/B8s7x3iHAHGD4LcQ9AbyDqbhX9J\nZkmwGx6PIVmbMDANmppqLik36V7cov6BuHz1gFpDP+iPjem4mph/KLwugQIDAQAB\nAoGBAI6sRaQAYCkBzTeWC8E0HmwhN/Z2NKdZL0clb/3JrLtphI5DWBOT/0/5n6hQ\naVouBdvJYcowcgZa3zr+FtPW9s9EKswd4M6VEg7Kb7yvd7iD+6Hl/KY5YkpRutJF\nZVBt20iJi3xi+5D0BvMImD3nE/Zl2MgAJWIBlRywfDOuKS7BAkEA4hIoq0RAbSgf\nVBzzWucpZa4o2Ll35tG9X5zQSmEjWuuIxipsiwcuyHURTEG+45TU/AasyDTvqqm6\nHhG4Z9SpaQJBAORoAzTfuF6Z7I3THSDLQjqWiE10K0qSkrcPf7fMlTdzheQdhS5T\nA4liwuAkpoRKxpvBw+OvCkgaqr34+Oqo4VkCQQC19kPBxofM1HSS8VJ3IoTRkOLT\nvkTiBoPUx5VnqNQaRGasik0fgkKHmqK3rFuHNq5PxNehteoKhd6GgWDaQfOxAkEA\n1KV9rsFGrlSR5qyRJtH11AQH3Ex2bZQuod39I0qF9b1I/0r4jltdJJBdLD8TBIF1\njNeGH7j8Uor5QarFW/tk6QJBAMEYab7c1YTagny4nrKoddPfNyjUF2a7HNHTnCQn\nrbOt963SPr1/dv602FwOzKHAWVw401PfaHWkclEROZTwwEc=\n-----END RSA PRIVATE KEY-----",
         "public_key": "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDJtAZt9hgB/7bNozWtv9Er+Pnf\num97oM8cxRlqRqUXZk0wuST9A0eY5EUsN8j3qc6msZjDPSDQELr/U/o+zJLp/B8s\n7x3iHAHGD4LcQ9AbyDqbhX9JZkmwGx6PIVmbMDANmppqLik36V7cov6BuHz1gFpD\nP+iPjem4mph/KLwugQIDAQAB\n-----END PUBLIC KEY-----",
+        "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIICXwIBAAKBgQDJtAZt9hgB/7bNozWtv9Er+Pnfum97oM8cxRlqRqUXZk0wuST9\nA0eY5EUsN8j3qc6msZjDPSDQELr/U/o+zJLp/B8s7x3iHAHGD4LcQ9AbyDqbhX9J\nZkmwGx6PIVmbMDANmppqLik36V7cov6BuHz1gFpDP+iPjem4mph/KLwugQIDAQAB\nAoGBAI6sRaQAYCkBzTeWC8E0HmwhN/Z2NKdZL0clb/3JrLtphI5DWBOT/0/5n6hQ\naVouBdvJYcowcgZa3zr+FtPW9s9EKswd4M6VEg7Kb7yvd7iD+6Hl/KY5YkpRutJF\nZVBt20iJi3xi+5D0BvMImD3nE/Zl2MgAJWIBlRywfDOuKS7BAkEA4hIoq0RAbSgf\nVBzzWucpZa4o2Ll35tG9X5zQSmEjWuuIxipsiwcuyHURTEG+45TU/AasyDTvqqm6\nHhG4Z9SpaQJBAORoAzTfuF6Z7I3THSDLQjqWiE10K0qSkrcPf7fMlTdzheQdhS5T\nA4liwuAkpoRKxpvBw+OvCkgaqr34+Oqo4VkCQQC19kPBxofM1HSS8VJ3IoTRkOLT\nvkTiBoPUx5VnqNQaRGasik0fgkKHmqK3rFuHNq5PxNehteoKhd6GgWDaQfOxAkEA\n1KV9rsFGrlSR5qyRJtH11AQH3Ex2bZQuod39I0qF9b1I/0r4jltdJJBdLD8TBIF1\njNeGH7j8Uor5QarFW/tk6QJBAMEYab7c1YTagny4nrKoddPfNyjUF2a7HNHTnCQn\nrbOt963SPr1/dv602FwOzKHAWVw401PfaHWkclEROZTwwEc=\n-----END RSA PRIVATE KEY-----",
         "default_sensitive": false,
         "default_visibility": "P",
         "groups": [],
-        "user_permissions": []
+        "user_permissions": [],
+        "following": [
+            3,
+            4
+        ],
+        "blocking": []
     }
 },
 {
@@ -49,12 +54,16 @@
         "moved_to": "",
         "_avatar": "/static/testing/bob.jpg",
         "_header": "/static/defaults/_header.jpg",
-        "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIICXgIBAAKBgQDPPJ6uNXzpocC9Z1rue3sgZl/WnYHjbtkfQCUpdV9lgmtbOgpZ\nrQos5sIB5QxUx+yRAXmdSRsD2q1Kaeeew5T+pv3hJKH4XMNZd2mZf1KAuHjPFBjC\nRGMUwdEEozSy8ZpDAg+jQ2ro8E7wgZ+wsYatSLbQ9SIkceGWqxyhabyIqwIDAQAB\nAoGBAMMfZqDMh+JKhHlROVLWPOYSviYKg2Oq2RANi2/vrXScSYzJpzksLip80yqJ\niQTCgME/TEyFqsQEP6mS8ZyQtlUjoz8j6q/9TFvQrWWHRNgiD9bdXFQr0+F9kxr9\nhdm1h7F5Q0JTGCPwBmL8GXCO8KmbZUMejITNqsIxx3bvzUoRAkEA1Eul1Mwkb/6C\ncBuG0TPfXwluWdzS37XY+ckuQqgA5Jhj+vQTWbGovA/99W5GHHWsHJwGwcqqJJet\nc4slKN3GBwJBAPnmXpAO1NiQMlIVohTfjCusypsSiHJXocigJG/DeEuMIHUJebuH\nr6M7D2ENk7xh/kr3qA6369WokYT+K5Bqnz0CQQDPvApUVUIeeNwoWTcuBOVBeNgL\nhOKv16Cuo6bpwL3G8jt7OFSrAwZKqBdojvR6Ksc045RVEzw0PFuU4YaGG6UHAkBZ\nQ9LvfnzFRuzSqWuWLSwyxawxrHMU9PyTX7DkQ1yLD+jgJZxYQmWY1xXtQx5Momxl\ndwWPDF+vmGEysl/5XDy5AkEAwbbjj3YstPYPnBsAbI0XYHfXxu7aZ+bwPNtH48r3\n3YPAqM+HO0i2ffHjMJCYfbttWiRJRFVHyp3QO/Wtww4DQQ==\n-----END RSA PRIVATE KEY-----",
         "public_key": "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDPPJ6uNXzpocC9Z1rue3sgZl/W\nnYHjbtkfQCUpdV9lgmtbOgpZrQos5sIB5QxUx+yRAXmdSRsD2q1Kaeeew5T+pv3h\nJKH4XMNZd2mZf1KAuHjPFBjCRGMUwdEEozSy8ZpDAg+jQ2ro8E7wgZ+wsYatSLbQ\n9SIkceGWqxyhabyIqwIDAQAB\n-----END PUBLIC KEY-----",
+        "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIICXgIBAAKBgQDPPJ6uNXzpocC9Z1rue3sgZl/WnYHjbtkfQCUpdV9lgmtbOgpZ\nrQos5sIB5QxUx+yRAXmdSRsD2q1Kaeeew5T+pv3hJKH4XMNZd2mZf1KAuHjPFBjC\nRGMUwdEEozSy8ZpDAg+jQ2ro8E7wgZ+wsYatSLbQ9SIkceGWqxyhabyIqwIDAQAB\nAoGBAMMfZqDMh+JKhHlROVLWPOYSviYKg2Oq2RANi2/vrXScSYzJpzksLip80yqJ\niQTCgME/TEyFqsQEP6mS8ZyQtlUjoz8j6q/9TFvQrWWHRNgiD9bdXFQr0+F9kxr9\nhdm1h7F5Q0JTGCPwBmL8GXCO8KmbZUMejITNqsIxx3bvzUoRAkEA1Eul1Mwkb/6C\ncBuG0TPfXwluWdzS37XY+ckuQqgA5Jhj+vQTWbGovA/99W5GHHWsHJwGwcqqJJet\nc4slKN3GBwJBAPnmXpAO1NiQMlIVohTfjCusypsSiHJXocigJG/DeEuMIHUJebuH\nr6M7D2ENk7xh/kr3qA6369WokYT+K5Bqnz0CQQDPvApUVUIeeNwoWTcuBOVBeNgL\nhOKv16Cuo6bpwL3G8jt7OFSrAwZKqBdojvR6Ksc045RVEzw0PFuU4YaGG6UHAkBZ\nQ9LvfnzFRuzSqWuWLSwyxawxrHMU9PyTX7DkQ1yLD+jgJZxYQmWY1xXtQx5Momxl\ndwWPDF+vmGEysl/5XDy5AkEAwbbjj3YstPYPnBsAbI0XYHfXxu7aZ+bwPNtH48r3\n3YPAqM+HO0i2ffHjMJCYfbttWiRJRFVHyp3QO/Wtww4DQQ==\n-----END RSA PRIVATE KEY-----",
         "default_sensitive": false,
         "default_visibility": "P",
         "groups": [],
-        "user_permissions": []
+        "user_permissions": [],
+        "following": [
+            2
+        ],
+        "blocking": []
     }
 },
 {
@@ -78,12 +87,14 @@
         "moved_to": "",
         "_avatar": "/static/testing/carol.jpg",
         "_header": "/static/defaults/_header.jpg",
-        "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIICXAIBAAKBgQCsGqRZbZV2nljTOW2b77fzpkx9+iqcNgEnlhdgSIjCPvhzwj6c\nb0O5RVqPu6krvv+Dgiy89Mb0nregdOstUXzn40Yicg1OOHMitrpAQ+4MsotqspfF\nZF/Q9qSFom3PxDA55lIHYJJmusVM6bSlrdY8msAsL1BieW7065gtjzv6RQIDAQAB\nAoGACURx/yLIfpeuPsmD3na9GBCnY805yCmcTE5nudaODq+nX0xhZLkVE3/pjX3U\ncTeauLEkyZQAtqFpT+mb1Ffj+t3exqK68k7UwCUI23Gtbr5dRUOivWuN75Sf4xFo\n7vQeSwIot/1PyU7JYXZ9Tq9WMBHcFocCdxu85QSBS40cPIECQQC60bIlj+bN7fvU\nHoPyQbj1vfjbz6vcoeR6v+YGCiSFrzawOEuJ1xUC7c/uivgJUvKumhrOFfwLac+1\nZay2t7khAkEA69X4ft06mfVNo1oM8ly33CO5TKlpFlVPBxEdKMHyZ2ZO1vIK6DsF\nN67YwYI9OoncTvBucZ+Dy2GU0xUeqtSopQJANhtnsjNUUI49onjYFEDutdW4jsk9\n6F/HEbokf9lOLJ3LhAw57Ikrn7aKw3biUakBeopNeySo5BFYRBxXgnABoQJBANlf\nMVoNo1QAy/zCpahGWZlovASzKY9SNjM3TP8iNMGlhQmNswv2SorWeCd0Wec45n1E\nEyhbdOjjGn+sucWPmZkCQD8ekBtzToRvNZjocFJhZdcWMIAo96XsnTAxREKSmbnG\npFHXBWokjDO/rTRbqANocLr0GwFR8UBD70CJLLOCaEg=\n-----END RSA PRIVATE KEY-----",
         "public_key": "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCsGqRZbZV2nljTOW2b77fzpkx9\n+iqcNgEnlhdgSIjCPvhzwj6cb0O5RVqPu6krvv+Dgiy89Mb0nregdOstUXzn40Yi\ncg1OOHMitrpAQ+4MsotqspfFZF/Q9qSFom3PxDA55lIHYJJmusVM6bSlrdY8msAs\nL1BieW7065gtjzv6RQIDAQAB\n-----END PUBLIC KEY-----",
+        "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIICXAIBAAKBgQCsGqRZbZV2nljTOW2b77fzpkx9+iqcNgEnlhdgSIjCPvhzwj6c\nb0O5RVqPu6krvv+Dgiy89Mb0nregdOstUXzn40Yicg1OOHMitrpAQ+4MsotqspfF\nZF/Q9qSFom3PxDA55lIHYJJmusVM6bSlrdY8msAsL1BieW7065gtjzv6RQIDAQAB\nAoGACURx/yLIfpeuPsmD3na9GBCnY805yCmcTE5nudaODq+nX0xhZLkVE3/pjX3U\ncTeauLEkyZQAtqFpT+mb1Ffj+t3exqK68k7UwCUI23Gtbr5dRUOivWuN75Sf4xFo\n7vQeSwIot/1PyU7JYXZ9Tq9WMBHcFocCdxu85QSBS40cPIECQQC60bIlj+bN7fvU\nHoPyQbj1vfjbz6vcoeR6v+YGCiSFrzawOEuJ1xUC7c/uivgJUvKumhrOFfwLac+1\nZay2t7khAkEA69X4ft06mfVNo1oM8ly33CO5TKlpFlVPBxEdKMHyZ2ZO1vIK6DsF\nN67YwYI9OoncTvBucZ+Dy2GU0xUeqtSopQJANhtnsjNUUI49onjYFEDutdW4jsk9\n6F/HEbokf9lOLJ3LhAw57Ikrn7aKw3biUakBeopNeySo5BFYRBxXgnABoQJBANlf\nMVoNo1QAy/zCpahGWZlovASzKY9SNjM3TP8iNMGlhQmNswv2SorWeCd0Wec45n1E\nEyhbdOjjGn+sucWPmZkCQD8ekBtzToRvNZjocFJhZdcWMIAo96XsnTAxREKSmbnG\npFHXBWokjDO/rTRbqANocLr0GwFR8UBD70CJLLOCaEg=\n-----END RSA PRIVATE KEY-----",
         "default_sensitive": false,
         "default_visibility": "P",
         "groups": [],
-        "user_permissions": []
+        "user_permissions": [],
+        "following": [],
+        "blocking": []
     }
 },
 {
@@ -91,7 +102,7 @@
     "pk": 5,
     "fields": {
         "password": "pbkdf2_sha256$100000$RUkxP556EAlO$IqiRKEAjs0AxQebO3ohhnGP9mQCf47LxjmW3V0j7gG8=",
-        "last_login": null,
+        "last_login": "2018-07-27T20:51:33.666Z",
         "is_superuser": true,
         "first_name": "",
         "last_name": "",
@@ -107,12 +118,14 @@
         "moved_to": "",
         "_avatar": "",
         "_header": "",
-        "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIICXQIBAAKBgQDIUCqW/lyJ9eWkqvE7wpmHacu9XOOSWZsx/+B2MM/xQYpUUIMZ\n3cyI3yMSOa3MS14wMBWdxlWNIMF7gVKHO6L9PpnsBfTLbe/QMcssQ5rHv9oAMy/h\nWHGyaES3vbxzqT2qMxI5bIJRpOJfDlTpAY5AVqrn8sYx/1XA9YJOKFkQIQIDAQAB\nAoGAb5YY45w2uLO+hYikcYHqPMD2ujowm6pHBgdgZvayH9c+09E19wbTlbuXseNn\nqdKiWX2vzQBbUA7bOY3FB4h1NllyJlusNGcfdiz8zoW0gYl7pPJ2bUQrKjYO/fVV\ndvKqcdgy8Vsh8XQa1deAAauoAz5z6lqRvMgpFpDv9XQFGjECQQDcgKr8K6Yp1C+F\nt+NqOLvD168zEJiutxNtknl8jocntuNEfzkyDGF8OMEsVqsmXdffxs8mnkJZUJo3\nbrfMVlGTAkEA6I9z0lDJzdsUHgQdGov8H3t4Mp05YuczoOdzi3TNAaSW1ofwVpkw\n79V/zFrLQHYBJNrHcGFUBXTgxmOmQ123+wJBANwu146Lf5dRPEsIftw43rYHD/mr\n3urIAWxu0UUhhbCQnYxuhgyF9Gp4udyuhqT/HGtmOMBVU+ef5v7nXj17DGUCQHH4\ny7RIr33ZXfSP44t9CySKqA92Cge0cxLqGzA/H7EsblfY6yoljVwcb7NA09dVfZ4I\nMjGbIUhDTV0svPDK3z0CQQC1f6idZlB5IfvIhsXrCJuFpK6iqwNrtfjn5GHuMUXe\n8yvE/7Cuz76dFSMnIUPmvdO4ZRfrd4lmC3tRnGzGqZz4\n-----END RSA PRIVATE KEY-----",
         "public_key": "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDIUCqW/lyJ9eWkqvE7wpmHacu9\nXOOSWZsx/+B2MM/xQYpUUIMZ3cyI3yMSOa3MS14wMBWdxlWNIMF7gVKHO6L9Ppns\nBfTLbe/QMcssQ5rHv9oAMy/hWHGyaES3vbxzqT2qMxI5bIJRpOJfDlTpAY5AVqrn\n8sYx/1XA9YJOKFkQIQIDAQAB\n-----END PUBLIC KEY-----",
+        "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIICXQIBAAKBgQDIUCqW/lyJ9eWkqvE7wpmHacu9XOOSWZsx/+B2MM/xQYpUUIMZ\n3cyI3yMSOa3MS14wMBWdxlWNIMF7gVKHO6L9PpnsBfTLbe/QMcssQ5rHv9oAMy/h\nWHGyaES3vbxzqT2qMxI5bIJRpOJfDlTpAY5AVqrn8sYx/1XA9YJOKFkQIQIDAQAB\nAoGAb5YY45w2uLO+hYikcYHqPMD2ujowm6pHBgdgZvayH9c+09E19wbTlbuXseNn\nqdKiWX2vzQBbUA7bOY3FB4h1NllyJlusNGcfdiz8zoW0gYl7pPJ2bUQrKjYO/fVV\ndvKqcdgy8Vsh8XQa1deAAauoAz5z6lqRvMgpFpDv9XQFGjECQQDcgKr8K6Yp1C+F\nt+NqOLvD168zEJiutxNtknl8jocntuNEfzkyDGF8OMEsVqsmXdffxs8mnkJZUJo3\nbrfMVlGTAkEA6I9z0lDJzdsUHgQdGov8H3t4Mp05YuczoOdzi3TNAaSW1ofwVpkw\n79V/zFrLQHYBJNrHcGFUBXTgxmOmQ123+wJBANwu146Lf5dRPEsIftw43rYHD/mr\n3urIAWxu0UUhhbCQnYxuhgyF9Gp4udyuhqT/HGtmOMBVU+ef5v7nXj17DGUCQHH4\ny7RIr33ZXfSP44t9CySKqA92Cge0cxLqGzA/H7EsblfY6yoljVwcb7NA09dVfZ4I\nMjGbIUhDTV0svPDK3z0CQQC1f6idZlB5IfvIhsXrCJuFpK6iqwNrtfjn5GHuMUXe\n8yvE/7Cuz76dFSMnIUPmvdO4ZRfrd4lmC3tRnGzGqZz4\n-----END RSA PRIVATE KEY-----",
         "default_sensitive": false,
         "default_visibility": "P",
         "groups": [],
-        "user_permissions": []
+        "user_permissions": [],
+        "following": [],
+        "blocking": []
     }
 },
 {
@@ -225,33 +238,6 @@
         "spoiler_text": "",
         "visibility": "U",
         "idempotency_key": ""
-    }
-},
-{
-    "model": "trilby_api.relationship",
-    "pk": 1,
-    "fields": {
-        "us": 2,
-        "them": 3,
-        "what": "F"
-    }
-},
-{
-    "model": "trilby_api.relationship",
-    "pk": 2,
-    "fields": {
-        "us": 3,
-        "them": 2,
-        "what": "F"
-    }
-},
-{
-    "model": "trilby_api.relationship",
-    "pk": 3,
-    "fields": {
-        "us": 2,
-        "them": 4,
-        "what": "F"
     }
 }
 ]

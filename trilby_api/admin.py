@@ -39,9 +39,13 @@ class TrilbyUserAdmin(UserAdmin):
                     'moved_to',
                     ),
                 }),
-            )
+            ('Relationships', {
+                'fields': (
+                    ('following', 'blocking',), 
+                    ),
+                }),
+             )
 
-admin.site.register(models.User, TrilbyUserAdmin)
+admin.site.register(models.User)
 admin.site.register(models.Status)
-admin.site.register(models.Relationship)
 

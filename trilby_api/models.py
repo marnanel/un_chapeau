@@ -20,13 +20,6 @@ class Visibility(Enum):
 
 #############################
 
-class RelationshipType(Enum):
-    F = 'is following'
-    B = 'is blocked by'
-    R = 'has requested access to'
-
-#############################
-
 def iso_date(date):
     return date.isoformat()+'Z'
 
@@ -84,6 +77,7 @@ class User(AbstractUser):
             default='')
 
     moved_to = models.CharField(max_length=255,
+            blank=True,
             default='')
 
     _avatar = models.ImageField(
@@ -106,6 +100,26 @@ class User(AbstractUser):
     private_key = models.CharField(
             max_length=255,
             editable = False,
+            )
+
+    following = models.ManyToManyField(
+            'self',
+            related_name = 'followers',
+            symmetrical = False,
+            blank=True,
+            )
+
+    blocking = models.ManyToManyField(
+            'self',
+            related_name = 'blocked',
+            symmetrical = False,
+            blank=True,
+            )
+
+    access_requests = models.ManyToManyField(
+            'self',
+            related_name = 'hopefuls',
+            symmetrical = False,
             )
 
     @property
@@ -151,12 +165,6 @@ class User(AbstractUser):
                 config['HOSTNAME'],
                 )
 
-    def followers(self):
-        return Relationship.objects.filter(them=self)
-
-    def following(self):
-        return Relationship.objects.filter(us=self)
-
     def statuses(self):
         return Status.objects.filter(posted_by=self)
 
@@ -173,72 +181,18 @@ class User(AbstractUser):
 
     ############### Relationship (friending, muting, blocking, etc)
 
-    def _set_relationship(self, them, what, us=None):
-
-        if us is None:
-            us = self
-
-        try:
-            already = Relationship.objects.get(us=us, them=them)
-
-            if what is None:
-                already.delete()
-            else:
-                already.what = what.name
-                already.save()
-
-        except ObjectDoesNotExist:
-            
-            if what is None:
-                # it ain't broken...
-                return
-
-            rel = Relationship(
-                us = us,
-                them = them,
-                what = what.name)
-            rel.save()
-
-    def _get_relationship(self, them, us=None):
-
-        if us is None:
-            us = self
-
-        try:
-            rel = Relationship.objects.get(us=us, them=them)
-            return RelationshipType[rel.what]
-
-        except ObjectDoesNotExist:
-            return None
-
     def block(self, someone):
         """
         Blocks another user. The other user should
         henceforth be unaware of our existence.
         """
-        self._set_relationship(
-                us=someone,
-                them=self,
-                what=RelationshipType('is blocked by'))
-
-        self._set_relationship(
-                us=self,
-                them=someone,
-                what=None)
+        self.blocking.add(someone)
 
     def unblock(self, someone):
         """
         Unblocks another user.
         """
-
-        if someone._get_relationship(self)!=RelationshipType('is blocked by'):
-            raise ValueError("%s wasn't blocked by %s" % (
-                someone, self))
-
-        self._set_relationship(
-                us=someone,
-                them=self,
-                what=None)
+        self.blocking.remove(someone)
 
     def follow(self, someone):
         """
@@ -250,49 +204,32 @@ class User(AbstractUser):
         this will request access rather than following.
         """
 
-        if self._get_relationship(someone)==RelationshipType('is blocked by'):
+        if someone.blocking.filter(pk=self.pk).exists():
             raise ValueError("Can't follow: blocked.")
 
         if someone.locked:
-            self._set_relationship(someone,
-                    RelationshipType('has requested access to'))
+            someone.access_requests.add(self)
         else:
-            self._set_relationship(someone,
-                    RelationshipType('is following'))
+            self.following.add(someone)
 
     def unfollow(self, someone):
-
-        if self._get_relationship(someone)!=RelationshipType('is following'):
-            raise ValueError("%s wasn't following %s" % (
-                someone, self))
-
-        self._set_relationship(someone,
-                None)
+        self.following.remove(someone)
 
     def is_following(self, someone):
-        return self._get_relationship(someone)==RelationshipType('is following')
-
-    def followRequests(self):
-        """
-        Returns the list of follow requests. This only makes
-        sense for locked accounts.
-        """
-        return [r.us for r in Relationship.objects.filter(them=self,
-                what=RelationshipType('has requested access to').name)]
+        return self.following.filter(pk=someone.pk).exists()
 
     def dealWithRequest(self, someone, accept=False):
-        if someone._get_relationship(self)!=RelationshipType('has requested access to'):
-            raise ValueError("%s hadn't requested access to %s" % (
-                someone, self))
+
+        if self.following.filter(pk=someone.pk).exists():
+            raise ValueError("They are already following you.")
+
+        if not self.access_requests.filter(pk=someone.pk).exists():
+            raise ValueError("They haven't asked to follow you.")
 
         if accept:
-            new_relationship = RelationshipType('is following')
-        else:
-            new_relationship = None
+            someone.following.add(self)
 
-        self._set_relationship(
-                us=someone, them=self,
-                what=new_relationship)
+        self.access_requests.remove(someone)
 
     def profileURL(self):
         return config.get('USER_URLS',
@@ -515,42 +452,4 @@ class Status(models.Model):
                 now.month,
                 now.day,
                 self.id,
-                )
-
-class Relationship(models.Model):
-    """
-    A transitive relationship between two users.
-    Don't use this class directly: use the accessors
-    in User.
-    """
-
-    class Meta:
-        unique_together = (('us', 'them'),)
-
-        indexes = [
-            models.Index(fields=['us', 'them']),
-        ]
-
-    us = models.ForeignKey(User,
-            on_delete = models.DO_NOTHING,
-            related_name = 'active',
-            )
-
-    them = models.ForeignKey(User,
-            on_delete = models.DO_NOTHING,
-            related_name = 'passive',
-            )
-
-    what = models.CharField(
-            max_length = 1,
-            choices = [(tag.name, tag.value)
-                for tag in RelationshipType
-                if tag.value!='none'],
-            )
-
-    def __str__(self):
-        return '%s %s %s' % (
-                self.us,
-                RelationshipType[self.what],
-                self.them,
                 )
