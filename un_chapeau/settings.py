@@ -141,6 +141,11 @@ REST_FRAMEWORK = {
         'DEFAULT_AUTHENTICATION_CLASSES': (
             'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
             ),
+
+        'DEFAULT_PAGINATION_CLASS':
+            'kepi_activity.serializers.ActivityPagination',
+
+        'PAGE_SIZE': 50,
         }
 
 AUTH_USER_MODEL = 'trilby_api.User'
@@ -174,8 +179,5 @@ UN_CHAPEAU = {
         # fill in, not us. We pass it out as is.
         'AUTHORIZE_FOLLOW_TEMPLATE': 'https://%(hostname)s/authorize_follow?acct={{uri}}',
         }
-
-######################################
-
 
 ######################################

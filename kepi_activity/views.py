@@ -1,10 +1,25 @@
-from django.shortcuts import get_object_or_404
+# XXX several of these are probably superfluous
+from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.http import HttpResponse, JsonResponse
-import trilby_api.models as trilby
+from oauth2_provider.models import Application
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.datastructures import MultiValueDictKeyError
+from django.core.exceptions import SuspiciousOperation
 from un_chapeau.config import config
+import trilby_api.models as trilby
+import kepi_activity.serializers as serializers
+from rest_framework import generics, response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
+import json
+import re
 
 def render(data):
+    # XXX merge in
     result = JsonResponse(
             data=data,
             json_dumps_params={
@@ -17,70 +32,34 @@ def render(data):
 
     return result
 
-class User(View):
-    def get(self, request, username):
-        user = get_object_or_404(trilby.User, username=username)
+class UserView(generics.GenericAPIView):
 
-        result = {
-                "type": "Person", 
-                "id": user.profileURL(),
-                "name": user.display_name, 
-                "preferredUsername": user.username,
-                "url": user.profileURL(),
-                "summary": user.note,
+    serializer_class = serializers.User
+    permission_classes = ()
 
-                "followers": user.followersURL(),
-                "inbox": user.inboxURL(),
-                "outbox": user.outboxURL(),
-                "following": user.followingURL(),
+class FollowersView(generics.ListAPIView):
 
-                "endpoints": {
-                    "sharedInbox": config['SHARED_INBOX_URL'],
-                    }, 
-                "icon": {
-                    "url": user.avatar.url,
-                    "type": "Image", 
-                    "mediaType": "image/jpeg",
-                    }, 
-                "image": {
-                    "url": user.header.url,
-                    "type": "Image", 
-                    "mediaType": "image/jpeg",
-                    }, 
-                "publicKey": {
-                    "owner": user.profileURL(),
-                    "id": '{}#main-key'.format(user.profileURL()),
-                    "publicKeyPem": user.public_key,
-                    }, 
+    serializer_class = serializers.ListFromUser
+    permission_classes = ()
 
-                # XXX Mastodon has the "featured" collection here; what is it?
-                "tag": [], 
-                "attachment": [],
-                "@context": [
-                    "https://www.w3.org/ns/activitystreams", 
-                    "https://w3id.org/security/v1", 
-                    {
-                        "schema": "http://schema.org#", 
-                        "inReplyToAtomUri": "ostatus:inReplyToAtomUri", 
-                        "movedTo": "as:movedTo", 
-                        "conversation": "ostatus:conversation", 
-                        "ostatus": "http://ostatus.org#", 
-                        "atomUri": "ostatus:atomUri", 
-                        "featured": "toot:featured", 
-                        "value": "schema:value", 
-                        "PropertyValue": "schema:PropertyValue", 
-                        "sensitive": "as:sensitive", 
-                        "toot": "http://joinmastodon.org/ns#", 
-                        "Hashtag": "as:Hashtag", 
-                        "manuallyApprovesFollowers": "as:manuallyApprovesFollowers", 
-                        "focalPoint": {
-                            "@id": "toot:focalPoint", 
-                            "@container": "@list"
-                            }, 
-                        "Emoji": "toot:Emoji"
-                        }
-                    ], 
-                "manuallyApprovesFollowers": False, 
-        }
+    def get_queryset(self):
 
-        return render(result)
+        username=self.kwargs['username']
+
+        return trilby.User.objects.filter(
+                followers__username=username,
+                ).order_by('date_joined')
+
+class FollowingView(generics.ListAPIView):
+
+    serializer_class = serializers.ListFromUser
+    permission_classes = ()
+
+    def get_queryset(self):
+
+        username=self.kwargs['username']
+
+        return trilby.User.objects.filter(
+                following__username=username,
+                ).order_by('date_joined')
+

@@ -22,7 +22,7 @@ oauth2_endpoint_views = [
 ##################################################
 
 urlpatterns = [
-    path('admin', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
 
     path('accounts/login', auth_views.login, name='login'),
     path('accounts/logout', auth_views.logout, name='logout'),
@@ -38,9 +38,13 @@ urlpatterns = [
     path('users/<username>/salmon', buckethat_salmon.views.Salmon.as_view()),
 
     path('', tophat_ui.views.FrontPage.as_view()),
-    path('about', tophat_ui.views.FrontPage.as_view()),
-    path('users/<username>.json', kepi_activity.views.User.as_view()),
+    path('about/', tophat_ui.views.FrontPage.as_view()),
     path('users/<username>', tophat_ui.views.UserPage.as_view()),
+
+    path('users/<username>.json', kepi_activity.views.UserView.as_view()),
+    path('users/<username>/following', kepi_activity.views.FollowingView.as_view()),
+    path('users/<username>/followers', kepi_activity.views.FollowersView.as_view()),
+    #path('users/<username>/outbox', kepi_activity.views.User.as_view()),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
         + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

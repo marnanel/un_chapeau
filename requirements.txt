@@ -7,5 +7,6 @@ django-cors-headers
 django-oauth-toolkit
 django-rest-framework
 djangorestframework-xml
+djangorestframework-constant-field
 pillow
 pycrypto
