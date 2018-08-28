@@ -8,5 +8,6 @@ django-oauth-toolkit
 django-rest-framework
 djangorestframework-xml
 djangorestframework-constant-field
+django-kepi
 pillow
 pycrypto

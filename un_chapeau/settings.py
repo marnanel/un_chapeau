@@ -21,7 +21,6 @@ INSTALLED_APPS = [
     'django_kepi',
 
     'trilby_api',
-    'kepi_activity',
     'buckethat_salmon',
     'tophat_ui',
 ]
@@ -143,10 +142,7 @@ REST_FRAMEWORK = {
             'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
             ),
 
-        'DEFAULT_PAGINATION_CLASS':
-            'kepi_activity.serializers.ActivityPagination',
-
-        'PAGE_SIZE': 50,
+#        'PAGE_SIZE': 50,
         }
 
 AUTH_USER_MODEL = 'trilby_api.User'

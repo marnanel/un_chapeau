@@ -9,6 +9,7 @@ from django.contrib.staticfiles.storage import StaticFilesStorage
 from django.core.files.images import ImageFile
 from un_chapeau.config import config
 from trilby_api.crypto import Key
+import django_kepi.models
 
 #############################
 
@@ -107,24 +108,10 @@ class User(AbstractUser):
             editable = False,
             )
 
-    following = models.ManyToManyField(
-            'self',
-            related_name = 'followers',
-            symmetrical = False,
-            blank=True,
-            )
-
-    blocking = models.ManyToManyField(
-            'self',
-            related_name = 'blocked',
-            symmetrical = False,
-            blank=True,
-            )
-
-    access_requests = models.ManyToManyField(
-            'self',
-            related_name = 'hopefuls',
-            symmetrical = False,
+    actor = models.ForeignKey(
+            django_kepi.models.Actor,
+            on_delete=models.CASCADE,
+            null=True,
             )
 
     @property
@@ -142,10 +129,17 @@ class User(AbstractUser):
             return default_header()
 
     def save(self, *args, **kwargs):
+
         if not self.private_key:
             key = Key()
             self.private_key = key.private_as_pem()
             self.public_key = key.public_as_pem()
+
+        if not self.actor:
+            self.actor = django_kepi.models.Actor(
+                    name = self.username,
+                    )
+            self.actor.save()
 
         super().save(*args, **kwargs)
 
@@ -186,18 +180,47 @@ class User(AbstractUser):
 
     ############### Relationship (friending, muting, blocking, etc)
 
+    @property
+    def followers(self):
+        # XXX this returns Actors, not Persons. How can we fix that?
+        return django_kepi.models.Following.objects.filter(following=self.actor)
+
+    @property
+    def following(self):
+        return django_kepi.models.Following.objects.filter(follower=self.actor)
+
+    @property
+    def blocking(self):
+        return django_kepi.models.Blocking.objects.filter(blocker=self.actor)
+
+    @property
+    def requesting_access(self):
+        return django_kepi.models.RequestingAccess.objects.filter(following=self.actor)
+
     def block(self, someone):
         """
         Blocks another user. The other user should
         henceforth be unaware of our existence.
         """
-        self.blocking.add(someone)
+        blocking = django_kepi.models.Blocking(
+                blocking==self.actor,
+                blocked==someone.actor)
+        blocking.save()
 
     def unblock(self, someone):
         """
         Unblocks another user.
         """
-        self.blocking.remove(someone)
+        django_kepi.models.Blocking.objects.filter(
+                following=self.actor,
+                follower=someone.actor,
+                ).delete()
+
+    def is_blocking(self, someone):
+        return django_kepi.models.Blocking.objects.filter(
+                blocking=self.actor,
+                blocker=someone.actor,
+                ).exists()
 
     def follow(self, someone):
         """
@@ -208,33 +231,51 @@ class User(AbstractUser):
         If the other user's account is locked,
         this will request access rather than following.
         """
-
-        if someone.blocking.filter(pk=self.pk).exists():
+        if someone.is_blocking(self):
             raise ValueError("Can't follow: blocked.")
 
         if someone.locked:
-            someone.access_requests.add(self)
+            req = django_kepi.models.RequestingAccess(
+                    hopeful=self,
+                    grantor=someone,
+                    )
+            req.save()
         else:
-            self.following.add(someone)
+            following = django_kepi.models.Following(
+                    following=self.actor,
+                    follower=someone.actor,
+                    )
+            following.save()
 
     def unfollow(self, someone):
-        self.following.remove(someone)
-
+        django_kepi.models.Following.objects.filter(
+                following=self.actor,
+                follower=someone.actor,
+                ).delete()
+ 
     def is_following(self, someone):
-        return self.following.filter(pk=someone.pk).exists()
-
+        return django_kepi.models.Following.objects.filter(
+                following=self.actor,
+                follower=someone.actor,
+                ).exists()
+ 
     def dealWithRequest(self, someone, accept=False):
 
-        if self.following.filter(pk=someone.pk).exists():
+        if someone.is_following(self):
             raise ValueError("They are already following you.")
 
-        if not self.access_requests.filter(pk=someone.pk).exists():
+        if not django_kepi.models.AccessRequests(hopeful=someone.actor).exists():
             raise ValueError("They haven't asked to follow you.")
 
         if accept:
-            someone.following.add(self)
+            following = django_kepi.models.Following(
+                    following=self.actor,
+                    follower=someone.actor)
+            following.save()
 
-        self.access_requests.remove(someone)
+        django_kepi.models.AccessRequests(grantor=self.actor).delete()
+
+    #############################
 
     def profileURL(self):
         return config.get('USER_URLS',

@@ -25,12 +25,7 @@
         "default_sensitive": false,
         "default_visibility": "P",
         "groups": [],
-        "user_permissions": [],
-        "following": [
-            3,
-            4
-        ],
-        "blocking": []
+        "user_permissions": []
     }
 },
 {
@@ -59,11 +54,7 @@
         "default_sensitive": false,
         "default_visibility": "P",
         "groups": [],
-        "user_permissions": [],
-        "following": [
-            2
-        ],
-        "blocking": []
+        "user_permissions": []
     }
 },
 {
@@ -92,9 +83,7 @@
         "default_sensitive": false,
         "default_visibility": "P",
         "groups": [],
-        "user_permissions": [],
-        "following": [],
-        "blocking": []
+        "user_permissions": []
     }
 },
 {
@@ -123,9 +112,7 @@
         "default_sensitive": false,
         "default_visibility": "P",
         "groups": [],
-        "user_permissions": [],
-        "following": [],
-        "blocking": []
+        "user_permissions": []
     }
 },
 {

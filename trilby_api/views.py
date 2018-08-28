@@ -157,6 +157,66 @@ class UserFeed(View):
 
 ########################################
 
+class UserActivityView(View):
+
+    permission_classes = ()
+
+    def get(self, request, username, *args, **kwargs):
+
+        user = get_object_or_404(User, username=username)
+        result = user.serialize()
+
+        return self._render(result)
+
+        context = {
+                'user': user,
+                'statuses': statuses,
+                'server_name': config['HOSTNAME'],
+                'hubURL': config['HUB'],
+            }
+
+        result = render(
+                request=request,
+                template_name='account.atom.xml',
+                context=context,
+                content_type='application/atom+xml',
+                )
+
+        link_context = {
+                'hostname': config['HOSTNAME'],
+                'username': user.username,
+                'acct': user.acct(),
+                }
+
+        links = ', '.join(
+                [ '<{}>; rel="{}"; type="{}"'.format(
+                    config.get(uri, username=user.username, acct=user.display_name),
+                    rel, mimetype)
+                    for uri, rel, mimetype in
+                    [
+                        ('USER_WEBFINGER_URLS',
+                            'lrdd',
+                            'application/xrd+xml',
+                            ),
+
+                        ('USER_FEED_URLS',
+                            'alternate',
+                            'application/atom+xml',
+                            ),
+
+                        ('USER_FEED_URLS',
+                            'alternate',
+                            'application/activity+json',
+                            ),
+                        ]
+                    ])
+
+        result['Link'] = links
+
+        return result
+
+########################################
+
 class Webfinger(generics.GenericAPIView):
     """
     RFC7033 webfinger support.

@@ -7,7 +7,7 @@ import trilby_api.urls
 import trilby_api.views
 import buckethat_salmon.views
 import tophat_ui.views
-import kepi_activity.views
+import django_kepi.views
 import un_chapeau.settings as settings
 
 ##################################
@@ -24,8 +24,8 @@ oauth2_endpoint_views = [
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
 
-    path('accounts/login', auth_views.login, name='login'),
-    path('accounts/logout', auth_views.logout, name='logout'),
+    path('accounts/login', auth_views.LoginView.as_view(), name='login'),
+    path('accounts/logout', auth_views.LogoutView.as_view(), name='logout'),
 
     path('oauth/', include((oauth2_endpoint_views, 'oauth2_provider'), namespace="oauth2_provider")),
 
@@ -41,10 +41,10 @@ urlpatterns = [
     path('about/', tophat_ui.views.FrontPage.as_view()),
     path('users/<username>', tophat_ui.views.UserPage.as_view()),
 
-    path('users/<username>.json', kepi_activity.views.UserView.as_view()),
-    path('users/<username>/following', kepi_activity.views.FollowingView.as_view()),
-    path('users/<username>/followers', kepi_activity.views.FollowersView.as_view()),
-    #path('users/<username>/outbox', kepi_activity.views.User.as_view()),
+    path('users/<username>/json', trilby_api.views.UserActivityView.as_view()),
+#    path('users/<username>/following', django_kepi.views.FollowingView.as_view()),
+    path('users/<username>/followers', django_kepi.views.FollowersView.as_view()),
+    #path('users/<username>/outbox', django_kepi.views.User.as_view()),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
         + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
