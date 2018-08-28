@@ -20,6 +20,11 @@ class Visibility(Enum):
 
 #############################
 
+class Person(models.Model):
+    pass
+
+#############################
+
 def iso_date(date):
     return date.isoformat()+'Z'
 

@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'corsheaders',
     'django_fields',
+    'django_kepi',
 
     'trilby_api',
     'kepi_activity',
