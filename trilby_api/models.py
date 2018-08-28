@@ -211,13 +211,13 @@ class User(AbstractUser):
         """
         Unblocks another user.
         """
-        django_kepi.models.Blocking.objects.filter(
+        django_kepi.models.Blocking.objects.get(
                 following=self.actor,
                 follower=someone.actor,
                 ).delete()
 
     def is_blocking(self, someone):
-        return django_kepi.models.Blocking.objects.filter(
+        return django_kepi.models.Blocking.objects.get(
                 blocking=self.actor,
                 blocker=someone.actor,
                 ).exists()
@@ -248,13 +248,13 @@ class User(AbstractUser):
             following.save()
 
     def unfollow(self, someone):
-        django_kepi.models.Following.objects.filter(
+        django_kepi.models.Following.objects.get(
                 following=self.actor,
                 follower=someone.actor,
                 ).delete()
  
     def is_following(self, someone):
-        return django_kepi.models.Following.objects.filter(
+        return django_kepi.models.Following.objects.get(
                 following=self.actor,
                 follower=someone.actor,
                 ).exists()
@@ -264,7 +264,10 @@ class User(AbstractUser):
         if someone.is_following(self):
             raise ValueError("They are already following you.")
 
-        if not django_kepi.models.AccessRequests(hopeful=someone.actor).exists():
+        if not django_kepi.models.AccessRequests.objects.get(
+                hopeful=someone.actor,
+                grantor=self.actor,
+                ).exists():
             raise ValueError("They haven't asked to follow you.")
 
         if accept:
@@ -273,7 +276,10 @@ class User(AbstractUser):
                     follower=someone.actor)
             following.save()
 
-        django_kepi.models.AccessRequests(grantor=self.actor).delete()
+        django_kepi.models.AccessRequests.objects.get(
+                hopeful=someone.actor,
+                grantor=self.actor,
+                ).delete()
 
     #############################
 
