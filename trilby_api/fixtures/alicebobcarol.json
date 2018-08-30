@@ -25,7 +25,8 @@
         "default_sensitive": false,
         "default_visibility": "P",
         "groups": [],
-        "user_permissions": []
+        "user_permissions": [],
+        "actor_id": 1
     }
 },
 {
@@ -54,7 +55,8 @@
         "default_sensitive": false,
         "default_visibility": "P",
         "groups": [],
-        "user_permissions": []
+        "user_permissions": [],
+        "actor_id": 2
     }
 },
 {
@@ -83,7 +85,8 @@
         "default_sensitive": false,
         "default_visibility": "P",
         "groups": [],
-        "user_permissions": []
+        "user_permissions": [],
+        "actor_id": 3
     }
 },
 {
@@ -112,7 +115,8 @@
         "default_sensitive": false,
         "default_visibility": "P",
         "groups": [],
-        "user_permissions": []
+        "user_permissions": [],
+        "actor_id": 4
     }
 },
 {
@@ -226,5 +230,34 @@
         "visibility": "U",
         "idempotency_key": ""
     }
+},
+{
+    "model": "django_kepi.actor",
+    "pk": 1,
+    "fields": {
+            "url": "https://www.example.com/user/alice"
+    }
+},
+{
+    "model": "django_kepi.actor",
+    "pk": 2,
+    "fields": {
+            "url": "https://www.example.com/user/bob"
+    }
+},
+{
+    "model": "django_kepi.actor",
+    "pk": 3,
+    "fields": {
+            "url": "https://www.example.com/user/carol"
+    }
+},
+{
+    "model": "django_kepi.actor",
+    "pk": 4,
+    "fields": {
+            "url": "https://www.example.com/user/marnanel"
+    }
 }
 ]
+

@@ -62,9 +62,9 @@ class UserTests(TestCase):
         self.assertEqual(bob.is_following(carol), False)
         self.assertEqual(carol.is_following(bob), False)
 
-        self.assertEqual(carol.access_requests.filter(pk=bob.pk).exists(), True)
+        self.assertEqual(carol.requesting_access.filter(pk=bob.pk).exists(), True)
         carol.dealWithRequest(bob, accept=True)
-        self.assertEqual(carol.access_requests.filter(pk=bob.pk).exists(), False)
+        self.assertEqual(carol.requesting_access.filter(pk=bob.pk).exists(), False)
 
         self.assertEqual(bob.is_following(carol), True)
         self.assertEqual(carol.is_following(bob), False)
@@ -85,9 +85,9 @@ class UserTests(TestCase):
         self.assertEqual(bob.is_following(carol), False)
         self.assertEqual(carol.is_following(bob), False)
 
-        self.assertEqual(carol.access_requests.filter(pk=bob.pk).exists(), True)
+        self.assertEqual(carol.requesting_access.filter(pk=bob.pk).exists(), True)
         carol.dealWithRequest(bob, accept=False)
-        self.assertEqual(carol.access_requests.filter(pk=bob.pk).exists(), False)
+        self.assertEqual(carol.requesting_access.filter(pk=bob.pk).exists(), False)
 
         self.assertEqual(bob.is_following(carol), False)
         self.assertEqual(carol.is_following(bob), False)

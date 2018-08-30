@@ -65,6 +65,11 @@ class User(AbstractUser):
     # it's an oauth2 thing. just roll with it.
     USERNAME_FIELD = 'email'
 
+    actor = models.OneToOneField(
+            django_kepi.models.Actor,
+            on_delete=models.CASCADE,
+            )
+
     username = models.CharField(max_length=255,
             unique=True)
 
@@ -108,12 +113,6 @@ class User(AbstractUser):
             editable = False,
             )
 
-    actor = models.ForeignKey(
-            django_kepi.models.Actor,
-            on_delete=models.CASCADE,
-            null=True,
-            )
-
     @property
     def avatar(self):
         if self._avatar is not None:
@@ -135,11 +134,12 @@ class User(AbstractUser):
             self.private_key = key.private_as_pem()
             self.public_key = key.public_as_pem()
 
-        if not self.actor:
-            self.actor = django_kepi.models.Actor(
-                    name = self.username,
+        if not self.actor_id:
+            actor = django_kepi.models.Actor(
+                    url = self.profileURL(),
                     )
-            self.actor.save()
+            actor.save()
+            self.actor_id = actor.pk
 
         super().save(*args, **kwargs)
 
@@ -182,7 +182,6 @@ class User(AbstractUser):
 
     @property
     def followers(self):
-        # XXX this returns Actors, not Persons. How can we fix that?
         return django_kepi.models.Following.objects.filter(following=self.actor)
 
     @property
@@ -195,7 +194,9 @@ class User(AbstractUser):
 
     @property
     def requesting_access(self):
-        return django_kepi.models.RequestingAccess.objects.filter(following=self.actor)
+        return User.objects.filter(
+                actor__grantors__hopeful=self.actor,
+                )
 
     def block(self, someone):
         """
@@ -203,21 +204,21 @@ class User(AbstractUser):
         henceforth be unaware of our existence.
         """
         blocking = django_kepi.models.Blocking(
-                blocking==self.actor,
-                blocked==someone.actor)
+                blocking=self.actor,
+                blocked=someone.actor)
         blocking.save()
 
     def unblock(self, someone):
         """
         Unblocks another user.
         """
-        django_kepi.models.Blocking.objects.get(
+        django_kepi.models.Blocking.objects.filter(
                 following=self.actor,
                 follower=someone.actor,
                 ).delete()
 
     def is_blocking(self, someone):
-        return django_kepi.models.Blocking.objects.get(
+        return django_kepi.models.Blocking.objects.filter(
                 blocking=self.actor,
                 blocker=someone.actor,
                 ).exists()
@@ -236,8 +237,8 @@ class User(AbstractUser):
 
         if someone.locked:
             req = django_kepi.models.RequestingAccess(
-                    hopeful=self,
-                    grantor=someone,
+                    hopeful=self.actor,
+                    grantor=someone.actor,
                     )
             req.save()
         else:
@@ -248,13 +249,13 @@ class User(AbstractUser):
             following.save()
 
     def unfollow(self, someone):
-        django_kepi.models.Following.objects.get(
+        django_kepi.models.Following.objects.filter(
                 following=self.actor,
                 follower=someone.actor,
                 ).delete()
  
     def is_following(self, someone):
-        return django_kepi.models.Following.objects.get(
+        return django_kepi.models.Following.objects.filter(
                 following=self.actor,
                 follower=someone.actor,
                 ).exists()
@@ -264,7 +265,7 @@ class User(AbstractUser):
         if someone.is_following(self):
             raise ValueError("They are already following you.")
 
-        if not django_kepi.models.AccessRequests.objects.get(
+        if not django_kepi.models.AccessRequests.objects.filter(
                 hopeful=someone.actor,
                 grantor=self.actor,
                 ).exists():
@@ -276,7 +277,7 @@ class User(AbstractUser):
                     follower=someone.actor)
             following.save()
 
-        django_kepi.models.AccessRequests.objects.get(
+        django_kepi.models.AccessRequests.objects.filter(
                 hopeful=someone.actor,
                 grantor=self.actor,
                 ).delete()
