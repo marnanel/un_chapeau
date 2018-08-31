@@ -182,15 +182,21 @@ class User(AbstractUser):
 
     @property
     def followers(self):
-        return django_kepi.models.Following.objects.filter(following=self.actor)
+        return User.objects.filter(
+                actor__followers__following=self.actor,
+                )
 
     @property
     def following(self):
-        return django_kepi.models.Following.objects.filter(follower=self.actor)
+        return User.objects.filter(
+                actor__following__follower=self.actor,
+                )
 
     @property
     def blocking(self):
-        return django_kepi.models.Blocking.objects.filter(blocker=self.actor)
+        return User.objects.filter(
+                actor__blockers__blocking=self.actor,
+                )
 
     @property
     def requesting_access(self):
