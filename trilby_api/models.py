@@ -195,7 +195,7 @@ class User(AbstractUser):
     @property
     def requesting_access(self):
         return User.objects.filter(
-                actor__grantors__hopeful=self.actor,
+                actor__hopefuls__grantor=self.actor,
                 )
 
     def block(self, someone):
@@ -243,21 +243,21 @@ class User(AbstractUser):
             req.save()
         else:
             following = django_kepi.models.Following(
-                    following=self.actor,
-                    follower=someone.actor,
+                    following=someone.actor,
+                    follower=self.actor,
                     )
             following.save()
 
     def unfollow(self, someone):
         django_kepi.models.Following.objects.filter(
-                following=self.actor,
-                follower=someone.actor,
+                following=someone.actor,
+                follower=self.actor,
                 ).delete()
  
     def is_following(self, someone):
         return django_kepi.models.Following.objects.filter(
-                following=self.actor,
-                follower=someone.actor,
+                following=someone.actor,
+                follower=self.actor,
                 ).exists()
  
     def dealWithRequest(self, someone, accept=False):
@@ -265,7 +265,7 @@ class User(AbstractUser):
         if someone.is_following(self):
             raise ValueError("They are already following you.")
 
-        if not django_kepi.models.AccessRequests.objects.filter(
+        if not django_kepi.models.RequestingAccess.objects.filter(
                 hopeful=someone.actor,
                 grantor=self.actor,
                 ).exists():
@@ -277,7 +277,7 @@ class User(AbstractUser):
                     follower=someone.actor)
             following.save()
 
-        django_kepi.models.AccessRequests.objects.filter(
+        django_kepi.models.RequestingAccess.objects.filter(
                 hopeful=someone.actor,
                 grantor=self.actor,
                 ).delete()
