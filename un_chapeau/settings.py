@@ -174,7 +174,7 @@ UN_CHAPEAU = {
 
         # the "{uri}" in AUTHORIZE_FOLLOW_TEMPLATE is for the client to
         # fill in, not us. We pass it out as is.
-        'AUTHORIZE_FOLLOW_TEMPLATE': 'https://%(hostname)s/authorize_follow?acct={{uri}}',
+        'AUTHORIZE_FOLLOW_TEMPLATE': 'https://{hostname}/authorize_follow?acct={{uri}}',
         }
 
 ######################################
